@@ -39,12 +39,12 @@
   },
   {
     "period": 3,
-    "periodDate": "2022-04-01T00:00:00+01:00",
+    "periodDate": "2022-04-01T00:00:00+00:00",
     "loanResults": [
       {
         "loanType": 1,
         "period": 3,
-        "periodDate": "2022-04-01T00:00:00+01:00",
+        "periodDate": "2022-04-01T00:00:00+00:00",
         "debtRemaining": 0.00000000000000000000000000,
         "interestRate": 0.01,
         "paidInPeriod": 251.56432349537037037037037034,

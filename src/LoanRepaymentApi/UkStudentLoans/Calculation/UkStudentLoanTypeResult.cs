@@ -6,7 +6,7 @@ public class UkStudentLoanTypeResult
 
     public int Period { get; set; }
 
-    public DateTime PeriodDate { get; set; }
+    public DateTimeOffset PeriodDate { get; set; }
 
     public decimal DebtRemaining { get; set; }
 

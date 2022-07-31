@@ -4,7 +4,7 @@ public class StandardTypeCalculatorRequest
 {
     public int Period { get; set; }
 
-    public DateTime PeriodDate { get; set; }
+    public DateTimeOffset PeriodDate { get; set; }
 
     public Income Income { get; set; }
 
