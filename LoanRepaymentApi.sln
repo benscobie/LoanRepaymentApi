@@ -1,14 +1,14 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LoanRepaymentApi", "LoanRepaymentApi\LoanRepaymentApi.csproj", "{BBC0E5E9-BF90-498F-B85F-4B5417EAE9C0}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LoanRepaymentApi", "src\LoanRepaymentApi\LoanRepaymentApi.csproj", "{BBC0E5E9-BF90-498F-B85F-4B5417EAE9C0}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{4040F318-0BF2-4C48-BE9C-5380753828BB}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{74A92AC2-6F1F-4154-A433-417EE8F3AF9E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LoanRepaymentApi.Unit.Tests", "..\test\LoanRepaymentApi.Unit.Tests\LoanRepaymentApi.Unit.Tests.csproj", "{6DBFE421-02B8-4BE7-8371-D0AA317D92FF}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LoanRepaymentApi.Unit.Tests", "test\LoanRepaymentApi.Unit.Tests\LoanRepaymentApi.Unit.Tests.csproj", "{6DBFE421-02B8-4BE7-8371-D0AA317D92FF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LoanRepaymentApi.Integration.Tests", "..\test\LoanRepaymentApi.Integration.Tests\LoanRepaymentApi.Integration.Tests.csproj", "{8CD9DBC3-BB8D-412C-8034-3C5EAAB52D26}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LoanRepaymentApi.Integration.Tests", "test\LoanRepaymentApi.Integration.Tests\LoanRepaymentApi.Integration.Tests.csproj", "{8CD9DBC3-BB8D-412C-8034-3C5EAAB52D26}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
