@@ -11,7 +11,7 @@ using Xunit;
 public class Tests
 {
     [Fact]
-    public async Task Get_EndpointsReturnSuccessAndCorrectContentType()
+    public async Task Calculate_WithSingleLoan_ReturnsSuccessResponseWithCorrectData()
     {
         await using var application = new Application();
         
@@ -22,7 +22,7 @@ public class Tests
         var expectedJsonResponse = JToken.Parse(await File.ReadAllTextAsync("UkStudentLoans/calculate-response.json"));
 
         // Act
-        var response = await client.PostAsync("/ukstudentloans", new StringContent(jsonRequest, Encoding.UTF8, "application/json"));
+        var response = await client.PostAsync("/ukstudentloans/calculate", new StringContent(jsonRequest, Encoding.UTF8, "application/json"));
 
         // Assert
         response.EnsureSuccessStatusCode();

@@ -2,5 +2,5 @@
 
 public interface IUkStudentLoanCalculator
 {
-    List<UkStudentLoanResult> Execute(UkStudentLoanCalculatorRequest request);
+    List<UkStudentLoanResult> Run(UkStudentLoanCalculatorRequest request);
 }

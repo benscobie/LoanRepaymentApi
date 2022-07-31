@@ -1,95 +1,49 @@
 ﻿namespace LoanRepaymentApi.UkStudentLoans.Calculation;
 
+using LoanRepaymentApi.UkStudentLoans.Calculation.StandardTypes;
 using NodaTime;
 
 public class UkStudentLoanCalculator : IUkStudentLoanCalculator
 {
     private readonly IClock _clock;
+    private readonly IStandardTypeCalculator _standardTypeCalculator;
 
-    public UkStudentLoanCalculator(IClock clock)
+    public UkStudentLoanCalculator(IClock clock, IStandardTypeCalculator standardTypeCalculator)
     {
         _clock = clock;
+        _standardTypeCalculator = standardTypeCalculator;
     }
     
-    public List<UkStudentLoanResult> Execute(UkStudentLoanCalculatorRequest request)
+    public List<UkStudentLoanResult> Run(UkStudentLoanCalculatorRequest request)
     {
         var results = new List<UkStudentLoanResult>();
         var period = 1;
-        var loansToRepayInThresholdOrder = request.Loans
-            .OrderByDescending(x => x.RepaymentThreshold);
         bool loansHaveDebt;
         var now = _clock.GetCurrentInstant().ToDateTimeUtc();
+        
+        var standardLoanTypes = new[] { UkStudentLoanType.Type1, UkStudentLoanType.Type2, UkStudentLoanType.Type4 };
 
         do
         {
             var periodDate = now.AddMonths(period);
-            loansHaveDebt = false;
-            var typeResults = new List<UkStudentLoanTypeResult>();
-
-            decimal allocationCarriedOver = 0;
-            UkStudentLoan? previousLoanWithABalancePaid = null;
-            foreach (var loan in loansToRepayInThresholdOrder)
+            var standardTypeResults = _standardTypeCalculator.Run(new StandardTypeCalculatorRequest
             {
-                var previousPeriodResult = results.SingleOrDefault(x => x.Period == period - 1)?.LoanResults
-                    .SingleOrDefault(x => x.LoanType == loan.Type);
+                Income = request.Income,
+                Loans = request.Loans.Where(x => standardLoanTypes.Contains(x.Type)).ToList(),
+                Period = period,
+                PeriodDate = periodDate,
+                PreviousPeriods = results.SelectMany(x => x.LoanResults).ToList()
+            });
+            
+            // TODO Call post grad calc
 
-                var balanceRemaining = previousPeriodResult?.DebtRemaining ?? loan.BalanceRemaining;
-
-                if (balanceRemaining <= 0)
-                {
-                    continue;
-                }
-
-                // Apply Interest
-                // TODO Calculate the interest rate ourselves: https://www.gov.uk/repaying-your-student-loan/what-you-pay
-                var interestToApply = balanceRemaining * loan.InterestRate / 12;
-                balanceRemaining += interestToApply;
-
-                // Pay Down Balance
-                // TODO Use thresholds defined here: https://www.gov.uk/repaying-your-student-loan/what-you-pay
-                
-                var annualSalaryUsableForLoanRepayment =
-                    previousLoanWithABalancePaid?.RepaymentThreshold ?? request.Income.AnnualSalaryBeforeTax;
-
-                var amountAvailableForPayment = (((annualSalaryUsableForLoanRepayment - loan.RepaymentThreshold) * 0.09m) / 12) + allocationCarriedOver;
-
-                decimal amountToPay;
-                if (amountAvailableForPayment > balanceRemaining)
-                {
-                    amountToPay = balanceRemaining;
-                    allocationCarriedOver = amountAvailableForPayment - balanceRemaining;
-                }
-                else
-                {
-                    amountToPay = amountAvailableForPayment;
-                    allocationCarriedOver = 0;
-                }
-
-                var debtRemaining = balanceRemaining - amountToPay;
-
-                var result = new UkStudentLoanTypeResult
-                {
-                    LoanType = loan.Type,
-                    Period = period,
-                    PeriodDate = periodDate,
-                    DebtRemaining = debtRemaining,
-                    PaidInPeriod = amountToPay,
-                    InterestRate = loan.InterestRate,
-                    InterestAppliedInPeriod = interestToApply,
-                    TotalPaid = amountToPay + (previousPeriodResult?.TotalPaid ?? 0),
-                    TotalInterestPaid = interestToApply + (previousPeriodResult?.TotalInterestPaid ?? 0),
-                };
-
-                loansHaveDebt = debtRemaining > 0 || loansHaveDebt;
-                previousLoanWithABalancePaid = loan;
-                typeResults.Add(result);
-            }
+            loansHaveDebt = standardTypeResults.Any(x => x.DebtRemaining > 0);
 
             results.Add(new UkStudentLoanResult
             {
                 Period = period,
                 PeriodDate = periodDate,
-                LoanResults = typeResults.OrderBy(x => x.LoanType).ToList()
+                LoanResults = standardTypeResults.OrderBy(x => x.LoanType).ToList()
             });
 
             period++;

@@ -16,7 +16,7 @@ public class UkStudentLoansController : ControllerBase
         _ukStudentLoanCalculator = ukStudentLoanCalculator;
     }
 
-    [HttpPost(Name = "calculate")]
+    [HttpPost("calculate")]
     public IEnumerable<UkStudentLoanResult> Calculate(UkStudentLoanCalculationDto request)
     {
         var calculatorRequest = new UkStudentLoanCalculatorRequest
@@ -38,7 +38,7 @@ public class UkStudentLoansController : ControllerBase
             });
         }
         
-        var results = _ukStudentLoanCalculator.Execute(calculatorRequest);
+        var results = _ukStudentLoanCalculator.Run(calculatorRequest);
         
         // TODO Map response to DTO + loan type enum should be string
         return results;
