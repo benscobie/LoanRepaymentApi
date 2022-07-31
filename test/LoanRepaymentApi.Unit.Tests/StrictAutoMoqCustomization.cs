@@ -1,4 +1,6 @@
-﻿namespace LoanRepaymentApi.Tests;
+﻿#nullable disable warnings
+
+namespace LoanRepaymentApi.Tests;
 
 using System;
 using System.Collections.Generic;
@@ -80,7 +82,7 @@ public class StrictMockConstructorQuery : IMethodQuery
         return type.GetGenericArguments().Single();
     }
 
-    internal static bool IsDelegate(Type type)
+    private static bool IsDelegate(Type type)
     {
         return typeof(MulticastDelegate).IsAssignableFrom(type.BaseType);
     }

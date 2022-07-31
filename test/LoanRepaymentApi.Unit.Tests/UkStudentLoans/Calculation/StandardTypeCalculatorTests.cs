@@ -32,9 +32,8 @@ public class StandardTypeCalculatorTests
             }
         };
 
-        var request = new StandardTypeCalculatorRequest
+        var request = new StandardTypeCalculatorRequest(income)
         {
-            Income = income,
             Loans = loans,
             Period = 1,
             PeriodDate = new DateTime(2022, 02, 01),
@@ -86,9 +85,8 @@ public class StandardTypeCalculatorTests
             }
         };
 
-        var request = new StandardTypeCalculatorRequest
+        var request = new StandardTypeCalculatorRequest(income)
         {
-            Income = income,
             Loans = loans,
             Period = 2,
             PeriodDate = new DateTime(2022, 03, 01),
@@ -161,9 +159,8 @@ public class StandardTypeCalculatorTests
             }
         };
 
-        var request = new StandardTypeCalculatorRequest
+        var request = new StandardTypeCalculatorRequest(income)
         {
-            Income = income,
             Loans = loans,
             Period = 2,
             PeriodDate = new DateTime(2022, 03, 01),

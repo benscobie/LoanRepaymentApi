@@ -26,9 +26,8 @@ public class UkStudentLoanCalculator : IUkStudentLoanCalculator
         do
         {
             var periodDate = now.AddMonths(period);
-            var standardTypeResults = _standardTypeCalculator.Run(new StandardTypeCalculatorRequest
+            var standardTypeResults = _standardTypeCalculator.Run(new StandardTypeCalculatorRequest(request.Income)
             {
-                Income = request.Income,
                 Loans = request.Loans.Where(x => standardLoanTypes.Contains(x.Type)).ToList(),
                 Period = period,
                 PeriodDate = periodDate,

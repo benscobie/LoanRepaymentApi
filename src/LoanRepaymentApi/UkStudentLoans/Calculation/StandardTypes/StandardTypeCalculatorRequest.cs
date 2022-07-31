@@ -2,13 +2,18 @@
 
 public class StandardTypeCalculatorRequest
 {
-    public int Period { get; set; }
+    public StandardTypeCalculatorRequest(Income income)
+    {
+        Income = income;
+    }
+    
+    public int Period { get; init; }
 
-    public DateTimeOffset PeriodDate { get; set; }
+    public DateTimeOffset PeriodDate { get; init; }
 
-    public Income Income { get; set; }
+    public Income Income { get; init; }
 
-    public List<UkStudentLoan> Loans { get; set; } = new();
+    public List<UkStudentLoan> Loans { get; init; } = new();
 
-    public IList<UkStudentLoanTypeResult> PreviousPeriods { get; set; } = new List<UkStudentLoanTypeResult>();
+    public IList<UkStudentLoanTypeResult> PreviousPeriods { get; init; } = new List<UkStudentLoanTypeResult>();
 }

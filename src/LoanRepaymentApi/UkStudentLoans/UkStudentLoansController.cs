@@ -19,13 +19,11 @@ public class UkStudentLoansController : ControllerBase
     [HttpPost("calculate")]
     public IEnumerable<UkStudentLoanResult> Calculate(UkStudentLoanCalculationDto request)
     {
-        var calculatorRequest = new UkStudentLoanCalculatorRequest
+        var loans = new List<UkStudentLoan>();
+        var calculatorRequest = new UkStudentLoanCalculatorRequest(new Income
         {
-            Income = new Income
-            {
-                AnnualSalaryBeforeTax = request.AnnualSalaryBeforeTax,
-            },
-        };
+            AnnualSalaryBeforeTax = request.AnnualSalaryBeforeTax,
+        }, loans);
 
         foreach (var loan in request.Loans)
         {

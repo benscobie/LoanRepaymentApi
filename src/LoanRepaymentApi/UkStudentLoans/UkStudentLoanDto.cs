@@ -1,4 +1,6 @@
-﻿namespace LoanRepaymentApi.UkStudentLoans;
+﻿#nullable disable warnings
+
+namespace LoanRepaymentApi.UkStudentLoans;
 
 using System.Text.Json.Serialization;
 

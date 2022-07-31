@@ -2,7 +2,13 @@
 
 public class UkStudentLoanCalculatorRequest
 {
-    public Income Income { get; set; }
+    public UkStudentLoanCalculatorRequest(Income income, List<UkStudentLoan> loans)
+    {
+        Income = income;
+        Loans = loans;
+    }
+    
+    public Income Income { get; }
 
-    public List<UkStudentLoan> Loans { get; set; } = new();
+    public List<UkStudentLoan> Loans { get; }
 }

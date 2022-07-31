@@ -6,7 +6,7 @@ public class UkStudentLoanResult
     
     public DateTimeOffset PeriodDate { get; set; }
 
-    public List<UkStudentLoanTypeResult> LoanResults { get; set; }
+    public List<UkStudentLoanTypeResult> LoanResults { get; set; } = new List<UkStudentLoanTypeResult>();
 
     public decimal AggregatedPaidInPeriod => LoanResults.Sum(x => x.PaidInPeriod);
 
