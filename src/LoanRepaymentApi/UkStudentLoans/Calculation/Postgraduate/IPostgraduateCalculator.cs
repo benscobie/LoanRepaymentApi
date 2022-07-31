@@ -2,5 +2,5 @@
 
 public interface IPostgraduateCalculator
 {
-    List<UkStudentLoanTypeResult> Run(PostgraduateCalculatorRequest request);
+    UkStudentLoanTypeResult? Run(PostgraduateCalculatorRequest request);
 }

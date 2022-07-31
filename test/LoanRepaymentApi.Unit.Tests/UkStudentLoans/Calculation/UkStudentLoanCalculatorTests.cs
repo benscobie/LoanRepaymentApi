@@ -15,12 +15,28 @@ public class UkStudentLoanCalculatorTests
 {
     [Theory, AutoMoqData]
     public void Run_WithLoans_ShouldRunUntilNoDebtRemaining(
-        [Frozen]Mock<IStandardTypeCalculator> standardTypeCalculator,
-        [Frozen]Mock<IPostgraduateCalculator> postgraduateCalculator,
+        [Frozen] Mock<IStandardTypeCalculator> standardTypeCalculator,
+        [Frozen] Mock<IPostgraduateCalculator> postgraduateCalculator,
         UkStudentLoanCalculatorRequest request,
         UkStudentLoanCalculator sut)
     {
         // Arrange
+        request.Loans.AddRange(new List<UkStudentLoan>
+        {
+            new UkStudentLoan
+            {
+                Type = UkStudentLoanType.Type1
+            },
+            new UkStudentLoan
+            {
+                Type = UkStudentLoanType.Type2
+            },
+            new UkStudentLoan
+            {
+                Type = UkStudentLoanType.Postgraduate
+            }
+        });
+
         standardTypeCalculator.Setup(x => x.Run(It.Is<StandardTypeCalculatorRequest>(x => x.Period == 1)))
             .Returns(new List<UkStudentLoanTypeResult>
             {
@@ -35,14 +51,14 @@ public class UkStudentLoanCalculatorTests
                     DebtRemaining = 0
                 }
             });
-        
+
         standardTypeCalculator.Setup(x => x.Run(It.Is<StandardTypeCalculatorRequest>(x => x.Period == 2)))
             .Returns(new List<UkStudentLoanTypeResult>
             {
                 new()
                 {
                     LoanType = UkStudentLoanType.Type1,
-                    DebtRemaining = 0
+                    DebtRemaining = 500
                 },
                 new()
                 {
@@ -50,52 +66,27 @@ public class UkStudentLoanCalculatorTests
                     DebtRemaining = 0
                 }
             });
-        
+
+        standardTypeCalculator.Setup(x => x.Run(It.Is<StandardTypeCalculatorRequest>(x => x.Period == 3)))
+            .Returns(new List<UkStudentLoanTypeResult>());
+
         postgraduateCalculator.Setup(x => x.Run(It.Is<PostgraduateCalculatorRequest>(x => x.Period == 1)))
-            .Returns(new List<UkStudentLoanTypeResult>
+            .Returns(new UkStudentLoanTypeResult
             {
-                new()
-                {
-                    LoanType = UkStudentLoanType.Postgraduate,
-                    DebtRemaining = 1000
-                },
-                new()
-                {
-                    LoanType = UkStudentLoanType.Postgraduate,
-                    DebtRemaining = 0
-                }
+                LoanType = UkStudentLoanType.Postgraduate,
+                DebtRemaining = 1000
             });
-        
+
         postgraduateCalculator.Setup(x => x.Run(It.Is<PostgraduateCalculatorRequest>(x => x.Period == 2)))
-            .Returns(new List<UkStudentLoanTypeResult>
+            .Returns(new UkStudentLoanTypeResult
             {
-                new()
-                {
-                    LoanType = UkStudentLoanType.Postgraduate,
-                    DebtRemaining = 500
-                },
-                new()
-                {
-                    LoanType = UkStudentLoanType.Postgraduate,
-                    DebtRemaining = 0
-                }
+                LoanType = UkStudentLoanType.Postgraduate,
+                DebtRemaining = 0
             });
         
         postgraduateCalculator.Setup(x => x.Run(It.Is<PostgraduateCalculatorRequest>(x => x.Period == 3)))
-            .Returns(new List<UkStudentLoanTypeResult>
-            {
-                new()
-                {
-                    LoanType = UkStudentLoanType.Postgraduate,
-                    DebtRemaining = 0
-                },
-                new()
-                {
-                    LoanType = UkStudentLoanType.Postgraduate,
-                    DebtRemaining = 0
-                }
-            });
-        
+            .Returns((UkStudentLoanTypeResult?)null);
+
         // Act
         var results = sut.Run(request);
 
@@ -103,6 +94,6 @@ public class UkStudentLoanCalculatorTests
         standardTypeCalculator.Verify(x => x.Run(It.IsAny<StandardTypeCalculatorRequest>()), Times.Exactly(3));
         postgraduateCalculator.Verify(x => x.Run(It.IsAny<PostgraduateCalculatorRequest>()), Times.Exactly(3));
         results.Sum(x => x.LoanResults.Count(l => l.LoanType == UkStudentLoanType.Type1)).Should().Be(4);
-        results.Sum(x => x.LoanResults.Count(l => l.LoanType == UkStudentLoanType.Postgraduate)).Should().Be(6);
+        results.Sum(x => x.LoanResults.Count(l => l.LoanType == UkStudentLoanType.Postgraduate)).Should().Be(2);
     }
 }

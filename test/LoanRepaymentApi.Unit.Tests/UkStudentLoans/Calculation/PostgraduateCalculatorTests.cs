@@ -11,7 +11,7 @@ using Xunit;
 public class PostgraduateCalculatorTests
 {
     private readonly PostgraduateCalculator _calculator = new();
-    
+
     [Fact]
     public void Execute_WithSingleLoanNotEndOfPeriod_ShouldPayOffSomeOfTheBalance()
     {
@@ -21,39 +21,33 @@ public class PostgraduateCalculatorTests
             AnnualSalaryBeforeTax = 120_000m
         };
 
-        var loans = new List<UkStudentLoan>
+        var loan = new UkStudentLoan
         {
-            new()
-            {
-                Type = UkStudentLoanType.Postgraduate,
-                BalanceRemaining = 1_200m,
-                InterestRate = 0.01m,
-                RepaymentThreshold = 20_000m
-            }
+            Type = UkStudentLoanType.Postgraduate,
+            BalanceRemaining = 1_200m,
+            InterestRate = 0.01m,
+            RepaymentThreshold = 20_000m
         };
 
         var request = new PostgraduateCalculatorRequest(income)
         {
-            Loans = loans,
+            Loan = loan,
             Period = 1,
             PeriodDate = new DateTime(2022, 02, 01),
             PreviousPeriods = new List<UkStudentLoanTypeResult>()
         };
 
-        var expected = new List<UkStudentLoanTypeResult>
+        var expected = new UkStudentLoanTypeResult
         {
-            new()
-            {
-                Period = 1,
-                PeriodDate = new DateTime(2022, 02, 01),
-                LoanType = UkStudentLoanType.Postgraduate,
-                InterestRate = 0.01m,
-                DebtRemaining = 701m,
-                TotalPaid = 500.00m,
-                PaidInPeriod = 500.00m,
-                TotalInterestPaid = 1m,
-                InterestAppliedInPeriod = 1m
-            }
+            Period = 1,
+            PeriodDate = new DateTime(2022, 02, 01),
+            LoanType = UkStudentLoanType.Postgraduate,
+            InterestRate = 0.01m,
+            DebtRemaining = 701m,
+            TotalPaid = 500.00m,
+            PaidInPeriod = 500.00m,
+            TotalInterestPaid = 1m,
+            InterestAppliedInPeriod = 1m
         };
 
         // Act
@@ -74,20 +68,17 @@ public class PostgraduateCalculatorTests
             AnnualSalaryBeforeTax = 120_000m
         };
 
-        var loans = new List<UkStudentLoan>
+        var loan = new UkStudentLoan
         {
-            new()
-            {
-                Type = UkStudentLoanType.Postgraduate,
-                BalanceRemaining = 1_200m,
-                InterestRate = 0.01m,
-                RepaymentThreshold = 20_000m
-            }
+            Type = UkStudentLoanType.Postgraduate,
+            BalanceRemaining = 1_200m,
+            InterestRate = 0.01m,
+            RepaymentThreshold = 20_000m
         };
 
         var request = new PostgraduateCalculatorRequest(income)
         {
-            Loans = loans,
+            Loan = loan,
             Period = 2,
             PeriodDate = new DateTime(2022, 03, 01),
             PreviousPeriods = new List<UkStudentLoanTypeResult>
@@ -107,20 +98,17 @@ public class PostgraduateCalculatorTests
             }
         };
 
-        var expected = new List<UkStudentLoanTypeResult>
+        var expected = new UkStudentLoanTypeResult
         {
-            new()
-            {
-                Period = 2,
-                PeriodDate = new DateTime(2022, 03, 01),
-                LoanType = UkStudentLoanType.Postgraduate,
-                InterestRate = 0.01m,
-                DebtRemaining = 0,
-                TotalPaid = 510.0083m,
-                PaidInPeriod = 10.0083m,
-                TotalInterestPaid = 1.0083m,
-                InterestAppliedInPeriod = 0.0083m
-            }
+            Period = 2,
+            PeriodDate = new DateTime(2022, 03, 01),
+            LoanType = UkStudentLoanType.Postgraduate,
+            InterestRate = 0.01m,
+            DebtRemaining = 0,
+            TotalPaid = 510.0083m,
+            PaidInPeriod = 10.0083m,
+            TotalInterestPaid = 1.0083m,
+            InterestAppliedInPeriod = 0.0083m
         };
 
         // Act

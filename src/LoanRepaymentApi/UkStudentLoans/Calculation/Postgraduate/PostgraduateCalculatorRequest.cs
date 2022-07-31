@@ -13,7 +13,7 @@ public class PostgraduateCalculatorRequest
 
     public Income Income { get; init; }
 
-    public List<UkStudentLoan> Loans { get; init; } = new();
+    public UkStudentLoan Loan { get; init; }
 
     public IList<UkStudentLoanTypeResult> PreviousPeriods { get; init; } = new List<UkStudentLoanTypeResult>();
 }

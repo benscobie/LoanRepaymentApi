@@ -41,13 +41,21 @@ public class UkStudentLoanCalculator : IUkStudentLoanCalculator
                 PreviousPeriods = results.SelectMany(x => x.LoanResults).ToList()
             }));
 
-            loanTypeResults.AddRange(_postgraduateCalculator.Run(new PostgraduateCalculatorRequest(request.Income)
+            if (request.Loans.Any(x => x.Type == UkStudentLoanType.Postgraduate))
             {
-                Loans = request.Loans.Where(x => x.Type == UkStudentLoanType.Postgraduate).ToList(),
-                Period = period,
-                PeriodDate = periodDate,
-                PreviousPeriods = results.SelectMany(x => x.LoanResults).ToList()
-            }));
+                var postgraduateResult = _postgraduateCalculator.Run(new PostgraduateCalculatorRequest(request.Income)
+                {
+                    Loan = request.Loans.Single(x => x.Type == UkStudentLoanType.Postgraduate),
+                    Period = period,
+                    PeriodDate = periodDate,
+                    PreviousPeriods = results.SelectMany(x => x.LoanResults).ToList()
+                });
+
+                if (postgraduateResult != null)
+                {
+                    loanTypeResults.Add(postgraduateResult);
+                }
+            }
 
             loansHaveDebt = loanTypeResults.Any(x => x.DebtRemaining > 0);
 
