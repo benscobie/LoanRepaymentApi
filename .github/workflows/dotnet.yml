@@ -16,8 +16,6 @@ jobs:
 
     steps:
     - uses: actions/checkout@v3
-      with:
-        fetch-depth: 2
     - name: Setup .NET
       uses: actions/setup-dotnet@v2
       with:
@@ -40,6 +38,8 @@ jobs:
     steps:
     - name: Checkout
       uses: actions/checkout@v2
+      with:
+        fetch-depth: 2
     - name: Download coverage reports
       uses: actions/download-artifact@v2
     - name: Install ReportGenerator tool
