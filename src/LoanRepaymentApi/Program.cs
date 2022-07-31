@@ -1,4 +1,5 @@
 using LoanRepaymentApi.UkStudentLoans.Calculation;
+using LoanRepaymentApi.UkStudentLoans.Calculation.Postgraduate;
 using LoanRepaymentApi.UkStudentLoans.Calculation.StandardTypes;
 using NodaTime;
 
@@ -13,6 +14,7 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddScoped<IUkStudentLoanCalculator, UkStudentLoanCalculator>();
 builder.Services.AddScoped<IStandardTypeCalculator, StandardTypeCalculator>();
+builder.Services.AddScoped<IPostgraduateCalculator, PostgraduateCalculator>();
 builder.Services.AddSingleton<IClock>(SystemClock.Instance);
 
 var app = builder.Build();
