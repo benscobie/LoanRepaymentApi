@@ -1,9 +1,11 @@
 ﻿namespace LoanRepaymentApi;
 
+using System.Linq;
 using FluentValidation;
 using FluentValidation.Results;
 using Hellang.Middleware.ProblemDetails;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
+using Microsoft.Extensions.DependencyInjection;
 
 public static class Extensions
 {

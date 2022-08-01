@@ -1,11 +1,20 @@
 ﻿namespace LoanRepaymentApi.UkStudentLoans.Calculation.StandardTypes;
 
+using LoanRepaymentApi.UkStudentLoans.Calculation.Operations;
+
 public class StandardTypeCalculator : IStandardTypeCalculator
 {
+    private readonly ICanLoanBeWrittenOffOperation _canLoanBeWrittenOffOperation;
+
+    public StandardTypeCalculator(ICanLoanBeWrittenOffOperation canLoanBeWrittenOffOperation)
+    {
+        _canLoanBeWrittenOffOperation = canLoanBeWrittenOffOperation;
+    }
+
     public List<UkStudentLoanTypeResult> Run(StandardTypeCalculatorRequest request)
     {
         var results = new List<UkStudentLoanTypeResult>();
-        
+
         var loansToRepayInThresholdOrder = request.Loans
             .OrderByDescending(x => x.RepaymentThreshold);
 
@@ -23,6 +32,32 @@ public class StandardTypeCalculator : IStandardTypeCalculator
                 continue;
             }
 
+            if (_canLoanBeWrittenOffOperation.Execute(new CanLoanBeWrittenOffOperationFact
+                {
+                    BirthDate = request.PersonDetails.BirthDate,
+                    LoanType = loan.Type,
+                    PeriodDate = request.PeriodDate,
+                    FirstRepaymentDate = loan.FirstRepaymentDate,
+                    AcademicYearLoanTakenOut = loan.AcademicYearLoanTakenOut
+                }))
+            {
+                results.Add(new UkStudentLoanTypeResult
+                {
+                    RepaymentStatus = UkStudentLoanRepaymentStatus.WrittenOff,
+                    LoanType = loan.Type,
+                    Period = request.Period,
+                    PeriodDate = request.PeriodDate,
+                    DebtRemaining = 0,
+                    PaidInPeriod = 0,
+                    InterestRate = loan.InterestRate,
+                    InterestAppliedInPeriod = 0,
+                    TotalPaid = previousPeriodResult?.TotalPaid ?? 0,
+                    TotalInterestPaid = previousPeriodResult?.TotalInterestPaid ?? 0,
+                });
+
+                continue;
+            }
+
             // Apply Interest
             // TODO Calculate the interest rate ourselves: https://www.gov.uk/repaying-your-student-loan/what-you-pay
             var interestToApply = balanceRemaining * loan.InterestRate / 12;
@@ -32,7 +67,7 @@ public class StandardTypeCalculator : IStandardTypeCalculator
             // TODO Use thresholds defined here: https://www.gov.uk/repaying-your-student-loan/what-you-pay
 
             var annualSalaryUsableForLoanRepayment =
-                previousLoanWithABalancePaid?.RepaymentThreshold ?? request.Income.AnnualSalaryBeforeTax;
+                previousLoanWithABalancePaid?.RepaymentThreshold ?? request.PersonDetails.AnnualSalaryBeforeTax;
 
             var amountAvailableForPayment =
                 (((annualSalaryUsableForLoanRepayment - loan.RepaymentThreshold) * 0.09m) / 12) + allocationCarriedOver;
@@ -53,6 +88,7 @@ public class StandardTypeCalculator : IStandardTypeCalculator
 
             var result = new UkStudentLoanTypeResult
             {
+                RepaymentStatus = debtRemaining == 0 ? UkStudentLoanRepaymentStatus.PaidOff : UkStudentLoanRepaymentStatus.Paying,
                 LoanType = loan.Type,
                 Period = request.Period,
                 PeriodDate = request.PeriodDate,
@@ -63,7 +99,7 @@ public class StandardTypeCalculator : IStandardTypeCalculator
                 TotalPaid = amountToPay + (previousPeriodResult?.TotalPaid ?? 0),
                 TotalInterestPaid = interestToApply + (previousPeriodResult?.TotalInterestPaid ?? 0),
             };
-            
+
             previousLoanWithABalancePaid = loan;
             results.Add(result);
         }

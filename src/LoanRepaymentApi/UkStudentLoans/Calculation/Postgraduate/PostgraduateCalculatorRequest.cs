@@ -2,18 +2,19 @@
 
 public class PostgraduateCalculatorRequest
 {
-    public PostgraduateCalculatorRequest(Income income)
+    public PostgraduateCalculatorRequest(PersonDetails personDetails, UkStudentLoan loan)
     {
-        Income = income;
+        PersonDetails = personDetails;
+        Loan = loan;
     }
     
     public int Period { get; init; }
 
     public DateTimeOffset PeriodDate { get; init; }
 
-    public Income Income { get; init; }
+    public PersonDetails PersonDetails { get; }
 
-    public UkStudentLoan Loan { get; init; }
+    public UkStudentLoan Loan { get; }
 
     public IList<UkStudentLoanTypeResult> PreviousPeriods { get; init; } = new List<UkStudentLoanTypeResult>();
 }

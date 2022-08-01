@@ -14,4 +14,8 @@ public class UkStudentLoanDto
     public decimal InterestRate { get; set; }
 
     public decimal RepaymentThreshold { get; set; }
+
+    public DateTimeOffset? FirstRepaymentDate { get; set; }
+
+    public int? AcademicYearLoanTakenOut { get; set; }
 }

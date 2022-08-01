@@ -1,9 +1,13 @@
 ﻿namespace LoanRepaymentApi.UkStudentLoans;
 
+using System.Collections.Generic;
 using System.Net.Mime;
+using System.Threading.Tasks;
 using Hellang.Middleware.ProblemDetails;
 using LoanRepaymentApi.UkStudentLoans.Calculation;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 
 [ApiController]
 [Route("[controller]")]
@@ -43,9 +47,10 @@ public class UkStudentLoansController : ControllerBase
         }
         
         var loans = new List<UkStudentLoan>();
-        var calculatorRequest = new UkStudentLoanCalculatorRequest(new Income
+        var calculatorRequest = new UkStudentLoanCalculatorRequest(new PersonDetails
         {
             AnnualSalaryBeforeTax = request.AnnualSalaryBeforeTax,
+            BirthDate = request.BirthDate
         }, loans);
 
         foreach (var loan in request.Loans)
@@ -55,7 +60,9 @@ public class UkStudentLoansController : ControllerBase
                 Type = loan.LoanType,
                 BalanceRemaining = loan.BalanceRemaining,
                 InterestRate = loan.InterestRate,
-                RepaymentThreshold = loan.RepaymentThreshold
+                RepaymentThreshold = loan.RepaymentThreshold,
+                FirstRepaymentDate = loan.FirstRepaymentDate,
+                AcademicYearLoanTakenOut = loan.AcademicYearLoanTakenOut
             });
         }
         

@@ -2,11 +2,15 @@
 
 namespace LoanRepaymentApi.UkStudentLoans;
 
+using System.Collections.Generic;
+using System.Linq;
 using FluentValidation;
 
 public class UkStudentLoanCalculationDto
 {
     public int AnnualSalaryBeforeTax { get; set; }
+
+    public DateTimeOffset? BirthDate { get; set; }
 
     public List<UkStudentLoanDto> Loans { get; set; }
 }
@@ -16,6 +20,9 @@ public class UkStudentLoanCalculationDtoValidator : AbstractValidator<UkStudentL
     public UkStudentLoanCalculationDtoValidator()
     {
         RuleFor(x => x.AnnualSalaryBeforeTax).GreaterThan(0);
+        RuleFor(x => x.BirthDate).NotNull().When(x =>
+            x.Loans.Any(x => x.LoanType == UkStudentLoanType.Type1 && x.AcademicYearLoanTakenOut <= 2005) ||
+             x.Loans.Any(x => x.LoanType == UkStudentLoanType.Type4 && x.AcademicYearLoanTakenOut <= 2006));
         RuleFor(x => x.Loans).Must(HaveUniqueLoanTypes).WithMessage("Only one loan of each type allowed.");
         RuleFor(x => x.Loans).NotEmpty().WithMessage("At least one loan must be supplied.");
 
@@ -26,6 +33,12 @@ public class UkStudentLoanCalculationDtoValidator : AbstractValidator<UkStudentL
                 loan.RuleFor(x => x.BalanceRemaining).GreaterThan(0);
                 loan.RuleFor(x => x.InterestRate).GreaterThan(0);
                 loan.RuleFor(x => x.RepaymentThreshold).GreaterThan(0);
+                loan.RuleFor(x => x.AcademicYearLoanTakenOut).NotNull().When(x =>
+                    x.LoanType == UkStudentLoanType.Type1 || x.LoanType == UkStudentLoanType.Type4);
+                loan.RuleFor(x => x.FirstRepaymentDate).NotNull().When(x =>
+                    (x.LoanType == UkStudentLoanType.Type1 && x.AcademicYearLoanTakenOut >= 2006) ||
+                    x.LoanType == UkStudentLoanType.Type4 || x.LoanType == UkStudentLoanType.Postgraduate ||
+                    x.LoanType == UkStudentLoanType.Type2);
             });
     }
 

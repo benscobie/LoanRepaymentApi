@@ -4,6 +4,7 @@
     "periodDate": "2022-02-01T00:00:00+00:00",
     "loanResults": [
       {
+        "repaymentStatus": 2,
         "loanType": 1,
         "period": 1,
         "periodDate": "2022-02-01T00:00:00+00:00",
@@ -23,6 +24,7 @@
     "periodDate": "2022-03-01T00:00:00+00:00",
     "loanResults": [
       {
+        "repaymentStatus": 2,
         "loanType": 1,
         "period": 2,
         "periodDate": "2022-03-01T00:00:00+00:00",
@@ -42,6 +44,7 @@
     "periodDate": "2022-04-01T00:00:00+00:00",
     "loanResults": [
       {
+        "repaymentStatus": 3,
         "loanType": 1,
         "period": 3,
         "periodDate": "2022-04-01T00:00:00+00:00",
