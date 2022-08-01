@@ -1,5 +1,7 @@
 ﻿namespace LoanRepaymentApi.UkStudentLoans.Calculation;
 
+using System.Collections.Generic;
+using System.Linq;
 using LoanRepaymentApi.UkStudentLoans.Calculation.Postgraduate;
 using LoanRepaymentApi.UkStudentLoans.Calculation.StandardTypes;
 using NodaTime;
@@ -33,7 +35,7 @@ public class UkStudentLoanCalculator : IUkStudentLoanCalculator
 
             var loanTypeResults = new List<UkStudentLoanTypeResult>();
 
-            loanTypeResults.AddRange(_standardTypeCalculator.Run(new StandardTypeCalculatorRequest(request.Income)
+            loanTypeResults.AddRange(_standardTypeCalculator.Run(new StandardTypeCalculatorRequest(request.PersonDetails)
             {
                 Loans = request.Loans.Where(x => standardLoanTypes.Contains(x.Type)).ToList(),
                 Period = period,
@@ -43,13 +45,14 @@ public class UkStudentLoanCalculator : IUkStudentLoanCalculator
 
             if (request.Loans.Any(x => x.Type == UkStudentLoanType.Postgraduate))
             {
-                var postgraduateResult = _postgraduateCalculator.Run(new PostgraduateCalculatorRequest(request.Income)
-                {
-                    Loan = request.Loans.Single(x => x.Type == UkStudentLoanType.Postgraduate),
-                    Period = period,
-                    PeriodDate = periodDate,
-                    PreviousPeriods = results.SelectMany(x => x.LoanResults).ToList()
-                });
+                var postgraduateResult = _postgraduateCalculator.Run(
+                    new PostgraduateCalculatorRequest(request.PersonDetails,
+                        request.Loans.Single(x => x.Type == UkStudentLoanType.Postgraduate))
+                    {
+                        Period = period,
+                        PeriodDate = periodDate,
+                        PreviousPeriods = results.SelectMany(x => x.LoanResults).ToList()
+                    });
 
                 if (postgraduateResult != null)
                 {

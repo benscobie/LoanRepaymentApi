@@ -1,6 +1,10 @@
 ﻿namespace LoanRepaymentApi.UkStudentLoans;
 
-public class Income
+using System;
+
+public class PersonDetails
 {
     public decimal AnnualSalaryBeforeTax { get; set; }
+
+    public DateTimeOffset? BirthDate { get; set; }
 }

@@ -1,14 +1,16 @@
 ﻿namespace LoanRepaymentApi.UkStudentLoans.Calculation;
 
+using System.Collections.Generic;
+
 public class UkStudentLoanCalculatorRequest
 {
-    public UkStudentLoanCalculatorRequest(Income income, List<UkStudentLoan> loans)
+    public UkStudentLoanCalculatorRequest(PersonDetails personDetails, List<UkStudentLoan> loans)
     {
-        Income = income;
+        PersonDetails = personDetails;
         Loans = loans;
     }
     
-    public Income Income { get; }
+    public PersonDetails PersonDetails { get; }
 
     public List<UkStudentLoan> Loans { get; }
 }

@@ -2,16 +2,16 @@
 
 public class StandardTypeCalculatorRequest
 {
-    public StandardTypeCalculatorRequest(Income income)
+    public StandardTypeCalculatorRequest(PersonDetails personDetails)
     {
-        Income = income;
+        PersonDetails = personDetails;
     }
     
     public int Period { get; init; }
 
     public DateTimeOffset PeriodDate { get; init; }
 
-    public Income Income { get; init; }
+    public PersonDetails PersonDetails { get; init; }
 
     public List<UkStudentLoan> Loans { get; init; } = new();
 

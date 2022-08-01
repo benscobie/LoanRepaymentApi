@@ -2,6 +2,8 @@
 
 public class UkStudentLoanTypeResult
 {
+    public UkStudentLoanRepaymentStatus RepaymentStatus { get; set; }
+    
     public UkStudentLoanType LoanType { get; set; }
 
     public int Period { get; set; }

@@ -3,6 +3,7 @@ using Hellang.Middleware.ProblemDetails;
 using LoanRepaymentApi;
 using LoanRepaymentApi.UkStudentLoans;
 using LoanRepaymentApi.UkStudentLoans.Calculation;
+using LoanRepaymentApi.UkStudentLoans.Calculation.Operations;
 using LoanRepaymentApi.UkStudentLoans.Calculation.Postgraduate;
 using LoanRepaymentApi.UkStudentLoans.Calculation.StandardTypes;
 using NodaTime;
@@ -20,6 +21,10 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddScoped<IUkStudentLoanCalculator, UkStudentLoanCalculator>();
 builder.Services.AddScoped<IStandardTypeCalculator, StandardTypeCalculator>();
 builder.Services.AddScoped<IPostgraduateCalculator, PostgraduateCalculator>();
+
+// TODO Bulk register IOperations
+builder.Services.AddScoped<ICanLoanBeWrittenOffOperation, CanLoanBeWrittenOffOperation>();
+
 builder.Services.AddSingleton<IClock>(SystemClock.Instance);
 builder.Services.AddValidatorsFromAssemblyContaining<UkStudentLoanCalculationDtoValidator>();
 
