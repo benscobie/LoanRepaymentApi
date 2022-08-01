@@ -1,0 +1,25 @@
+﻿{
+  "title": "One or more validation errors occurred.",
+  "status": 400,
+  "traceId": "00-3e9724257927bcc56f9bb7bc2d093e63-dafc3c372855c2d4-00",
+  "errors": {
+    "Loans": [
+      "Only one loan of each type allowed."
+    ],
+    "AnnualSalaryBeforeTax": [
+      "'Annual Salary Before Tax' must be greater than '0'."
+    ],
+    "Loans[0].InterestRate": [
+      "'Interest Rate' must be greater than '0'."
+    ],
+    "Loans[0].BalanceRemaining": [
+      "'Balance Remaining' must be greater than '0'."
+    ],
+    "Loans[0].RepaymentThreshold": [
+      "'Repayment Threshold' must be greater than '0'."
+    ],
+    "Loans[1].RepaymentThreshold": [
+      "'Repayment Threshold' must be greater than '0'."
+    ]
+  }
+}

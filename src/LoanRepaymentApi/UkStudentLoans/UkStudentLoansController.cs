@@ -1,5 +1,7 @@
 ﻿namespace LoanRepaymentApi.UkStudentLoans;
 
+using System.Net.Mime;
+using Hellang.Middleware.ProblemDetails;
 using LoanRepaymentApi.UkStudentLoans.Calculation;
 using Microsoft.AspNetCore.Mvc;
 
@@ -9,16 +11,37 @@ public class UkStudentLoansController : ControllerBase
 {
     private readonly ILogger<UkStudentLoansController> _logger;
     private readonly IUkStudentLoanCalculator _ukStudentLoanCalculator;
+    private readonly UkStudentLoanCalculationDtoValidator _calculationDtoValidator;
 
-    public UkStudentLoansController(ILogger<UkStudentLoansController> logger, IUkStudentLoanCalculator ukStudentLoanCalculator)
+    public UkStudentLoansController(
+        ILogger<UkStudentLoansController> logger,
+        IUkStudentLoanCalculator ukStudentLoanCalculator,
+        UkStudentLoanCalculationDtoValidator calculationDtoValidator)
     {
         _logger = logger;
         _ukStudentLoanCalculator = ukStudentLoanCalculator;
+        _calculationDtoValidator = calculationDtoValidator;
     }
 
     [HttpPost("calculate")]
-    public IEnumerable<UkStudentLoanResult> Calculate(UkStudentLoanCalculationDto request)
+    [Consumes(MediaTypeNames.Application.Json)]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public async Task<ActionResult<IEnumerable<UkStudentLoanResult>>> Calculate(UkStudentLoanCalculationDto request)
     {
+        var validationResult = await _calculationDtoValidator.ValidateAsync(request);
+
+        if (!validationResult.IsValid)
+        {
+            validationResult.AddToModelState(ModelState);
+            var validation = new ValidationProblemDetails(ModelState)
+            {
+                Status = StatusCodes.Status400BadRequest
+            };
+
+            throw new ProblemDetailsException(validation);
+        }
+        
         var loans = new List<UkStudentLoan>();
         var calculatorRequest = new UkStudentLoanCalculatorRequest(new Income
         {
