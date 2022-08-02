@@ -22,7 +22,7 @@ public class Application : WebApplicationFactory<Program>
         // Add mock/test services to the builder here
         builder.ConfigureServices(services =>
         {
-            services.AddSingleton<IClock>(new FakeClock(Instant.FromUtc(2022, 1, 1, 0, 0, 0)));
+            services.AddSingleton<IClock>(new FakeClock(Instant.FromUtc(2022, 04, 1, 0, 0, 0)));
         });
 
         return base.CreateHost(builder);

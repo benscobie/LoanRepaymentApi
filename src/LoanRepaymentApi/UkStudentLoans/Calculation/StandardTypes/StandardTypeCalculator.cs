@@ -1,14 +1,20 @@
 ﻿namespace LoanRepaymentApi.UkStudentLoans.Calculation.StandardTypes;
 
 using LoanRepaymentApi.UkStudentLoans.Calculation.Operations;
+using LoanRepaymentApi.UkStudentLoans.Calculation.Operations.CanLoanBeWrittenOff;
+using LoanRepaymentApi.UkStudentLoans.Calculation.Operations.Threshold;
 
 public class StandardTypeCalculator : IStandardTypeCalculator
 {
     private readonly ICanLoanBeWrittenOffOperation _canLoanBeWrittenOffOperation;
+    private readonly IThresholdOperation _thresholdOperation;
 
-    public StandardTypeCalculator(ICanLoanBeWrittenOffOperation canLoanBeWrittenOffOperation)
+    public StandardTypeCalculator(
+        ICanLoanBeWrittenOffOperation canLoanBeWrittenOffOperation,
+        IThresholdOperation thresholdOperation)
     {
         _canLoanBeWrittenOffOperation = canLoanBeWrittenOffOperation;
+        _thresholdOperation = thresholdOperation;
     }
 
     public List<UkStudentLoanTypeResult> Run(StandardTypeCalculatorRequest request)
@@ -16,10 +22,14 @@ public class StandardTypeCalculator : IStandardTypeCalculator
         var results = new List<UkStudentLoanTypeResult>();
 
         var loansToRepayInThresholdOrder = request.Loans
-            .OrderByDescending(x => x.RepaymentThreshold);
+            .OrderByDescending(x => _thresholdOperation.Execute(new ThresholdOperationFact
+            {
+                LoanType = x.Type,
+                PeriodDate = request.PeriodDate
+            })).ToList();
 
         decimal allocationCarriedOver = 0;
-        UkStudentLoan? previousLoanWithABalancePaid = null;
+        int? previousLoansThreshold = null;
         foreach (var loan in loansToRepayInThresholdOrder)
         {
             var previousPeriodResult =
@@ -64,13 +74,17 @@ public class StandardTypeCalculator : IStandardTypeCalculator
             balanceRemaining += interestToApply;
 
             // Pay Down Balance
-            // TODO Use thresholds defined here: https://www.gov.uk/repaying-your-student-loan/what-you-pay
+            var threshold = _thresholdOperation.Execute(new ThresholdOperationFact
+            {
+                LoanType = loan.Type,
+                PeriodDate = request.PeriodDate
+            });
 
             var annualSalaryUsableForLoanRepayment =
-                previousLoanWithABalancePaid?.RepaymentThreshold ?? request.PersonDetails.AnnualSalaryBeforeTax;
+                previousLoansThreshold ?? request.PersonDetails.AnnualSalaryBeforeTax;
 
             var amountAvailableForPayment =
-                (((annualSalaryUsableForLoanRepayment - loan.RepaymentThreshold) * 0.09m) / 12) + allocationCarriedOver;
+                (((annualSalaryUsableForLoanRepayment - threshold) * 0.09m) / 12) + allocationCarriedOver;
 
             decimal amountToPay;
             if (amountAvailableForPayment > balanceRemaining)
@@ -88,7 +102,9 @@ public class StandardTypeCalculator : IStandardTypeCalculator
 
             var result = new UkStudentLoanTypeResult
             {
-                RepaymentStatus = debtRemaining == 0 ? UkStudentLoanRepaymentStatus.PaidOff : UkStudentLoanRepaymentStatus.Paying,
+                RepaymentStatus = debtRemaining == 0
+                    ? UkStudentLoanRepaymentStatus.PaidOff
+                    : UkStudentLoanRepaymentStatus.Paying,
                 LoanType = loan.Type,
                 Period = request.Period,
                 PeriodDate = request.PeriodDate,
@@ -100,7 +116,7 @@ public class StandardTypeCalculator : IStandardTypeCalculator
                 TotalInterestPaid = interestToApply + (previousPeriodResult?.TotalInterestPaid ?? 0),
             };
 
-            previousLoanWithABalancePaid = loan;
+            previousLoansThreshold = threshold;
             results.Add(result);
         }
 

@@ -7,6 +7,8 @@ using FluentAssertions;
 using LoanRepaymentApi.UkStudentLoans;
 using LoanRepaymentApi.UkStudentLoans.Calculation;
 using LoanRepaymentApi.UkStudentLoans.Calculation.Operations;
+using LoanRepaymentApi.UkStudentLoans.Calculation.Operations.CanLoanBeWrittenOff;
+using LoanRepaymentApi.UkStudentLoans.Calculation.Operations.Threshold;
 using LoanRepaymentApi.UkStudentLoans.Calculation.StandardTypes;
 using Moq;
 using Xunit;
@@ -15,7 +17,9 @@ public class StandardTypeCalculatorTests
 {
     [Theory, AutoMoqData]
     public void Execute_WithSingleLoanNotEndOfPeriod_ShouldPayOffSomeOfTheBalance(
-        [Frozen] Mock<ICanLoanBeWrittenOffOperation> canLoanBeWrittenOffOperationMock, StandardTypeCalculator sut)
+        [Frozen] Mock<ICanLoanBeWrittenOffOperation> canLoanBeWrittenOffOperationMock,
+        [Frozen] Mock<IThresholdOperation> thresholdOperation,
+        StandardTypeCalculator sut)
     {
         // Arrange
         var income = new PersonDetails
@@ -29,8 +33,7 @@ public class StandardTypeCalculatorTests
             {
                 Type = UkStudentLoanType.Type1,
                 BalanceRemaining = 1_200m,
-                InterestRate = 0.01m,
-                RepaymentThreshold = 20_000m
+                InterestRate = 0.01m
             }
         };
 
@@ -44,6 +47,8 @@ public class StandardTypeCalculatorTests
 
         canLoanBeWrittenOffOperationMock.Setup(x => x.Execute(It.IsAny<CanLoanBeWrittenOffOperationFact>()))
             .Returns(false);
+        thresholdOperation.Setup(x => x.Execute(It.IsAny<ThresholdOperationFact>()))
+            .Returns(20_000);
 
         var expected = new List<UkStudentLoanTypeResult>
         {
@@ -73,7 +78,9 @@ public class StandardTypeCalculatorTests
 
     [Theory, AutoMoqData]
     public void Execute_WithSingleLoanLastPeriod_ShouldPayOffRemainingBalance(
-        [Frozen] Mock<ICanLoanBeWrittenOffOperation> canLoanBeWrittenOffOperationMock, StandardTypeCalculator sut)
+        [Frozen] Mock<ICanLoanBeWrittenOffOperation> canLoanBeWrittenOffOperationMock,
+        [Frozen] Mock<IThresholdOperation> thresholdOperation,
+        StandardTypeCalculator sut)
     {
         // Arrange
         var income = new PersonDetails
@@ -87,8 +94,7 @@ public class StandardTypeCalculatorTests
             {
                 Type = UkStudentLoanType.Type1,
                 BalanceRemaining = 1_200m,
-                InterestRate = 0.01m,
-                RepaymentThreshold = 20_000m
+                InterestRate = 0.01m
             }
         };
 
@@ -116,6 +122,8 @@ public class StandardTypeCalculatorTests
 
         canLoanBeWrittenOffOperationMock.Setup(x => x.Execute(It.IsAny<CanLoanBeWrittenOffOperationFact>()))
             .Returns(false);
+        thresholdOperation.Setup(x => x.Execute(It.IsAny<ThresholdOperationFact>()))
+            .Returns(20_000);
 
         var expected = new List<UkStudentLoanTypeResult>
         {
@@ -145,7 +153,9 @@ public class StandardTypeCalculatorTests
 
     [Theory, AutoMoqData]
     public void Execute_WithType1AndType2Loans_ShouldPayOffType2AndCarryExcessToType2(
-        [Frozen] Mock<ICanLoanBeWrittenOffOperation> canLoanBeWrittenOffOperationMock, StandardTypeCalculator sut)
+        [Frozen] Mock<ICanLoanBeWrittenOffOperation> canLoanBeWrittenOffOperationMock,
+        [Frozen] Mock<IThresholdOperation> thresholdOperation,
+        StandardTypeCalculator sut)
     {
         // Arrange
         var income = new PersonDetails
@@ -159,15 +169,13 @@ public class StandardTypeCalculatorTests
             {
                 Type = UkStudentLoanType.Type1,
                 BalanceRemaining = 600m,
-                InterestRate = 0.01m,
-                RepaymentThreshold = 20_000m
+                InterestRate = 0.01m
             },
             new()
             {
                 Type = UkStudentLoanType.Type2,
                 BalanceRemaining = 1_200,
-                InterestRate = 0.01m,
-                RepaymentThreshold = 30_000
+                InterestRate = 0.01m
             }
         };
 
@@ -207,6 +215,10 @@ public class StandardTypeCalculatorTests
 
         canLoanBeWrittenOffOperationMock.Setup(x => x.Execute(It.IsAny<CanLoanBeWrittenOffOperationFact>()))
             .Returns(false);
+        thresholdOperation.Setup(x => x.Execute(It.Is<ThresholdOperationFact>(x => x.LoanType == UkStudentLoanType.Type1)))
+            .Returns(20_000);
+        thresholdOperation.Setup(x => x.Execute(It.Is<ThresholdOperationFact>(x => x.LoanType == UkStudentLoanType.Type2)))
+            .Returns(30_000);
 
         var expected = new List<UkStudentLoanTypeResult>
         {
@@ -249,7 +261,9 @@ public class StandardTypeCalculatorTests
     
     [Theory, AutoMoqData]
     public void Execute_WithSingleLoanThatIsBeingWrittenOff_ShouldReturnWrittenOffResult(
-        [Frozen] Mock<ICanLoanBeWrittenOffOperation> canLoanBeWrittenOffOperationMock, StandardTypeCalculator sut)
+        [Frozen] Mock<ICanLoanBeWrittenOffOperation> canLoanBeWrittenOffOperationMock,
+        [Frozen] Mock<IThresholdOperation> thresholdOperation,
+        StandardTypeCalculator sut)
     {
         // Arrange
         var income = new PersonDetails
@@ -263,8 +277,7 @@ public class StandardTypeCalculatorTests
             {
                 Type = UkStudentLoanType.Type1,
                 BalanceRemaining = 1_200m,
-                InterestRate = 0.01m,
-                RepaymentThreshold = 20_000m
+                InterestRate = 0.01m
             }
         };
 
@@ -292,6 +305,8 @@ public class StandardTypeCalculatorTests
 
         canLoanBeWrittenOffOperationMock.Setup(x => x.Execute(It.IsAny<CanLoanBeWrittenOffOperationFact>()))
             .Returns(true);
+        thresholdOperation.Setup(x => x.Execute(It.IsAny<ThresholdOperationFact>()))
+            .Returns(20_000);
 
         var expected = new List<UkStudentLoanTypeResult>
         {

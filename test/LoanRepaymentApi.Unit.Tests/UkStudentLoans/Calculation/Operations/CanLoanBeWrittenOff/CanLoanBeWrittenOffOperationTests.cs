@@ -1,10 +1,10 @@
-﻿namespace LoanRepaymentApi.Tests.UkStudentLoans.Calculation.Operations;
+﻿namespace LoanRepaymentApi.Tests.UkStudentLoans.Calculation.Operations.CanLoanBeWrittenOff;
 
 using System;
 using System.Collections.Generic;
 using FluentAssertions;
 using LoanRepaymentApi.UkStudentLoans;
-using LoanRepaymentApi.UkStudentLoans.Calculation.Operations;
+using LoanRepaymentApi.UkStudentLoans.Calculation.Operations.CanLoanBeWrittenOff;
 using Xunit;
 
 public class CanLoanBeWrittenOffOperationTests

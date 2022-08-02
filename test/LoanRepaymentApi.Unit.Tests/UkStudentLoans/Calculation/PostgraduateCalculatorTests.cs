@@ -7,6 +7,8 @@ using FluentAssertions;
 using LoanRepaymentApi.UkStudentLoans;
 using LoanRepaymentApi.UkStudentLoans.Calculation;
 using LoanRepaymentApi.UkStudentLoans.Calculation.Operations;
+using LoanRepaymentApi.UkStudentLoans.Calculation.Operations.CanLoanBeWrittenOff;
+using LoanRepaymentApi.UkStudentLoans.Calculation.Operations.Threshold;
 using LoanRepaymentApi.UkStudentLoans.Calculation.Postgraduate;
 using Moq;
 using Xunit;
@@ -15,7 +17,9 @@ public class PostgraduateCalculatorTests
 {
     [Theory, AutoMoqData]
     public void Execute_WithSingleLoanNotEndOfPeriod_ShouldPayOffSomeOfTheBalance(
-        [Frozen] Mock<ICanLoanBeWrittenOffOperation> canLoanBeWrittenOffOperationMock, PostgraduateCalculator sut)
+        [Frozen] Mock<ICanLoanBeWrittenOffOperation> canLoanBeWrittenOffOperationMock,
+        [Frozen] Mock<IThresholdOperation> thresholdOperation,
+        PostgraduateCalculator sut)
     {
         // Arrange
         var income = new PersonDetails
@@ -27,8 +31,7 @@ public class PostgraduateCalculatorTests
         {
             Type = UkStudentLoanType.Postgraduate,
             BalanceRemaining = 1_200m,
-            InterestRate = 0.01m,
-            RepaymentThreshold = 20_000m
+            InterestRate = 0.01m
         };
 
         var request = new PostgraduateCalculatorRequest(income, loan)
@@ -40,6 +43,8 @@ public class PostgraduateCalculatorTests
         
         canLoanBeWrittenOffOperationMock.Setup(x => x.Execute(It.IsAny<CanLoanBeWrittenOffOperationFact>()))
             .Returns(false);
+        thresholdOperation.Setup(x => x.Execute(It.IsAny<ThresholdOperationFact>()))
+            .Returns(20_000);
 
         var expected = new UkStudentLoanTypeResult
         {
@@ -66,7 +71,9 @@ public class PostgraduateCalculatorTests
 
     [Theory, AutoMoqData]
     public void Execute_WithSingleLoanLastPeriod_ShouldPayOffRemainingBalance(
-        [Frozen] Mock<ICanLoanBeWrittenOffOperation> canLoanBeWrittenOffOperationMock, PostgraduateCalculator sut)
+        [Frozen] Mock<ICanLoanBeWrittenOffOperation> canLoanBeWrittenOffOperationMock,
+        [Frozen] Mock<IThresholdOperation> thresholdOperation,
+        PostgraduateCalculator sut)
     {
         // Arrange
         var income = new PersonDetails
@@ -79,7 +86,6 @@ public class PostgraduateCalculatorTests
             Type = UkStudentLoanType.Postgraduate,
             BalanceRemaining = 1_200m,
             InterestRate = 0.01m,
-            RepaymentThreshold = 20_000m
         };
 
         var request = new PostgraduateCalculatorRequest(income, loan)
@@ -105,6 +111,8 @@ public class PostgraduateCalculatorTests
         
         canLoanBeWrittenOffOperationMock.Setup(x => x.Execute(It.IsAny<CanLoanBeWrittenOffOperationFact>()))
             .Returns(false);
+        thresholdOperation.Setup(x => x.Execute(It.IsAny<ThresholdOperationFact>()))
+            .Returns(20_000);
 
         var expected = new UkStudentLoanTypeResult
         {
@@ -131,7 +139,9 @@ public class PostgraduateCalculatorTests
     
     [Theory, AutoMoqData]
     public void Execute_WithSingleLoanThatIsBeingWrittenOff_ShouldReturnWrittenOffResult(
-        [Frozen] Mock<ICanLoanBeWrittenOffOperation> canLoanBeWrittenOffOperationMock, PostgraduateCalculator sut)
+        [Frozen] Mock<ICanLoanBeWrittenOffOperation> canLoanBeWrittenOffOperationMock,
+        [Frozen] Mock<IThresholdOperation> thresholdOperation,
+        PostgraduateCalculator sut)
     {
         // Arrange
         var income = new PersonDetails
@@ -143,8 +153,7 @@ public class PostgraduateCalculatorTests
         {
             Type = UkStudentLoanType.Postgraduate,
             BalanceRemaining = 1_200m,
-            InterestRate = 0.01m,
-            RepaymentThreshold = 20_000m
+            InterestRate = 0.01m
         };
 
         var request = new PostgraduateCalculatorRequest(income, loan)
@@ -170,6 +179,8 @@ public class PostgraduateCalculatorTests
 
         canLoanBeWrittenOffOperationMock.Setup(x => x.Execute(It.IsAny<CanLoanBeWrittenOffOperationFact>()))
             .Returns(true);
+        thresholdOperation.Setup(x => x.Execute(It.IsAny<ThresholdOperationFact>()))
+            .Returns(20_000);
 
         var expected = new UkStudentLoanTypeResult
         {

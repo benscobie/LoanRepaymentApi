@@ -1,4 +1,4 @@
-﻿namespace LoanRepaymentApi.UkStudentLoans.Calculation.Operations;
+﻿namespace LoanRepaymentApi.UkStudentLoans.Calculation.Operations.CanLoanBeWrittenOff;
 
 public class CanLoanBeWrittenOffOperation : ICanLoanBeWrittenOffOperation
 {
