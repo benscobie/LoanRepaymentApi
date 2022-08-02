@@ -28,9 +28,7 @@ public class CanLoanBeWrittenOffOperationTests
     public void Execute_WhenCalledWithFact_ShouldReturnExpectedResult(CanLoanBeWrittenOffOperationFact fact,
         bool expectedResult)
     {
-        // Arrange
-
-        // Act
+        // Arrange & Act
         var result = new CanLoanBeWrittenOffOperation().Execute(fact);
 
         // Assert

@@ -12,5 +12,9 @@ public class UkStudentLoan
     
     public decimal BalanceRemaining { get; set; }
     
-    public decimal InterestRate { get; set; }
+    public bool? StudyingPartTime { get; set; }
+    
+    public DateTimeOffset? CourseStartDate { get; set; }
+    
+    public DateTimeOffset? CourseEndDate { get; set; }
 }

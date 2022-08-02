@@ -8,16 +8,16 @@
         "loanType": 1,
         "period": 1,
         "periodDate": "2022-05-01T01:00:00+01:00",
-        "debtRemaining": 664.7958333333333,
-        "interestRate": 0.01,
+        "debtRemaining": 665.2125,
+        "interestRate": 0.015,
         "paidInPeriod": 336.0375,
-        "interestAppliedInPeriod": 0.8333333333333334,
+        "interestAppliedInPeriod": 1.25,
         "totalPaid": 336.0375,
-        "totalInterestPaid": 0.8333333333333334
+        "totalInterestPaid": 1.25
       }
     ],
     "aggregatedPaidInPeriod": 336.0375,
-    "aggregatedInterestAppliedInPeriod": 0.8333333333333334
+    "aggregatedInterestAppliedInPeriod": 1.25
   },
   {
     "period": 2,
@@ -28,16 +28,16 @@
         "loanType": 1,
         "period": 2,
         "periodDate": "2022-06-01T01:00:00+01:00",
-        "debtRemaining": 329.3123298611111,
-        "interestRate": 0.01,
+        "debtRemaining": 330.006515625,
+        "interestRate": 0.015,
         "paidInPeriod": 336.0375,
-        "interestAppliedInPeriod": 0.5539965277777777,
+        "interestAppliedInPeriod": 0.831515625,
         "totalPaid": 672.075,
-        "totalInterestPaid": 1.3873298611111111
+        "totalInterestPaid": 2.081515625
       }
     ],
     "aggregatedPaidInPeriod": 336.0375,
-    "aggregatedInterestAppliedInPeriod": 0.5539965277777777
+    "aggregatedInterestAppliedInPeriod": 0.831515625
   },
   {
     "period": 3,
@@ -49,14 +49,14 @@
         "period": 3,
         "periodDate": "2022-07-01T01:00:00+01:00",
         "debtRemaining": 0.0,
-        "interestRate": 0.01,
-        "paidInPeriod": 329.586756802662,
-        "interestAppliedInPeriod": 0.27442694155092595,
-        "totalPaid": 1001.661756802662,
-        "totalInterestPaid": 1.661756802662037
+        "interestRate": 0.015,
+        "paidInPeriod": 330.41902376953124,
+        "interestAppliedInPeriod": 0.41250814453125,
+        "totalPaid": 1002.4940237695313,
+        "totalInterestPaid": 2.49402376953125
       }
     ],
-    "aggregatedPaidInPeriod": 329.586756802662,
-    "aggregatedInterestAppliedInPeriod": 0.27442694155092595
+    "aggregatedPaidInPeriod": 330.41902376953124,
+    "aggregatedInterestAppliedInPeriod": 0.41250814453125
   }
 ]

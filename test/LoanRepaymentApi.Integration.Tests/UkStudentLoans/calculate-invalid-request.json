@@ -4,13 +4,11 @@
     {
       "loanType": "Type1",
       "balanceRemaining": 0,
-      "interestRate": 0,
       "threshold": 0
     },
     {
       "loanType": "Type1",
       "balanceRemaining": 1000,
-      "interestRate": 0.01,
       "threshold": 15000
     }
   ]

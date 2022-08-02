@@ -8,6 +8,7 @@ using LoanRepaymentApi.UkStudentLoans;
 using LoanRepaymentApi.UkStudentLoans.Calculation;
 using LoanRepaymentApi.UkStudentLoans.Calculation.Operations;
 using LoanRepaymentApi.UkStudentLoans.Calculation.Operations.CanLoanBeWrittenOff;
+using LoanRepaymentApi.UkStudentLoans.Calculation.Operations.Interest;
 using LoanRepaymentApi.UkStudentLoans.Calculation.Operations.Threshold;
 using LoanRepaymentApi.UkStudentLoans.Calculation.StandardTypes;
 using Moq;
@@ -19,12 +20,13 @@ public class StandardTypeCalculatorTests
     public void Execute_WithSingleLoanNotEndOfPeriod_ShouldPayOffSomeOfTheBalance(
         [Frozen] Mock<ICanLoanBeWrittenOffOperation> canLoanBeWrittenOffOperationMock,
         [Frozen] Mock<IThresholdOperation> thresholdOperation,
+        [Frozen] Mock<IInterestRateOperation> interestRateOperation,
         StandardTypeCalculator sut)
     {
         // Arrange
         var income = new PersonDetails
         {
-            AnnualSalaryBeforeTax = 120_000m
+            AnnualSalaryBeforeTax = 120_000
         };
 
         var loans = new List<UkStudentLoan>
@@ -32,8 +34,7 @@ public class StandardTypeCalculatorTests
             new()
             {
                 Type = UkStudentLoanType.Type1,
-                BalanceRemaining = 1_200m,
-                InterestRate = 0.01m
+                BalanceRemaining = 1_200m
             }
         };
 
@@ -49,6 +50,8 @@ public class StandardTypeCalculatorTests
             .Returns(false);
         thresholdOperation.Setup(x => x.Execute(It.IsAny<ThresholdOperationFact>()))
             .Returns(20_000);
+        interestRateOperation.Setup(x => x.Execute(It.IsAny<InterestRateOperationFact>()))
+            .Returns(0.01m);
 
         var expected = new List<UkStudentLoanTypeResult>
         {
@@ -80,12 +83,13 @@ public class StandardTypeCalculatorTests
     public void Execute_WithSingleLoanLastPeriod_ShouldPayOffRemainingBalance(
         [Frozen] Mock<ICanLoanBeWrittenOffOperation> canLoanBeWrittenOffOperationMock,
         [Frozen] Mock<IThresholdOperation> thresholdOperation,
+        [Frozen] Mock<IInterestRateOperation> interestRateOperation,
         StandardTypeCalculator sut)
     {
         // Arrange
         var income = new PersonDetails
         {
-            AnnualSalaryBeforeTax = 120_000m
+            AnnualSalaryBeforeTax = 120_000
         };
 
         var loans = new List<UkStudentLoan>
@@ -93,8 +97,7 @@ public class StandardTypeCalculatorTests
             new()
             {
                 Type = UkStudentLoanType.Type1,
-                BalanceRemaining = 1_200m,
-                InterestRate = 0.01m
+                BalanceRemaining = 1_200m
             }
         };
 
@@ -124,6 +127,8 @@ public class StandardTypeCalculatorTests
             .Returns(false);
         thresholdOperation.Setup(x => x.Execute(It.IsAny<ThresholdOperationFact>()))
             .Returns(20_000);
+        interestRateOperation.Setup(x => x.Execute(It.IsAny<InterestRateOperationFact>()))
+            .Returns(0.01m);
 
         var expected = new List<UkStudentLoanTypeResult>
         {
@@ -155,12 +160,13 @@ public class StandardTypeCalculatorTests
     public void Execute_WithType1AndType2Loans_ShouldPayOffType2AndCarryExcessToType2(
         [Frozen] Mock<ICanLoanBeWrittenOffOperation> canLoanBeWrittenOffOperationMock,
         [Frozen] Mock<IThresholdOperation> thresholdOperation,
+        [Frozen] Mock<IInterestRateOperation> interestRateOperation,
         StandardTypeCalculator sut)
     {
         // Arrange
         var income = new PersonDetails
         {
-            AnnualSalaryBeforeTax = 120_000m
+            AnnualSalaryBeforeTax = 120_000
         };
 
         var loans = new List<UkStudentLoan>
@@ -168,14 +174,12 @@ public class StandardTypeCalculatorTests
             new()
             {
                 Type = UkStudentLoanType.Type1,
-                BalanceRemaining = 600m,
-                InterestRate = 0.01m
+                BalanceRemaining = 600m
             },
             new()
             {
                 Type = UkStudentLoanType.Type2,
-                BalanceRemaining = 1_200,
-                InterestRate = 0.01m
+                BalanceRemaining = 1_200
             }
         };
 
@@ -196,7 +200,7 @@ public class StandardTypeCalculatorTests
                     InterestAppliedInPeriod = 0.50m,
                     TotalPaid = 75m,
                     TotalInterestPaid = 0.50m,
-                    DebtRemaining = 525.50m,
+                    DebtRemaining = 525.50m
                 },
                 new()
                 {
@@ -208,7 +212,7 @@ public class StandardTypeCalculatorTests
                     InterestAppliedInPeriod = 1m,
                     TotalPaid = 675m,
                     TotalInterestPaid = 1m,
-                    DebtRemaining = 526m,
+                    DebtRemaining = 526m
                 }
             }
         };
@@ -219,6 +223,8 @@ public class StandardTypeCalculatorTests
             .Returns(20_000);
         thresholdOperation.Setup(x => x.Execute(It.Is<ThresholdOperationFact>(x => x.LoanType == UkStudentLoanType.Type2)))
             .Returns(30_000);
+        interestRateOperation.Setup(x => x.Execute(It.IsAny<InterestRateOperationFact>()))
+            .Returns(0.01m);
 
         var expected = new List<UkStudentLoanTypeResult>
         {
@@ -263,12 +269,13 @@ public class StandardTypeCalculatorTests
     public void Execute_WithSingleLoanThatIsBeingWrittenOff_ShouldReturnWrittenOffResult(
         [Frozen] Mock<ICanLoanBeWrittenOffOperation> canLoanBeWrittenOffOperationMock,
         [Frozen] Mock<IThresholdOperation> thresholdOperation,
+        [Frozen] Mock<IInterestRateOperation> interestRateOperation,
         StandardTypeCalculator sut)
     {
         // Arrange
         var income = new PersonDetails
         {
-            AnnualSalaryBeforeTax = 120_000m
+            AnnualSalaryBeforeTax = 120_000
         };
 
         var loans = new List<UkStudentLoan>
@@ -276,8 +283,7 @@ public class StandardTypeCalculatorTests
             new()
             {
                 Type = UkStudentLoanType.Type1,
-                BalanceRemaining = 1_200m,
-                InterestRate = 0.01m
+                BalanceRemaining = 1_200m
             }
         };
 
@@ -307,6 +313,8 @@ public class StandardTypeCalculatorTests
             .Returns(true);
         thresholdOperation.Setup(x => x.Execute(It.IsAny<ThresholdOperationFact>()))
             .Returns(20_000);
+        interestRateOperation.Setup(x => x.Execute(It.IsAny<InterestRateOperationFact>()))
+            .Returns(0.01m);
 
         var expected = new List<UkStudentLoanTypeResult>
         {
@@ -315,7 +323,7 @@ public class StandardTypeCalculatorTests
                 Period = 2,
                 PeriodDate = new DateTime(2022, 02, 01),
                 LoanType = UkStudentLoanType.Type1,
-                InterestRate = 0.01m,
+                InterestRate = 0,
                 DebtRemaining = 0,
                 TotalPaid = 750m,
                 PaidInPeriod = 0m,

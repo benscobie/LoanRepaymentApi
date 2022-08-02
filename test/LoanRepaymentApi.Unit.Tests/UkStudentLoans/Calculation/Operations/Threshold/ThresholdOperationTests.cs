@@ -28,9 +28,7 @@ public class ThresholdOperationTests
     public void Execute_WhenCalledWithFact_ShouldReturnExpectedResult(ThresholdOperationFact fact,
         int expectedResult)
     {
-        // Arrange
-
-        // Act
+        // Arrange & Act
         var result = new ThresholdOperation().Execute(fact);
 
         // Assert
