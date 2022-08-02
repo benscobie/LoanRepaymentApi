@@ -59,7 +59,6 @@ public class UkStudentLoansController : ControllerBase
             {
                 Type = loan.LoanType,
                 BalanceRemaining = loan.BalanceRemaining,
-                InterestRate = loan.InterestRate,
                 FirstRepaymentDate = loan.FirstRepaymentDate,
                 AcademicYearLoanTakenOut = loan.AcademicYearLoanTakenOut
             });

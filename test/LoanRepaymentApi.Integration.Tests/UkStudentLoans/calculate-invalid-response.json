@@ -9,9 +9,6 @@
     "AnnualSalaryBeforeTax": [
       "'Annual Salary Before Tax' must be greater than '0'."
     ],
-    "Loans[0].InterestRate": [
-      "'Interest Rate' must be greater than '0'."
-    ],
     "Loans[0].BalanceRemaining": [
       "'Balance Remaining' must be greater than '0'."
     ],

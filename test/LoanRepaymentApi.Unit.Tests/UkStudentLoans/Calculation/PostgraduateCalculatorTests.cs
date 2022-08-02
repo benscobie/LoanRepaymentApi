@@ -8,6 +8,7 @@ using LoanRepaymentApi.UkStudentLoans;
 using LoanRepaymentApi.UkStudentLoans.Calculation;
 using LoanRepaymentApi.UkStudentLoans.Calculation.Operations;
 using LoanRepaymentApi.UkStudentLoans.Calculation.Operations.CanLoanBeWrittenOff;
+using LoanRepaymentApi.UkStudentLoans.Calculation.Operations.Interest;
 using LoanRepaymentApi.UkStudentLoans.Calculation.Operations.Threshold;
 using LoanRepaymentApi.UkStudentLoans.Calculation.Postgraduate;
 using Moq;
@@ -19,19 +20,19 @@ public class PostgraduateCalculatorTests
     public void Execute_WithSingleLoanNotEndOfPeriod_ShouldPayOffSomeOfTheBalance(
         [Frozen] Mock<ICanLoanBeWrittenOffOperation> canLoanBeWrittenOffOperationMock,
         [Frozen] Mock<IThresholdOperation> thresholdOperation,
+        [Frozen] Mock<IInterestRateOperation> interestRateOperation,
         PostgraduateCalculator sut)
     {
         // Arrange
         var income = new PersonDetails
         {
-            AnnualSalaryBeforeTax = 120_000m
+            AnnualSalaryBeforeTax = 120_000
         };
 
         var loan = new UkStudentLoan
         {
             Type = UkStudentLoanType.Postgraduate,
-            BalanceRemaining = 1_200m,
-            InterestRate = 0.01m
+            BalanceRemaining = 1_200m
         };
 
         var request = new PostgraduateCalculatorRequest(income, loan)
@@ -45,6 +46,8 @@ public class PostgraduateCalculatorTests
             .Returns(false);
         thresholdOperation.Setup(x => x.Execute(It.IsAny<ThresholdOperationFact>()))
             .Returns(20_000);
+        interestRateOperation.Setup(x => x.Execute(It.IsAny<InterestRateOperationFact>()))
+            .Returns(0.01m);
 
         var expected = new UkStudentLoanTypeResult
         {
@@ -73,19 +76,19 @@ public class PostgraduateCalculatorTests
     public void Execute_WithSingleLoanLastPeriod_ShouldPayOffRemainingBalance(
         [Frozen] Mock<ICanLoanBeWrittenOffOperation> canLoanBeWrittenOffOperationMock,
         [Frozen] Mock<IThresholdOperation> thresholdOperation,
+        [Frozen] Mock<IInterestRateOperation> interestRateOperation,
         PostgraduateCalculator sut)
     {
         // Arrange
         var income = new PersonDetails
         {
-            AnnualSalaryBeforeTax = 120_000m
+            AnnualSalaryBeforeTax = 120_000
         };
 
         var loan = new UkStudentLoan
         {
             Type = UkStudentLoanType.Postgraduate,
-            BalanceRemaining = 1_200m,
-            InterestRate = 0.01m,
+            BalanceRemaining = 1_200m
         };
 
         var request = new PostgraduateCalculatorRequest(income, loan)
@@ -113,6 +116,8 @@ public class PostgraduateCalculatorTests
             .Returns(false);
         thresholdOperation.Setup(x => x.Execute(It.IsAny<ThresholdOperationFact>()))
             .Returns(20_000);
+        interestRateOperation.Setup(x => x.Execute(It.IsAny<InterestRateOperationFact>()))
+            .Returns(0.01m);
 
         var expected = new UkStudentLoanTypeResult
         {
@@ -141,19 +146,19 @@ public class PostgraduateCalculatorTests
     public void Execute_WithSingleLoanThatIsBeingWrittenOff_ShouldReturnWrittenOffResult(
         [Frozen] Mock<ICanLoanBeWrittenOffOperation> canLoanBeWrittenOffOperationMock,
         [Frozen] Mock<IThresholdOperation> thresholdOperation,
+        [Frozen] Mock<IInterestRateOperation> interestRateOperation,
         PostgraduateCalculator sut)
     {
         // Arrange
         var income = new PersonDetails
         {
-            AnnualSalaryBeforeTax = 120_000m
+            AnnualSalaryBeforeTax = 120_000
         };
 
         var loan = new UkStudentLoan
         {
             Type = UkStudentLoanType.Postgraduate,
-            BalanceRemaining = 1_200m,
-            InterestRate = 0.01m
+            BalanceRemaining = 1_200m
         };
 
         var request = new PostgraduateCalculatorRequest(income, loan)
@@ -181,13 +186,15 @@ public class PostgraduateCalculatorTests
             .Returns(true);
         thresholdOperation.Setup(x => x.Execute(It.IsAny<ThresholdOperationFact>()))
             .Returns(20_000);
+        interestRateOperation.Setup(x => x.Execute(It.IsAny<InterestRateOperationFact>()))
+            .Returns(0.01m);
 
         var expected = new UkStudentLoanTypeResult
         {
             Period = 2,
             PeriodDate = new DateTime(2022, 03, 01),
             LoanType = UkStudentLoanType.Postgraduate,
-            InterestRate = 0.01m,
+            InterestRate = 0,
             DebtRemaining = 0,
             TotalPaid = 500.00m,
             PaidInPeriod = 0,

@@ -10,6 +10,9 @@ public class UkStudentLoanCalculationDto
 {
     public int AnnualSalaryBeforeTax { get; set; }
 
+    /// <summary>
+    /// Required for Type 1 and Type 4 loans when below their respective academic year thresholds.
+    /// </summary>
     public DateTimeOffset? BirthDate { get; set; }
 
     public List<UkStudentLoanDto> Loans { get; set; }
@@ -31,7 +34,12 @@ public class UkStudentLoanCalculationDtoValidator : AbstractValidator<UkStudentL
             {
                 loan.RuleFor(x => x.LoanType).NotEmpty().IsInEnum();
                 loan.RuleFor(x => x.BalanceRemaining).GreaterThan(0);
-                loan.RuleFor(x => x.InterestRate).GreaterThan(0);
+                loan.RuleFor(x => x.CourseStartDate).NotNull()
+                    .When(x => x.LoanType == UkStudentLoanType.Type2);
+                loan.RuleFor(x => x.CourseEndDate).NotNull()
+                    .When(x => x.LoanType == UkStudentLoanType.Type2);
+                loan.RuleFor(x => x.StudyingPartTime).NotNull()
+                    .When(x => x.LoanType == UkStudentLoanType.Type2);
                 loan.RuleFor(x => x.AcademicYearLoanTakenOut).NotNull().When(x =>
                     x.LoanType == UkStudentLoanType.Type1 || x.LoanType == UkStudentLoanType.Type4);
                 loan.RuleFor(x => x.FirstRepaymentDate).NotNull().When(x =>

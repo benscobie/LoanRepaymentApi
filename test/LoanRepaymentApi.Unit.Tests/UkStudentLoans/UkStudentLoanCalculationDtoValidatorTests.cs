@@ -38,7 +38,6 @@ public class UkStudentLoanCalculationDtoValidatorTests
                         {
                             LoanType = UkStudentLoanType.Type1,
                             BalanceRemaining = 1,
-                            InterestRate = 1,
                             AcademicYearLoanTakenOut = 2005,
                         }
                     },
@@ -55,7 +54,6 @@ public class UkStudentLoanCalculationDtoValidatorTests
                         {
                             LoanType = UkStudentLoanType.Type1,
                             BalanceRemaining = 1,
-                            InterestRate = 1,
                             AcademicYearLoanTakenOut = 2006,
                             FirstRepaymentDate = DateTimeOffset.Now
                         }
@@ -74,7 +72,6 @@ public class UkStudentLoanCalculationDtoValidatorTests
                         {
                             LoanType = UkStudentLoanType.Type4,
                             BalanceRemaining = 1,
-                            InterestRate = 1,
                             AcademicYearLoanTakenOut = 2006,
                             FirstRepaymentDate = DateTimeOffset.Now
                         }
@@ -92,7 +89,6 @@ public class UkStudentLoanCalculationDtoValidatorTests
                         {
                             LoanType = UkStudentLoanType.Type4,
                             BalanceRemaining = 1,
-                            InterestRate = 1,
                             AcademicYearLoanTakenOut = 2007,
                             FirstRepaymentDate = DateTimeOffset.Now
                         }
@@ -110,8 +106,10 @@ public class UkStudentLoanCalculationDtoValidatorTests
                         {
                             LoanType = UkStudentLoanType.Type2,
                             BalanceRemaining = 1,
-                            InterestRate = 1,
-                            FirstRepaymentDate = DateTimeOffset.Now
+                            FirstRepaymentDate = DateTimeOffset.Now,
+                            CourseStartDate = DateTimeOffset.Now,
+                            CourseEndDate = DateTimeOffset.Now,
+                            StudyingPartTime = false
                         }
                     },
                     AnnualSalaryBeforeTax = 1
@@ -127,7 +125,6 @@ public class UkStudentLoanCalculationDtoValidatorTests
                         {
                             LoanType = UkStudentLoanType.Postgraduate,
                             BalanceRemaining = 1,
-                            InterestRate = 1,
                             FirstRepaymentDate = DateTimeOffset.Now
                         }
                     },
@@ -150,21 +147,23 @@ public class UkStudentLoanCalculationDtoValidatorTests
                 new UkStudentLoanDto
                 {
                     LoanType = UkStudentLoanType.Type1,
-                    BalanceRemaining = 0,
-                    InterestRate = 0,
+                    BalanceRemaining = 0, // Must be greater than 0
                 },
                 new UkStudentLoanDto
                 {
-                    LoanType = UkStudentLoanType.Type1,
-                    BalanceRemaining = 1500,
-                    InterestRate = 0.1m,
+                    LoanType = UkStudentLoanType.Type1, // Can't have more than 1 of the same loan type
                 },
                 new UkStudentLoanDto
                 {
-                    LoanType = UkStudentLoanType.NotSet,
-                    BalanceRemaining = 1500,
-                    InterestRate = 0.1m,
-                }
+                    LoanType = UkStudentLoanType.NotSet, // Not a valid selection
+                },
+                new UkStudentLoanDto
+                {
+                    LoanType = UkStudentLoanType.Type2,
+                    CourseStartDate = null, // Must be set for type 2
+                    CourseEndDate = null, // Must be set for type 2
+                    StudyingPartTime = null // Must be set for type 2
+                },
             },
             AnnualSalaryBeforeTax = 0
         };
@@ -178,8 +177,10 @@ public class UkStudentLoanCalculationDtoValidatorTests
         result.ShouldHaveValidationErrorFor(x => x.AnnualSalaryBeforeTax);
         result.ShouldHaveValidationErrorFor("Loans");
         result.ShouldHaveValidationErrorFor("Loans[0].BalanceRemaining");
-        result.ShouldHaveValidationErrorFor("Loans[0].InterestRate");
         result.ShouldHaveValidationErrorFor("Loans[2].LoanType");
+        result.ShouldHaveValidationErrorFor("Loans[3].CourseStartDate");
+        result.ShouldHaveValidationErrorFor("Loans[3].CourseEndDate");
+        result.ShouldHaveValidationErrorFor("Loans[3].StudyingPartTime");
     }
 
     [Theory]
@@ -198,7 +199,6 @@ public class UkStudentLoanCalculationDtoValidatorTests
                 {
                     LoanType = data.LoanType,
                     BalanceRemaining = 1,
-                    InterestRate = 1,
                     FirstRepaymentDate = data.FirstRepaymentDate,
                     AcademicYearLoanTakenOut = data.AcademicYearLoanTakenOut
                 },

@@ -2,19 +2,23 @@
 
 using LoanRepaymentApi.UkStudentLoans.Calculation.Operations;
 using LoanRepaymentApi.UkStudentLoans.Calculation.Operations.CanLoanBeWrittenOff;
+using LoanRepaymentApi.UkStudentLoans.Calculation.Operations.Interest;
 using LoanRepaymentApi.UkStudentLoans.Calculation.Operations.Threshold;
 
 public class PostgraduateCalculator : IPostgraduateCalculator
 {
     private readonly ICanLoanBeWrittenOffOperation _canLoanBeWrittenOffOperation;
     private readonly IThresholdOperation _thresholdOperation;
+    private readonly IInterestRateOperation _interestRateOperation;
 
     public PostgraduateCalculator(
         ICanLoanBeWrittenOffOperation canLoanBeWrittenOffOperation,
-        IThresholdOperation thresholdOperation)
+        IThresholdOperation thresholdOperation,
+        IInterestRateOperation interestRateOperation)
     {
         _canLoanBeWrittenOffOperation = canLoanBeWrittenOffOperation;
         _thresholdOperation = thresholdOperation;
+        _interestRateOperation = interestRateOperation;
     }
     
     public UkStudentLoanTypeResult? Run(PostgraduateCalculatorRequest request)
@@ -46,19 +50,26 @@ public class PostgraduateCalculator : IPostgraduateCalculator
                 PeriodDate = request.PeriodDate,
                 DebtRemaining = 0,
                 PaidInPeriod = 0,
-                InterestRate = request.Loan.InterestRate,
+                InterestRate = 0,
                 InterestAppliedInPeriod = 0,
                 TotalPaid = previousPeriodResult?.TotalPaid ?? 0,
                 TotalInterestPaid = previousPeriodResult?.TotalInterestPaid ?? 0,
             };
         }
 
-        // Apply Interest
-        // TODO Calculate the interest rate ourselves: https://www.gov.uk/repaying-your-student-loan/what-you-pay
-        var interestToApply = balanceRemaining * request.Loan.InterestRate / 12;
+        var interestRate = _interestRateOperation.Execute(new InterestRateOperationFact
+        {
+            LoanType = request.Loan.Type,
+            PeriodDate = request.PeriodDate,
+            CourseStartDate = request.Loan.CourseStartDate,
+            CourseEndDate = request.Loan.CourseEndDate,
+            StudyingPartTime = request.Loan.StudyingPartTime,
+            AnnualSalaryBeforeTax = request.PersonDetails.AnnualSalaryBeforeTax
+        });
+        
+        var interestToApply = balanceRemaining * interestRate / 12;
         balanceRemaining += interestToApply;
 
-        // Pay Down Balance
         var threshold = _thresholdOperation.Execute(new ThresholdOperationFact
         {
             LoanType = request.Loan.Type,
@@ -81,7 +92,7 @@ public class PostgraduateCalculator : IPostgraduateCalculator
             PeriodDate = request.PeriodDate,
             DebtRemaining = debtRemaining,
             PaidInPeriod = amountToPay,
-            InterestRate = request.Loan.InterestRate,
+            InterestRate = interestRate,
             InterestAppliedInPeriod = interestToApply,
             TotalPaid = amountToPay + (previousPeriodResult?.TotalPaid ?? 0),
             TotalInterestPaid = interestToApply + (previousPeriodResult?.TotalInterestPaid ?? 0),
