@@ -13,6 +13,4 @@ public class UkStudentLoan
     public decimal BalanceRemaining { get; set; }
     
     public decimal InterestRate { get; set; }
-    
-    public decimal RepaymentThreshold { get; set; }
 }

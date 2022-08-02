@@ -39,7 +39,6 @@ public class UkStudentLoanCalculationDtoValidatorTests
                             LoanType = UkStudentLoanType.Type1,
                             BalanceRemaining = 1,
                             InterestRate = 1,
-                            RepaymentThreshold = 1,
                             AcademicYearLoanTakenOut = 2005,
                         }
                     },
@@ -57,7 +56,6 @@ public class UkStudentLoanCalculationDtoValidatorTests
                             LoanType = UkStudentLoanType.Type1,
                             BalanceRemaining = 1,
                             InterestRate = 1,
-                            RepaymentThreshold = 1,
                             AcademicYearLoanTakenOut = 2006,
                             FirstRepaymentDate = DateTimeOffset.Now
                         }
@@ -77,7 +75,6 @@ public class UkStudentLoanCalculationDtoValidatorTests
                             LoanType = UkStudentLoanType.Type4,
                             BalanceRemaining = 1,
                             InterestRate = 1,
-                            RepaymentThreshold = 1,
                             AcademicYearLoanTakenOut = 2006,
                             FirstRepaymentDate = DateTimeOffset.Now
                         }
@@ -96,7 +93,6 @@ public class UkStudentLoanCalculationDtoValidatorTests
                             LoanType = UkStudentLoanType.Type4,
                             BalanceRemaining = 1,
                             InterestRate = 1,
-                            RepaymentThreshold = 1,
                             AcademicYearLoanTakenOut = 2007,
                             FirstRepaymentDate = DateTimeOffset.Now
                         }
@@ -115,7 +111,6 @@ public class UkStudentLoanCalculationDtoValidatorTests
                             LoanType = UkStudentLoanType.Type2,
                             BalanceRemaining = 1,
                             InterestRate = 1,
-                            RepaymentThreshold = 1,
                             FirstRepaymentDate = DateTimeOffset.Now
                         }
                     },
@@ -133,7 +128,6 @@ public class UkStudentLoanCalculationDtoValidatorTests
                             LoanType = UkStudentLoanType.Postgraduate,
                             BalanceRemaining = 1,
                             InterestRate = 1,
-                            RepaymentThreshold = 1,
                             FirstRepaymentDate = DateTimeOffset.Now
                         }
                     },
@@ -158,21 +152,18 @@ public class UkStudentLoanCalculationDtoValidatorTests
                     LoanType = UkStudentLoanType.Type1,
                     BalanceRemaining = 0,
                     InterestRate = 0,
-                    RepaymentThreshold = 0
                 },
                 new UkStudentLoanDto
                 {
                     LoanType = UkStudentLoanType.Type1,
                     BalanceRemaining = 1500,
                     InterestRate = 0.1m,
-                    RepaymentThreshold = 25000,
                 },
                 new UkStudentLoanDto
                 {
                     LoanType = UkStudentLoanType.NotSet,
                     BalanceRemaining = 1500,
                     InterestRate = 0.1m,
-                    RepaymentThreshold = 25000,
                 }
             },
             AnnualSalaryBeforeTax = 0
@@ -188,7 +179,6 @@ public class UkStudentLoanCalculationDtoValidatorTests
         result.ShouldHaveValidationErrorFor("Loans");
         result.ShouldHaveValidationErrorFor("Loans[0].BalanceRemaining");
         result.ShouldHaveValidationErrorFor("Loans[0].InterestRate");
-        result.ShouldHaveValidationErrorFor("Loans[0].RepaymentThreshold");
         result.ShouldHaveValidationErrorFor("Loans[2].LoanType");
     }
 
@@ -209,7 +199,6 @@ public class UkStudentLoanCalculationDtoValidatorTests
                     LoanType = data.LoanType,
                     BalanceRemaining = 1,
                     InterestRate = 1,
-                    RepaymentThreshold = 1,
                     FirstRepaymentDate = data.FirstRepaymentDate,
                     AcademicYearLoanTakenOut = data.AcademicYearLoanTakenOut
                 },

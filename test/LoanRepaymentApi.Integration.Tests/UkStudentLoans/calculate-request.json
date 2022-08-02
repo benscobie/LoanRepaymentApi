@@ -5,7 +5,6 @@
       "loanType": "Type1",
       "balanceRemaining": 1000,
       "interestRate": 0.01,
-      "repaymentThreshold": 15000,
       "academicYearLoanTakenOut": 2010,
       "firstRepaymentDate": "2015-04-01T00:00:00+00:00"
     }

@@ -32,7 +32,6 @@ public class UkStudentLoanCalculationDtoValidator : AbstractValidator<UkStudentL
                 loan.RuleFor(x => x.LoanType).NotEmpty().IsInEnum();
                 loan.RuleFor(x => x.BalanceRemaining).GreaterThan(0);
                 loan.RuleFor(x => x.InterestRate).GreaterThan(0);
-                loan.RuleFor(x => x.RepaymentThreshold).GreaterThan(0);
                 loan.RuleFor(x => x.AcademicYearLoanTakenOut).NotNull().When(x =>
                     x.LoanType == UkStudentLoanType.Type1 || x.LoanType == UkStudentLoanType.Type4);
                 loan.RuleFor(x => x.FirstRepaymentDate).NotNull().When(x =>

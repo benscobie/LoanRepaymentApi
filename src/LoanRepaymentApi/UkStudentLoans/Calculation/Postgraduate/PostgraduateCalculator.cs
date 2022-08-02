@@ -1,14 +1,20 @@
 ﻿namespace LoanRepaymentApi.UkStudentLoans.Calculation.Postgraduate;
 
 using LoanRepaymentApi.UkStudentLoans.Calculation.Operations;
+using LoanRepaymentApi.UkStudentLoans.Calculation.Operations.CanLoanBeWrittenOff;
+using LoanRepaymentApi.UkStudentLoans.Calculation.Operations.Threshold;
 
 public class PostgraduateCalculator : IPostgraduateCalculator
 {
     private readonly ICanLoanBeWrittenOffOperation _canLoanBeWrittenOffOperation;
+    private readonly IThresholdOperation _thresholdOperation;
 
-    public PostgraduateCalculator(ICanLoanBeWrittenOffOperation canLoanBeWrittenOffOperation)
+    public PostgraduateCalculator(
+        ICanLoanBeWrittenOffOperation canLoanBeWrittenOffOperation,
+        IThresholdOperation thresholdOperation)
     {
         _canLoanBeWrittenOffOperation = canLoanBeWrittenOffOperation;
+        _thresholdOperation = thresholdOperation;
     }
     
     public UkStudentLoanTypeResult? Run(PostgraduateCalculatorRequest request)
@@ -53,11 +59,15 @@ public class PostgraduateCalculator : IPostgraduateCalculator
         balanceRemaining += interestToApply;
 
         // Pay Down Balance
-        // TODO Use thresholds defined here: https://www.gov.uk/repaying-your-student-loan/what-you-pay
+        var threshold = _thresholdOperation.Execute(new ThresholdOperationFact
+        {
+            LoanType = request.Loan.Type,
+            PeriodDate = request.PeriodDate
+        });
 
         var annualSalaryUsableForLoanRepayment = request.PersonDetails.AnnualSalaryBeforeTax;
         var amountAvailableForPayment =
-            ((annualSalaryUsableForLoanRepayment - request.Loan.RepaymentThreshold) * 0.06m) / 12;
+            ((annualSalaryUsableForLoanRepayment - threshold) * 0.06m) / 12;
         var amountToPay = amountAvailableForPayment > balanceRemaining
             ? balanceRemaining
             : amountAvailableForPayment;
