@@ -33,7 +33,7 @@ public class SalaryOperationTests
         // Arrange
         var fact = new SalaryOperationFact
         {
-            CurrentSalary = 50000,
+            CurrentSalary = 50125,
             PeriodDate = new DateTimeOffset(2022, 04, 06, 0, 0, 0, new TimeSpan(0, 0, 0)),
             SalaryAdjustments = new List<Adjustment>
             {
@@ -45,7 +45,7 @@ public class SalaryOperationTests
                 new Adjustment
                 {
                     Date = new DateTimeOffset(2022, 04, 17, 0, 0, 0, new TimeSpan(0, 0, 0)),
-                    Value = 0.05m
+                    Value = 0.0135m
                 },
                 new Adjustment
                 {
@@ -59,6 +59,6 @@ public class SalaryOperationTests
         var result = sut.Execute(fact);
 
         // Assert
-        result.Should().Be(52500);
+        result.Should().Be(50801);
     }
 }
