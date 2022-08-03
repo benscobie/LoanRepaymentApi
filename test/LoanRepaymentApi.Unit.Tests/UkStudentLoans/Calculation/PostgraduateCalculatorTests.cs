@@ -213,4 +213,62 @@ public class PostgraduateCalculatorTests
             .Using<decimal>(ctx => ctx.Subject.Should().BeApproximately(ctx.Expectation, 0.0001m))
             .WhenTypeIs<decimal>());
     }
+    
+    [Theory, AutoMoqData]
+    public void Execute_WithSingleLoanWithFuturePaymentDate_ShouldNotPayLoan(
+        [Frozen] Mock<ICanLoanBeWrittenOffOperation> canLoanBeWrittenOffOperationMock,
+        [Frozen] Mock<IThresholdOperation> thresholdOperation,
+        [Frozen] Mock<IInterestRateOperation> interestRateOperation,
+        PostgraduateCalculator sut)
+    {
+        // Arrange
+        var income = new PersonDetails
+        {
+            AnnualSalaryBeforeTax = 120_000
+        };
+
+        var loan = new UkStudentLoan
+        {
+            Type = UkStudentLoanType.Postgraduate,
+            BalanceRemaining = 1_200m,
+            FirstRepaymentDate = new DateTime(2022, 03, 01)
+        };
+
+        var request = new PostgraduateCalculatorRequest(income, loan)
+        {
+            Period = 1,
+            PeriodDate = new DateTime(2022, 02, 01),
+            Salary = 120_000,
+            PreviousProjections = new List<UkStudentLoanProjection>()
+        };
+
+        canLoanBeWrittenOffOperationMock.Setup(x => x.Execute(It.IsAny<CanLoanBeWrittenOffOperationFact>()))
+            .Returns(false);
+        thresholdOperation.Setup(x => x.Execute(It.IsAny<ThresholdOperationFact>()))
+            .Returns(20_000);
+        interestRateOperation.Setup(x => x.Execute(It.IsAny<InterestRateOperationFact>()))
+            .Returns(0.01m);
+
+        var expected = new UkStudentLoanProjection
+        {
+            Period = 1,
+            PeriodDate = new DateTime(2022, 02, 01),
+            LoanType = UkStudentLoanType.Postgraduate,
+            InterestRate = 0.01m,
+            DebtRemaining = 1201,
+            TotalPaid = 0,
+            Paid = 0,
+            TotalInterestPaid = 0,
+            InterestApplied = 1m,
+            RepaymentStatus = UkStudentLoanRepaymentStatus.NotPaying
+        };
+
+        // Act
+        var results = sut.Run(request);
+
+        // Assert
+        results.Should().BeEquivalentTo(expected, options => options
+            .Using<decimal>(ctx => ctx.Subject.Should().BeApproximately(ctx.Expectation, 0.0001m))
+            .WhenTypeIs<decimal>());
+    }
 }
