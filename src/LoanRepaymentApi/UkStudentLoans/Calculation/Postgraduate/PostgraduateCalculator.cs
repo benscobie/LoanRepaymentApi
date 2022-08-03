@@ -19,11 +19,12 @@ public class PostgraduateCalculator : IPostgraduateCalculator
         _thresholdOperation = thresholdOperation;
         _interestRateOperation = interestRateOperation;
     }
-    
+
     public UkStudentLoanProjection? Run(PostgraduateCalculatorRequest request)
     {
         var previousPeriodResult =
-            request.PreviousProjections.SingleOrDefault(x => x.Period == request.Period - 1 && x.LoanType == request.Loan.Type);
+            request.PreviousProjections.SingleOrDefault(x =>
+                x.Period == request.Period - 1 && x.LoanType == request.Loan.Type);
 
         var balanceRemaining = previousPeriodResult?.DebtRemaining ?? request.Loan.BalanceRemaining;
 
@@ -31,6 +32,13 @@ public class PostgraduateCalculator : IPostgraduateCalculator
         {
             return null;
         }
+
+        var result = new UkStudentLoanProjection
+        {
+            LoanType = request.Loan.Type,
+            Period = request.Period,
+            PeriodDate = request.PeriodDate
+        };
 
         if (_canLoanBeWrittenOffOperation.Execute(new CanLoanBeWrittenOffOperationFact
             {
@@ -41,19 +49,10 @@ public class PostgraduateCalculator : IPostgraduateCalculator
                 AcademicYearLoanTakenOut = request.Loan.AcademicYearLoanTakenOut
             }))
         {
-            return new UkStudentLoanProjection
-            {
-                RepaymentStatus = UkStudentLoanRepaymentStatus.WrittenOff,
-                LoanType = request.Loan.Type,
-                Period = request.Period,
-                PeriodDate = request.PeriodDate,
-                DebtRemaining = 0,
-                Paid = 0,
-                InterestRate = 0,
-                InterestApplied = 0,
-                TotalPaid = previousPeriodResult?.TotalPaid ?? 0,
-                TotalInterestPaid = previousPeriodResult?.TotalInterestPaid ?? 0,
-            };
+            result.RepaymentStatus = UkStudentLoanRepaymentStatus.WrittenOff;
+            result.TotalPaid = previousPeriodResult?.TotalPaid ?? 0;
+            result.TotalInterestPaid = previousPeriodResult?.TotalInterestPaid ?? 0;
+            return result;
         }
 
         var interestRate = _interestRateOperation.Execute(new InterestRateOperationFact
@@ -65,7 +64,7 @@ public class PostgraduateCalculator : IPostgraduateCalculator
             StudyingPartTime = request.Loan.StudyingPartTime,
             Salary = request.Salary
         });
-        
+
         var interestToApply = balanceRemaining * interestRate / 12;
         balanceRemaining += interestToApply;
 
@@ -75,21 +74,16 @@ public class PostgraduateCalculator : IPostgraduateCalculator
             PeriodDate = request.PeriodDate
         });
 
-        if (request.Salary < threshold)
+        if ((request.Loan.FirstRepaymentDate != null && request.PeriodDate < request.Loan.FirstRepaymentDate) ||
+            request.Salary < threshold)
         {
-            return new UkStudentLoanProjection
-            {
-                RepaymentStatus = UkStudentLoanRepaymentStatus.NotPaying,
-                LoanType = request.Loan.Type,
-                Period = request.Period,
-                PeriodDate = request.PeriodDate,
-                DebtRemaining = balanceRemaining,
-                Paid = 0,
-                InterestRate = interestRate,
-                InterestApplied = interestToApply,
-                TotalPaid = previousPeriodResult?.TotalPaid ?? 0,
-                TotalInterestPaid = previousPeriodResult?.TotalInterestPaid ?? 0
-            };
+            result.RepaymentStatus = UkStudentLoanRepaymentStatus.NotPaying;
+            result.DebtRemaining = balanceRemaining;
+            result.InterestRate = interestRate;
+            result.InterestApplied = interestToApply;
+            result.TotalPaid = previousPeriodResult?.TotalPaid ?? 0;
+            result.TotalInterestPaid = previousPeriodResult?.TotalInterestPaid ?? 0;
+            return result;
         }
 
         var amountAvailableForPayment = ((request.Salary - threshold) * 0.06m) / 12;
@@ -98,18 +92,15 @@ public class PostgraduateCalculator : IPostgraduateCalculator
             : amountAvailableForPayment;
         var debtRemaining = balanceRemaining - amountToPay;
 
-        return new UkStudentLoanProjection
-        {
-            RepaymentStatus = debtRemaining == 0 ? UkStudentLoanRepaymentStatus.PaidOff : UkStudentLoanRepaymentStatus.Paying,
-            LoanType = request.Loan.Type,
-            Period = request.Period,
-            PeriodDate = request.PeriodDate,
-            DebtRemaining = debtRemaining,
-            Paid = amountToPay,
-            InterestRate = interestRate,
-            InterestApplied = interestToApply,
-            TotalPaid = amountToPay + (previousPeriodResult?.TotalPaid ?? 0),
-            TotalInterestPaid = interestToApply + (previousPeriodResult?.TotalInterestPaid ?? 0)
-        };
+        result.RepaymentStatus = debtRemaining == 0
+            ? UkStudentLoanRepaymentStatus.PaidOff
+            : UkStudentLoanRepaymentStatus.Paying;
+        result.DebtRemaining = debtRemaining;
+        result.Paid = amountToPay;
+        result.InterestRate = interestRate;
+        result.InterestApplied = interestToApply;
+        result.TotalPaid = amountToPay + (previousPeriodResult?.TotalPaid ?? 0);
+        result.TotalInterestPaid = interestToApply + (previousPeriodResult?.TotalInterestPaid ?? 0);
+        return result;
     }
 }

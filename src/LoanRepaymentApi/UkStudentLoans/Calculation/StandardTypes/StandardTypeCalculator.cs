@@ -36,7 +36,8 @@ public class StandardTypeCalculator : IStandardTypeCalculator
         foreach (var loan in loansToRepayInThresholdOrder)
         {
             var previousPeriodResult =
-                request.PreviousProjections.SingleOrDefault(x => x.Period == request.Period - 1 && x.LoanType == loan.Type);
+                request.PreviousProjections.SingleOrDefault(x =>
+                    x.Period == request.Period - 1 && x.LoanType == loan.Type);
 
             var balanceRemaining = previousPeriodResult?.DebtRemaining ?? loan.BalanceRemaining;
 
@@ -44,6 +45,13 @@ public class StandardTypeCalculator : IStandardTypeCalculator
             {
                 continue;
             }
+
+            var result = new UkStudentLoanProjection
+            {
+                LoanType = loan.Type,
+                Period = request.Period,
+                PeriodDate = request.PeriodDate
+            };
 
             if (_canLoanBeWrittenOffOperation.Execute(new CanLoanBeWrittenOffOperationFact
                 {
@@ -54,20 +62,10 @@ public class StandardTypeCalculator : IStandardTypeCalculator
                     AcademicYearLoanTakenOut = loan.AcademicYearLoanTakenOut
                 }))
             {
-                results.Add(new UkStudentLoanProjection
-                {
-                    RepaymentStatus = UkStudentLoanRepaymentStatus.WrittenOff,
-                    LoanType = loan.Type,
-                    Period = request.Period,
-                    PeriodDate = request.PeriodDate,
-                    DebtRemaining = 0,
-                    Paid = 0,
-                    InterestRate = 0,
-                    InterestApplied = 0,
-                    TotalPaid = previousPeriodResult?.TotalPaid ?? 0,
-                    TotalInterestPaid = previousPeriodResult?.TotalInterestPaid ?? 0
-                });
-
+                result.RepaymentStatus = UkStudentLoanRepaymentStatus.WrittenOff;
+                result.TotalPaid = previousPeriodResult?.TotalPaid ?? 0;
+                result.TotalInterestPaid = previousPeriodResult?.TotalInterestPaid ?? 0;
+                results.Add(result);
                 continue;
             }
 
@@ -80,7 +78,7 @@ public class StandardTypeCalculator : IStandardTypeCalculator
                 StudyingPartTime = loan.StudyingPartTime,
                 Salary = request.Salary
             });
-            
+
             var interestToApply = balanceRemaining * interestRate / 12;
             balanceRemaining += interestToApply;
 
@@ -92,22 +90,16 @@ public class StandardTypeCalculator : IStandardTypeCalculator
 
             var annualSalaryUsableForLoanRepayment = previousLoansThreshold ?? request.Salary;
 
-            if (annualSalaryUsableForLoanRepayment < threshold)
+            if ((loan.FirstRepaymentDate != null && request.PeriodDate < loan.FirstRepaymentDate) ||
+                annualSalaryUsableForLoanRepayment < threshold)
             {
-                results.Add(new UkStudentLoanProjection
-                {
-                    RepaymentStatus = UkStudentLoanRepaymentStatus.NotPaying,
-                    LoanType = loan.Type,
-                    Period = request.Period,
-                    PeriodDate = request.PeriodDate,
-                    DebtRemaining = balanceRemaining,
-                    Paid = 0,
-                    InterestRate = interestRate,
-                    InterestApplied = interestToApply,
-                    TotalPaid = previousPeriodResult?.TotalPaid ?? 0,
-                    TotalInterestPaid = previousPeriodResult?.TotalInterestPaid ?? 0
-                });
-                
+                result.RepaymentStatus = UkStudentLoanRepaymentStatus.NotPaying;
+                result.DebtRemaining = balanceRemaining;
+                result.InterestRate = interestRate;
+                result.InterestApplied = interestToApply;
+                result.TotalPaid = previousPeriodResult?.TotalPaid ?? 0;
+                result.TotalInterestPaid = previousPeriodResult?.TotalInterestPaid ?? 0;
+                results.Add(result);
                 continue;
             }
 
@@ -127,24 +119,18 @@ public class StandardTypeCalculator : IStandardTypeCalculator
             }
 
             var debtRemaining = balanceRemaining - amountToPay;
-
-            var result = new UkStudentLoanProjection
-            {
-                RepaymentStatus = debtRemaining == 0
-                    ? UkStudentLoanRepaymentStatus.PaidOff
-                    : UkStudentLoanRepaymentStatus.Paying,
-                LoanType = loan.Type,
-                Period = request.Period,
-                PeriodDate = request.PeriodDate,
-                DebtRemaining = debtRemaining,
-                Paid = amountToPay,
-                InterestRate = interestRate,
-                InterestApplied = interestToApply,
-                TotalPaid = amountToPay + (previousPeriodResult?.TotalPaid ?? 0),
-                TotalInterestPaid = interestToApply + (previousPeriodResult?.TotalInterestPaid ?? 0)
-            };
-
             previousLoansThreshold = threshold;
+
+            result.RepaymentStatus = debtRemaining == 0
+                ? UkStudentLoanRepaymentStatus.PaidOff
+                : UkStudentLoanRepaymentStatus.Paying;
+            result.DebtRemaining = debtRemaining;
+            result.Paid = amountToPay;
+            result.InterestRate = interestRate;
+            result.InterestApplied = interestToApply;
+            result.TotalPaid = amountToPay + (previousPeriodResult?.TotalPaid ?? 0);
+            result.TotalInterestPaid = interestToApply + (previousPeriodResult?.TotalInterestPaid ?? 0);
+
             results.Add(result);
         }
 
