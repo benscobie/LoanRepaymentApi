@@ -2,5 +2,5 @@
 
 public interface IStandardTypeCalculator
 {
-    List<UkStudentLoanTypeResult> Run(StandardTypeCalculatorRequest request);
+    List<UkStudentLoanProjection> Run(StandardTypeCalculatorRequest request);
 }

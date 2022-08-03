@@ -2,7 +2,7 @@
 
 public class InterestRateOperationFact
 {
-    public int AnnualSalaryBeforeTax { get; set; }
+    public int Salary { get; set; }
 
     public UkStudentLoanType LoanType { get; set; }
     

@@ -6,7 +6,6 @@ using AutoFixture.Xunit2;
 using FluentAssertions;
 using LoanRepaymentApi.UkStudentLoans;
 using LoanRepaymentApi.UkStudentLoans.Calculation;
-using LoanRepaymentApi.UkStudentLoans.Calculation.Operations;
 using LoanRepaymentApi.UkStudentLoans.Calculation.Operations.CanLoanBeWrittenOff;
 using LoanRepaymentApi.UkStudentLoans.Calculation.Operations.Interest;
 using LoanRepaymentApi.UkStudentLoans.Calculation.Operations.Threshold;
@@ -43,7 +42,8 @@ public class StandardTypeCalculatorTests
             Loans = loans,
             Period = 1,
             PeriodDate = new DateTime(2022, 02, 01),
-            PreviousPeriods = new List<UkStudentLoanTypeResult>()
+            Salary = 120_000,
+            PreviousProjections = new List<UkStudentLoanProjection>()
         };
 
         canLoanBeWrittenOffOperationMock.Setup(x => x.Execute(It.IsAny<CanLoanBeWrittenOffOperationFact>()))
@@ -53,7 +53,7 @@ public class StandardTypeCalculatorTests
         interestRateOperation.Setup(x => x.Execute(It.IsAny<InterestRateOperationFact>()))
             .Returns(0.01m);
 
-        var expected = new List<UkStudentLoanTypeResult>
+        var expected = new List<UkStudentLoanProjection>
         {
             new()
             {
@@ -63,9 +63,9 @@ public class StandardTypeCalculatorTests
                 InterestRate = 0.01m,
                 DebtRemaining = 451m,
                 TotalPaid = 750m,
-                PaidInPeriod = 750m,
+                Paid = 750m,
                 TotalInterestPaid = 1m,
-                InterestAppliedInPeriod = 1m,
+                InterestApplied = 1m,
                 RepaymentStatus = UkStudentLoanRepaymentStatus.Paying
             }
         };
@@ -106,7 +106,8 @@ public class StandardTypeCalculatorTests
             Loans = loans,
             Period = 2,
             PeriodDate = new DateTime(2022, 03, 01),
-            PreviousPeriods = new List<UkStudentLoanTypeResult>
+            Salary = 120_000,
+            PreviousProjections = new List<UkStudentLoanProjection>
             {
                 new()
                 {
@@ -116,9 +117,9 @@ public class StandardTypeCalculatorTests
                     InterestRate = 0.01m,
                     DebtRemaining = 451m,
                     TotalPaid = 750m,
-                    PaidInPeriod = 750m,
+                    Paid = 750m,
                     TotalInterestPaid = 1m,
-                    InterestAppliedInPeriod = 1m
+                    InterestApplied = 1m
                 }
             }
         };
@@ -130,7 +131,7 @@ public class StandardTypeCalculatorTests
         interestRateOperation.Setup(x => x.Execute(It.IsAny<InterestRateOperationFact>()))
             .Returns(0.01m);
 
-        var expected = new List<UkStudentLoanTypeResult>
+        var expected = new List<UkStudentLoanProjection>
         {
             new()
             {
@@ -140,9 +141,9 @@ public class StandardTypeCalculatorTests
                 InterestRate = 0.01m,
                 DebtRemaining = 0,
                 TotalPaid = 1201.3758m,
-                PaidInPeriod = 451.3758m,
+                Paid = 451.3758m,
                 TotalInterestPaid = 1.3758m,
-                InterestAppliedInPeriod = 0.3758m,
+                InterestApplied = 0.3758m,
                 RepaymentStatus = UkStudentLoanRepaymentStatus.PaidOff
             }
         };
@@ -188,7 +189,8 @@ public class StandardTypeCalculatorTests
             Loans = loans,
             Period = 2,
             PeriodDate = new DateTime(2022, 03, 01),
-            PreviousPeriods = new List<UkStudentLoanTypeResult>
+            Salary = 120_000,
+            PreviousProjections = new List<UkStudentLoanProjection>
             {
                 new()
                 {
@@ -196,8 +198,8 @@ public class StandardTypeCalculatorTests
                     PeriodDate = new DateTime(2022, 02, 01),
                     LoanType = UkStudentLoanType.Type1,
                     InterestRate = 0.01m,
-                    PaidInPeriod = 75m,
-                    InterestAppliedInPeriod = 0.50m,
+                    Paid = 75m,
+                    InterestApplied = 0.50m,
                     TotalPaid = 75m,
                     TotalInterestPaid = 0.50m,
                     DebtRemaining = 525.50m
@@ -208,8 +210,8 @@ public class StandardTypeCalculatorTests
                     PeriodDate = new DateTime(2022, 02, 01),
                     LoanType = UkStudentLoanType.Type2,
                     InterestRate = 0.01m,
-                    PaidInPeriod = 675m,
-                    InterestAppliedInPeriod = 1m,
+                    Paid = 675m,
+                    InterestApplied = 1m,
                     TotalPaid = 675m,
                     TotalInterestPaid = 1m,
                     DebtRemaining = 526m
@@ -226,7 +228,7 @@ public class StandardTypeCalculatorTests
         interestRateOperation.Setup(x => x.Execute(It.IsAny<InterestRateOperationFact>()))
             .Returns(0.01m);
 
-        var expected = new List<UkStudentLoanTypeResult>
+        var expected = new List<UkStudentLoanProjection>
         {
             new()
             {
@@ -234,8 +236,8 @@ public class StandardTypeCalculatorTests
                 PeriodDate = new DateTime(2022, 03, 01),
                 LoanType = UkStudentLoanType.Type1,
                 InterestRate = 0.01m,
-                PaidInPeriod = 223.5616m,
-                InterestAppliedInPeriod = 0.4379m,
+                Paid = 223.5616m,
+                InterestApplied = 0.4379m,
                 TotalPaid = 298.5616m,
                 TotalInterestPaid = 0.9379m,
                 DebtRemaining = 302.3762m,
@@ -247,8 +249,8 @@ public class StandardTypeCalculatorTests
                 PeriodDate = new DateTime(2022, 03, 01),
                 LoanType = UkStudentLoanType.Type2,
                 InterestRate = 0.01m,
-                PaidInPeriod = 526.4383m,
-                InterestAppliedInPeriod = 0.4383m,
+                Paid = 526.4383m,
+                InterestApplied = 0.4383m,
                 TotalPaid = 1201.4383m,
                 TotalInterestPaid = 1.4383m,
                 DebtRemaining = 0,
@@ -292,7 +294,8 @@ public class StandardTypeCalculatorTests
             Loans = loans,
             Period = 2,
             PeriodDate = new DateTime(2022, 02, 01),
-            PreviousPeriods = new List<UkStudentLoanTypeResult>
+            Salary = 120_000,
+            PreviousProjections = new List<UkStudentLoanProjection>
             {
                 new()
                 {
@@ -302,9 +305,9 @@ public class StandardTypeCalculatorTests
                     InterestRate = 0.01m,
                     DebtRemaining = 451m,
                     TotalPaid = 750m,
-                    PaidInPeriod = 750m,
+                    Paid = 750m,
                     TotalInterestPaid = 1m,
-                    InterestAppliedInPeriod = 1m,
+                    InterestApplied = 1m,
                 }
             }
         };
@@ -316,7 +319,7 @@ public class StandardTypeCalculatorTests
         interestRateOperation.Setup(x => x.Execute(It.IsAny<InterestRateOperationFact>()))
             .Returns(0.01m);
 
-        var expected = new List<UkStudentLoanTypeResult>
+        var expected = new List<UkStudentLoanProjection>
         {
             new()
             {
@@ -326,9 +329,9 @@ public class StandardTypeCalculatorTests
                 InterestRate = 0,
                 DebtRemaining = 0,
                 TotalPaid = 750m,
-                PaidInPeriod = 0m,
+                Paid = 0m,
                 TotalInterestPaid = 1m,
-                InterestAppliedInPeriod = 0m,
+                InterestApplied = 0m,
                 RepaymentStatus = UkStudentLoanRepaymentStatus.WrittenOff
             }
         };

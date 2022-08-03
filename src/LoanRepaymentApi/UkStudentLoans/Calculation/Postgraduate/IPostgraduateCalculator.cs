@@ -2,5 +2,5 @@
 
 public interface IPostgraduateCalculator
 {
-    UkStudentLoanTypeResult? Run(PostgraduateCalculatorRequest request);
+    UkStudentLoanProjection? Run(PostgraduateCalculatorRequest request);
 }

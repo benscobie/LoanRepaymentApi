@@ -18,11 +18,11 @@ public class InterestRateOperation : IInterestRateOperation
 
         if (fact.LoanType == UkStudentLoanType.Type2)
         {
-            if (fact.AnnualSalaryBeforeTax < 27295)
+            if (fact.Salary < 27295)
             {
                 return RPI;
             }
-            else if (fact.AnnualSalaryBeforeTax < 49130)
+            else if (fact.Salary < 49130)
             {
                 if ((fact.StudyingPartTime!.Value && fact.PeriodDate < fact.CourseStartDate!.Value.AddYears(4)) ||
                     !fact.StudyingPartTime!.Value && fact.PeriodDate < new DateTimeOffset(
@@ -32,7 +32,7 @@ public class InterestRateOperation : IInterestRateOperation
                     return 0.045m;
                 }
 
-                decimal percentagePortionOfIncome = (fact.AnnualSalaryBeforeTax - 27295m) / (49129m - 27295m);
+                decimal percentagePortionOfIncome = (fact.Salary - 27295m) / (49129m - 27295m);
                 var rate = Math.Round(percentagePortionOfIncome * 0.03m, 3);
 
                 return RPI + rate;

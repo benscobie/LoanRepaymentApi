@@ -3,9 +3,9 @@ using Hellang.Middleware.ProblemDetails;
 using LoanRepaymentApi;
 using LoanRepaymentApi.UkStudentLoans;
 using LoanRepaymentApi.UkStudentLoans.Calculation;
-using LoanRepaymentApi.UkStudentLoans.Calculation.Operations;
 using LoanRepaymentApi.UkStudentLoans.Calculation.Operations.CanLoanBeWrittenOff;
 using LoanRepaymentApi.UkStudentLoans.Calculation.Operations.Interest;
+using LoanRepaymentApi.UkStudentLoans.Calculation.Operations.Salary;
 using LoanRepaymentApi.UkStudentLoans.Calculation.Operations.Threshold;
 using LoanRepaymentApi.UkStudentLoans.Calculation.Postgraduate;
 using LoanRepaymentApi.UkStudentLoans.Calculation.StandardTypes;
@@ -29,6 +29,7 @@ builder.Services.AddScoped<IPostgraduateCalculator, PostgraduateCalculator>();
 builder.Services.AddScoped<ICanLoanBeWrittenOffOperation, CanLoanBeWrittenOffOperation>();
 builder.Services.AddScoped<IThresholdOperation, ThresholdOperation>();
 builder.Services.AddScoped<IInterestRateOperation, InterestRateOperation>();
+builder.Services.AddScoped<ISalaryOperation, SalaryOperation>();
 
 builder.Services.AddSingleton<IClock>(SystemClock.Instance);
 builder.Services.AddValidatorsFromAssemblyContaining<UkStudentLoanCalculationDtoValidator>();

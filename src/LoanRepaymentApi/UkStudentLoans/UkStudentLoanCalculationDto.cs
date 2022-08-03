@@ -5,17 +5,20 @@ namespace LoanRepaymentApi.UkStudentLoans;
 using System.Collections.Generic;
 using System.Linq;
 using FluentValidation;
+using LoanRepaymentApi.UkStudentLoans.Calculation;
 
 public class UkStudentLoanCalculationDto
 {
     public int AnnualSalaryBeforeTax { get; set; }
+
+    public List<Adjustment> SalaryAdjustments { get; set; } = new();
 
     /// <summary>
     /// Required for Type 1 and Type 4 loans when below their respective academic year thresholds.
     /// </summary>
     public DateTimeOffset? BirthDate { get; set; }
 
-    public List<UkStudentLoanDto> Loans { get; set; }
+    public List<UkStudentLoanDto> Loans { get; set; } = new();
 }
 
 public class UkStudentLoanCalculationDtoValidator : AbstractValidator<UkStudentLoanCalculationDto>
@@ -27,6 +30,7 @@ public class UkStudentLoanCalculationDtoValidator : AbstractValidator<UkStudentL
             x.Loans.Any(x => x.LoanType == UkStudentLoanType.Type1 && x.AcademicYearLoanTakenOut <= 2005) ||
              x.Loans.Any(x => x.LoanType == UkStudentLoanType.Type4 && x.AcademicYearLoanTakenOut <= 2006));
         RuleFor(x => x.Loans).Must(HaveUniqueLoanTypes).WithMessage("Only one loan of each type allowed.");
+        RuleFor(x => x.SalaryAdjustments).Must(HaveMaximumAdjustmentOfOnePerMonth).WithMessage("Only one salary adjustment allowed per month.");
         RuleFor(x => x.Loans).NotEmpty().WithMessage("At least one loan must be supplied.");
 
         RuleForEach(x => x.Loans)
@@ -47,6 +51,13 @@ public class UkStudentLoanCalculationDtoValidator : AbstractValidator<UkStudentL
                     x.LoanType == UkStudentLoanType.Type4 || x.LoanType == UkStudentLoanType.Postgraduate ||
                     x.LoanType == UkStudentLoanType.Type2);
             });
+    }
+
+    private bool HaveMaximumAdjustmentOfOnePerMonth(UkStudentLoanCalculationDto loan, List<Adjustment> adjustments)
+    {
+        var groupedAdjustments = adjustments.GroupBy(x => new { x.Date.Year, x.Date.Month});
+
+        return groupedAdjustments.Count() == adjustments.Count;
     }
 
     private bool HaveUniqueLoanTypes(UkStudentLoanCalculationDto loan, List<UkStudentLoanDto> loans)

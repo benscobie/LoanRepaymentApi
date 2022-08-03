@@ -3,12 +3,14 @@
 public class UkStudentLoanResult
 {
     public int Period { get; set; }
-    
+
     public DateTimeOffset PeriodDate { get; set; }
+    
+    public int Salary { get; set; }
 
-    public List<UkStudentLoanTypeResult> LoanResults { get; set; } = new List<UkStudentLoanTypeResult>();
+    public List<UkStudentLoanProjection> Projections { get; set; } = new List<UkStudentLoanProjection>();
 
-    public decimal AggregatedPaidInPeriod => LoanResults.Sum(x => x.PaidInPeriod);
+    public decimal AggregatedPaidInPeriod => Projections.Sum(x => x.Paid);
 
-    public decimal AggregatedInterestAppliedInPeriod => LoanResults.Sum(x => x.InterestAppliedInPeriod);
+    public decimal AggregatedInterestAppliedInPeriod => Projections.Sum(x => x.InterestApplied);
 }
