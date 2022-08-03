@@ -1,0 +1,44 @@
+﻿[
+  {
+    "period": 1,
+    "periodDate": "2022-05-01T01:00:00+01:00",
+    "salary": 20000,
+    "projections": [
+      {
+        "repaymentStatus": 1,
+        "loanType": 1,
+        "period": 1,
+        "periodDate": "2022-05-01T01:00:00+01:00",
+        "debtRemaining": 50.0625,
+        "interestRate": 0.015,
+        "paid": 0,
+        "interestApplied": 0.0625,
+        "totalPaid": 0,
+        "totalInterestPaid": 0
+      }
+    ],
+    "aggregatedPaidInPeriod": 0,
+    "aggregatedInterestAppliedInPeriod": 0.0625
+  },
+  {
+    "period": 2,
+    "periodDate": "2022-06-01T01:00:00+01:00",
+    "salary": 30000,
+    "projections": [
+      {
+        "repaymentStatus": 3,
+        "loanType": 1,
+        "period": 2,
+        "periodDate": "2022-06-01T01:00:00+01:00",
+        "debtRemaining": 0.0,
+        "interestRate": 0.015,
+        "paid": 50.125078125,
+        "interestApplied": 0.062578125,
+        "totalPaid": 50.125078125,
+        "totalInterestPaid": 0.062578125
+      }
+    ],
+    "aggregatedPaidInPeriod": 50.125078125,
+    "aggregatedInterestAppliedInPeriod": 0.062578125
+  }
+]
