@@ -92,6 +92,25 @@ public class StandardTypeCalculator : IStandardTypeCalculator
 
             var annualSalaryUsableForLoanRepayment = previousLoansThreshold ?? request.Salary;
 
+            if (annualSalaryUsableForLoanRepayment < threshold)
+            {
+                results.Add(new UkStudentLoanProjection
+                {
+                    RepaymentStatus = UkStudentLoanRepaymentStatus.NotPaying,
+                    LoanType = loan.Type,
+                    Period = request.Period,
+                    PeriodDate = request.PeriodDate,
+                    DebtRemaining = balanceRemaining,
+                    Paid = 0,
+                    InterestRate = interestRate,
+                    InterestApplied = interestToApply,
+                    TotalPaid = previousPeriodResult?.TotalPaid ?? 0,
+                    TotalInterestPaid = previousPeriodResult?.TotalInterestPaid ?? 0
+                });
+                
+                continue;
+            }
+
             var amountAvailableForPayment =
                 (((annualSalaryUsableForLoanRepayment - threshold) * 0.09m) / 12) + allocationCarriedOver;
 

@@ -75,6 +75,23 @@ public class PostgraduateCalculator : IPostgraduateCalculator
             PeriodDate = request.PeriodDate
         });
 
+        if (request.Salary < threshold)
+        {
+            return new UkStudentLoanProjection
+            {
+                RepaymentStatus = UkStudentLoanRepaymentStatus.NotPaying,
+                LoanType = request.Loan.Type,
+                Period = request.Period,
+                PeriodDate = request.PeriodDate,
+                DebtRemaining = balanceRemaining,
+                Paid = 0,
+                InterestRate = interestRate,
+                InterestApplied = interestToApply,
+                TotalPaid = previousPeriodResult?.TotalPaid ?? 0,
+                TotalInterestPaid = previousPeriodResult?.TotalInterestPaid ?? 0
+            };
+        }
+
         var amountAvailableForPayment = ((request.Salary - threshold) * 0.06m) / 12;
         var amountToPay = amountAvailableForPayment > balanceRemaining
             ? balanceRemaining
@@ -92,7 +109,7 @@ public class PostgraduateCalculator : IPostgraduateCalculator
             InterestRate = interestRate,
             InterestApplied = interestToApply,
             TotalPaid = amountToPay + (previousPeriodResult?.TotalPaid ?? 0),
-            TotalInterestPaid = interestToApply + (previousPeriodResult?.TotalInterestPaid ?? 0),
+            TotalInterestPaid = interestToApply + (previousPeriodResult?.TotalInterestPaid ?? 0)
         };
     }
 }

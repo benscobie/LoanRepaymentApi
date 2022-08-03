@@ -16,6 +16,7 @@ public class Tests
     [Theory]
     [InlineData("calculate-type1", "Salary adjustment should modify amounts.")]
     [InlineData("calculate-type1-type2", "The type 2 interest rate should increase in the 2nd year, and paying off type 2 in the 2nd year should rollover a sufficient amount to pay off the type 1 in the same year.")]
+    [InlineData("calculate-type1-not-enough-salary-at-start", "The first should not have any paid amount as not enough salary, further years have enough salary to start repaying.")]
     public async Task Calculate_WithHappyPath_ShouldReturnSuccessResponseWithCorrectData(string filenamePrefix, string because)
     {
         await using var application = new Application();
