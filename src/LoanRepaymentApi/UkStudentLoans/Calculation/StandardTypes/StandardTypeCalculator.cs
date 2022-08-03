@@ -20,9 +20,9 @@ public class StandardTypeCalculator : IStandardTypeCalculator
         _interestRateOperation = interestRateOperation;
     }
 
-    public List<UkStudentLoanTypeResult> Run(StandardTypeCalculatorRequest request)
+    public List<UkStudentLoanProjection> Run(StandardTypeCalculatorRequest request)
     {
-        var results = new List<UkStudentLoanTypeResult>();
+        var results = new List<UkStudentLoanProjection>();
 
         var loansToRepayInThresholdOrder = request.Loans
             .OrderByDescending(x => _thresholdOperation.Execute(new ThresholdOperationFact
@@ -36,7 +36,7 @@ public class StandardTypeCalculator : IStandardTypeCalculator
         foreach (var loan in loansToRepayInThresholdOrder)
         {
             var previousPeriodResult =
-                request.PreviousPeriods.SingleOrDefault(x => x.Period == request.Period - 1 && x.LoanType == loan.Type);
+                request.PreviousProjections.SingleOrDefault(x => x.Period == request.Period - 1 && x.LoanType == loan.Type);
 
             var balanceRemaining = previousPeriodResult?.DebtRemaining ?? loan.BalanceRemaining;
 
@@ -54,16 +54,16 @@ public class StandardTypeCalculator : IStandardTypeCalculator
                     AcademicYearLoanTakenOut = loan.AcademicYearLoanTakenOut
                 }))
             {
-                results.Add(new UkStudentLoanTypeResult
+                results.Add(new UkStudentLoanProjection
                 {
                     RepaymentStatus = UkStudentLoanRepaymentStatus.WrittenOff,
                     LoanType = loan.Type,
                     Period = request.Period,
                     PeriodDate = request.PeriodDate,
                     DebtRemaining = 0,
-                    PaidInPeriod = 0,
+                    Paid = 0,
                     InterestRate = 0,
-                    InterestAppliedInPeriod = 0,
+                    InterestApplied = 0,
                     TotalPaid = previousPeriodResult?.TotalPaid ?? 0,
                     TotalInterestPaid = previousPeriodResult?.TotalInterestPaid ?? 0,
                 });
@@ -78,7 +78,7 @@ public class StandardTypeCalculator : IStandardTypeCalculator
                 CourseStartDate = loan.CourseStartDate,
                 CourseEndDate = loan.CourseEndDate,
                 StudyingPartTime = loan.StudyingPartTime,
-                AnnualSalaryBeforeTax = request.PersonDetails.AnnualSalaryBeforeTax
+                Salary = request.Salary
             });
             
             var interestToApply = balanceRemaining * interestRate / 12;
@@ -90,8 +90,7 @@ public class StandardTypeCalculator : IStandardTypeCalculator
                 PeriodDate = request.PeriodDate
             });
 
-            var annualSalaryUsableForLoanRepayment =
-                previousLoansThreshold ?? request.PersonDetails.AnnualSalaryBeforeTax;
+            var annualSalaryUsableForLoanRepayment = previousLoansThreshold ?? request.Salary;
 
             var amountAvailableForPayment =
                 (((annualSalaryUsableForLoanRepayment - threshold) * 0.09m) / 12) + allocationCarriedOver;
@@ -110,7 +109,7 @@ public class StandardTypeCalculator : IStandardTypeCalculator
 
             var debtRemaining = balanceRemaining - amountToPay;
 
-            var result = new UkStudentLoanTypeResult
+            var result = new UkStudentLoanProjection
             {
                 RepaymentStatus = debtRemaining == 0
                     ? UkStudentLoanRepaymentStatus.PaidOff
@@ -119,9 +118,9 @@ public class StandardTypeCalculator : IStandardTypeCalculator
                 Period = request.Period,
                 PeriodDate = request.PeriodDate,
                 DebtRemaining = debtRemaining,
-                PaidInPeriod = amountToPay,
+                Paid = amountToPay,
                 InterestRate = interestRate,
-                InterestAppliedInPeriod = interestToApply,
+                InterestApplied = interestToApply,
                 TotalPaid = amountToPay + (previousPeriodResult?.TotalPaid ?? 0),
                 TotalInterestPaid = interestToApply + (previousPeriodResult?.TotalInterestPaid ?? 0),
             };

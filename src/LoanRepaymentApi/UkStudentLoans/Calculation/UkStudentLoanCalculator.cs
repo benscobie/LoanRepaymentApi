@@ -2,6 +2,7 @@
 
 using System.Collections.Generic;
 using System.Linq;
+using LoanRepaymentApi.UkStudentLoans.Calculation.Operations.Salary;
 using LoanRepaymentApi.UkStudentLoans.Calculation.Postgraduate;
 using LoanRepaymentApi.UkStudentLoans.Calculation.StandardTypes;
 using NodaTime;
@@ -11,13 +12,17 @@ public class UkStudentLoanCalculator : IUkStudentLoanCalculator
     private readonly IClock _clock;
     private readonly IStandardTypeCalculator _standardTypeCalculator;
     private readonly IPostgraduateCalculator _postgraduateCalculator;
+    private readonly ISalaryOperation _salaryOperation;
 
-    public UkStudentLoanCalculator(IClock clock, IStandardTypeCalculator standardTypeCalculator,
-        IPostgraduateCalculator postgraduateCalculator)
+    public UkStudentLoanCalculator(IClock clock,
+        IStandardTypeCalculator standardTypeCalculator,
+        IPostgraduateCalculator postgraduateCalculator,
+        ISalaryOperation salaryOperation)
     {
         _clock = clock;
         _standardTypeCalculator = standardTypeCalculator;
         _postgraduateCalculator = postgraduateCalculator;
+        _salaryOperation = salaryOperation;
     }
 
     public List<UkStudentLoanResult> Run(UkStudentLoanCalculatorRequest request)
@@ -32,15 +37,29 @@ public class UkStudentLoanCalculator : IUkStudentLoanCalculator
         do
         {
             var periodDate = now.AddMonths(period);
+            
+            var result = new UkStudentLoanResult
+            {
+                Period = period,
+                PeriodDate = periodDate
+            };
 
-            var loanTypeResults = new List<UkStudentLoanTypeResult>();
+            var previousResult = results.SingleOrDefault(x => x.Period == period - 1);
 
-            loanTypeResults.AddRange(_standardTypeCalculator.Run(new StandardTypeCalculatorRequest(request.PersonDetails)
+            result.Salary = _salaryOperation.Execute(new SalaryOperationFact
+            {
+                CurrentSalary = previousResult?.Salary ?? request.PersonDetails.AnnualSalaryBeforeTax,
+                PeriodDate = periodDate,
+                SalaryAdjustments = request.PersonDetails.SalaryAdjustments
+            });
+
+            result.Projections.AddRange(_standardTypeCalculator.Run(new StandardTypeCalculatorRequest(request.PersonDetails)
             {
                 Loans = request.Loans.Where(x => standardLoanTypes.Contains(x.Type)).ToList(),
                 Period = period,
                 PeriodDate = periodDate,
-                PreviousPeriods = results.SelectMany(x => x.LoanResults).ToList()
+                PreviousProjections = results.SelectMany(x => x.Projections).ToList(),
+                Salary = result.Salary
             }));
 
             if (request.Loans.Any(x => x.Type == UkStudentLoanType.Postgraduate))
@@ -51,24 +70,18 @@ public class UkStudentLoanCalculator : IUkStudentLoanCalculator
                     {
                         Period = period,
                         PeriodDate = periodDate,
-                        PreviousPeriods = results.SelectMany(x => x.LoanResults).ToList()
+                        PreviousProjections = results.SelectMany(x => x.Projections).ToList(),
+                        Salary = result.Salary
                     });
 
                 if (postgraduateResult != null)
                 {
-                    loanTypeResults.Add(postgraduateResult);
+                    result.Projections.Add(postgraduateResult);
                 }
             }
 
-            loansHaveDebt = loanTypeResults.Any(x => x.DebtRemaining > 0);
-
-            results.Add(new UkStudentLoanResult
-            {
-                Period = period,
-                PeriodDate = periodDate,
-                LoanResults = loanTypeResults.OrderBy(x => x.LoanType).ToList()
-            });
-
+            loansHaveDebt = result.Projections.Any(x => x.DebtRemaining > 0);
+            results.Add(result);
             period++;
         } while (loansHaveDebt);
 

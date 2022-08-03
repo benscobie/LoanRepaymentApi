@@ -1,5 +1,11 @@
 ﻿{
   "annualSalaryBeforeTax": 65000,
+  "salaryAdjustments": [
+    {
+      "date": "2022-06-01T00:00:00+00:00",
+      "value": 0.1
+    }
+  ],
   "loans": [
     {
       "loanType": "Type1",

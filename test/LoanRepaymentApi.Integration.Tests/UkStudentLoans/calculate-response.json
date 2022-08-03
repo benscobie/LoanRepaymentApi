@@ -2,7 +2,8 @@
   {
     "period": 1,
     "periodDate": "2022-05-01T01:00:00+01:00",
-    "loanResults": [
+    "salary": 65000,
+    "projections": [
       {
         "repaymentStatus": 2,
         "loanType": 1,
@@ -10,10 +11,11 @@
         "periodDate": "2022-05-01T01:00:00+01:00",
         "debtRemaining": 665.2125,
         "interestRate": 0.015,
-        "paidInPeriod": 336.0375,
-        "interestAppliedInPeriod": 1.25,
+        "paid": 336.0375,
+        "interestApplied": 1.25,
         "totalPaid": 336.0375,
-        "totalInterestPaid": 1.25
+        "totalInterestPaid": 1.25,
+        "salary": 0
       }
     ],
     "aggregatedPaidInPeriod": 336.0375,
@@ -22,27 +24,30 @@
   {
     "period": 2,
     "periodDate": "2022-06-01T01:00:00+01:00",
-    "loanResults": [
+    "salary": 71500,
+    "projections": [
       {
         "repaymentStatus": 2,
         "loanType": 1,
         "period": 2,
         "periodDate": "2022-06-01T01:00:00+01:00",
-        "debtRemaining": 330.006515625,
+        "debtRemaining": 281.256515625,
         "interestRate": 0.015,
-        "paidInPeriod": 336.0375,
-        "interestAppliedInPeriod": 0.831515625,
-        "totalPaid": 672.075,
-        "totalInterestPaid": 2.081515625
+        "paid": 384.7875,
+        "interestApplied": 0.831515625,
+        "totalPaid": 720.825,
+        "totalInterestPaid": 2.081515625,
+        "salary": 0
       }
     ],
-    "aggregatedPaidInPeriod": 336.0375,
+    "aggregatedPaidInPeriod": 384.7875,
     "aggregatedInterestAppliedInPeriod": 0.831515625
   },
   {
     "period": 3,
     "periodDate": "2022-07-01T01:00:00+01:00",
-    "loanResults": [
+    "salary": 71500,
+    "projections": [
       {
         "repaymentStatus": 3,
         "loanType": 1,
@@ -50,13 +55,14 @@
         "periodDate": "2022-07-01T01:00:00+01:00",
         "debtRemaining": 0.0,
         "interestRate": 0.015,
-        "paidInPeriod": 330.41902376953124,
-        "interestAppliedInPeriod": 0.41250814453125,
-        "totalPaid": 1002.4940237695313,
-        "totalInterestPaid": 2.49402376953125
+        "paid": 281.60808626953127,
+        "interestApplied": 0.35157064453125,
+        "totalPaid": 1002.4330862695313,
+        "totalInterestPaid": 2.43308626953125,
+        "salary": 0
       }
     ],
-    "aggregatedPaidInPeriod": 330.41902376953124,
-    "aggregatedInterestAppliedInPeriod": 0.41250814453125
+    "aggregatedPaidInPeriod": 281.60808626953127,
+    "aggregatedInterestAppliedInPeriod": 0.35157064453125
   }
 ]

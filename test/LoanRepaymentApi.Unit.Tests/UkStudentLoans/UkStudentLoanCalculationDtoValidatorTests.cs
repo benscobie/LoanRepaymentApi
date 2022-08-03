@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using FluentAssertions;
 using FluentValidation.TestHelper;
 using LoanRepaymentApi.UkStudentLoans;
+using LoanRepaymentApi.UkStudentLoans.Calculation;
 using Xunit;
 
 public class UkStudentLoanCalculationDtoValidatorTests
@@ -34,7 +35,7 @@ public class UkStudentLoanCalculationDtoValidatorTests
                     BirthDate = DateTimeOffset.Now,
                     Loans = new List<UkStudentLoanDto>
                     {
-                        new UkStudentLoanDto
+                        new()
                         {
                             LoanType = UkStudentLoanType.Type1,
                             BalanceRemaining = 1,
@@ -50,7 +51,7 @@ public class UkStudentLoanCalculationDtoValidatorTests
                 {
                     Loans = new List<UkStudentLoanDto>
                     {
-                        new UkStudentLoanDto
+                        new()
                         {
                             LoanType = UkStudentLoanType.Type1,
                             BalanceRemaining = 1,
@@ -68,7 +69,7 @@ public class UkStudentLoanCalculationDtoValidatorTests
                     BirthDate = DateTimeOffset.Now,
                     Loans = new List<UkStudentLoanDto>
                     {
-                        new UkStudentLoanDto
+                        new()
                         {
                             LoanType = UkStudentLoanType.Type4,
                             BalanceRemaining = 1,
@@ -85,7 +86,7 @@ public class UkStudentLoanCalculationDtoValidatorTests
                 {
                     Loans = new List<UkStudentLoanDto>
                     {
-                        new UkStudentLoanDto
+                        new()
                         {
                             LoanType = UkStudentLoanType.Type4,
                             BalanceRemaining = 1,
@@ -102,7 +103,7 @@ public class UkStudentLoanCalculationDtoValidatorTests
                 {
                     Loans = new List<UkStudentLoanDto>
                     {
-                        new UkStudentLoanDto
+                        new()
                         {
                             LoanType = UkStudentLoanType.Type2,
                             BalanceRemaining = 1,
@@ -121,7 +122,36 @@ public class UkStudentLoanCalculationDtoValidatorTests
                 {
                     Loans = new List<UkStudentLoanDto>
                     {
-                        new UkStudentLoanDto
+                        new()
+                        {
+                            LoanType = UkStudentLoanType.Postgraduate,
+                            BalanceRemaining = 1,
+                            FirstRepaymentDate = DateTimeOffset.Now
+                        }
+                    },
+                    AnnualSalaryBeforeTax = 1
+                }
+            },
+            new object[]
+            {
+                new UkStudentLoanCalculationDto
+                {
+                    SalaryAdjustments = new List<Adjustment>
+                    {
+                        new()
+                        {
+                            Date = new DateTimeOffset(2022, 03, 01, 0, 0, 0, new TimeSpan(0, 0, 0)),
+                            Value = 0.02m
+                        },
+                        new()
+                        {
+                            Date = new DateTimeOffset(2022, 04, 17, 0, 0, 0, new TimeSpan(0, 0, 0)),
+                            Value = 0.05m
+                        },
+                    },
+                    Loans = new List<UkStudentLoanDto>
+                    {
+                        new()
                         {
                             LoanType = UkStudentLoanType.Postgraduate,
                             BalanceRemaining = 1,
@@ -144,28 +174,41 @@ public class UkStudentLoanCalculationDtoValidatorTests
         {
             Loans = new List<UkStudentLoanDto>
             {
-                new UkStudentLoanDto
+                new()
                 {
                     LoanType = UkStudentLoanType.Type1,
                     BalanceRemaining = 0, // Must be greater than 0
                 },
-                new UkStudentLoanDto
+                new()
                 {
                     LoanType = UkStudentLoanType.Type1, // Can't have more than 1 of the same loan type
                 },
-                new UkStudentLoanDto
+                new()
                 {
                     LoanType = UkStudentLoanType.NotSet, // Not a valid selection
                 },
-                new UkStudentLoanDto
+                new()
                 {
                     LoanType = UkStudentLoanType.Type2,
                     CourseStartDate = null, // Must be set for type 2
                     CourseEndDate = null, // Must be set for type 2
                     StudyingPartTime = null // Must be set for type 2
-                },
+                }
             },
-            AnnualSalaryBeforeTax = 0
+            AnnualSalaryBeforeTax = 0,
+            SalaryAdjustments = new List<Adjustment>
+            {
+                new()
+                {
+                    Date = new DateTimeOffset(2050, 01, 01, 0, 0, 0, new TimeSpan(0, 0, 0)),
+                    Value = 0.01m
+                },
+                new()
+                {
+                    Date = new DateTimeOffset(2050, 01, 25, 0, 0, 0, new TimeSpan(0, 0, 0)),
+                    Value = 0.01m
+                }
+            }
         };
 
         // Act
@@ -175,7 +218,7 @@ public class UkStudentLoanCalculationDtoValidatorTests
         result.IsValid.Should().BeFalse();
         result.ShouldHaveValidationErrorFor(x => x.Loans);
         result.ShouldHaveValidationErrorFor(x => x.AnnualSalaryBeforeTax);
-        result.ShouldHaveValidationErrorFor("Loans");
+        result.ShouldHaveValidationErrorFor(x => x.SalaryAdjustments);
         result.ShouldHaveValidationErrorFor("Loans[0].BalanceRemaining");
         result.ShouldHaveValidationErrorFor("Loans[2].LoanType");
         result.ShouldHaveValidationErrorFor("Loans[3].CourseStartDate");
@@ -195,7 +238,7 @@ public class UkStudentLoanCalculationDtoValidatorTests
         {
             Loans = new List<UkStudentLoanDto>
             {
-                new UkStudentLoanDto
+                new()
                 {
                     LoanType = data.LoanType,
                     BalanceRemaining = 1,

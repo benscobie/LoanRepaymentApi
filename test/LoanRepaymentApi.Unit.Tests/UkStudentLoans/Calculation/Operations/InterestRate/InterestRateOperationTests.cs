@@ -68,7 +68,7 @@ public class InterestRateOperationTests
                 new InterestRateOperationFact
                 {
                     LoanType = UkStudentLoanType.Type2,
-                    AnnualSalaryBeforeTax = 27294
+                    Salary = 27294
                 },
                 0.015m
             },
@@ -77,7 +77,7 @@ public class InterestRateOperationTests
                 new InterestRateOperationFact
                 {
                     LoanType = UkStudentLoanType.Type2,
-                    AnnualSalaryBeforeTax = 49129,
+                    Salary = 49129,
                     StudyingPartTime = true,
                     PeriodDate = new DateTimeOffset(2023, 12, 01, 0, 0, 0, new TimeSpan(0, 0, 0)),
                     CourseStartDate = new DateTimeOffset(2020, 01, 01, 0, 0, 0, new TimeSpan(0, 0, 0)),
@@ -89,7 +89,7 @@ public class InterestRateOperationTests
                 new InterestRateOperationFact
                 {
                     LoanType = UkStudentLoanType.Type2,
-                    AnnualSalaryBeforeTax = 38212,
+                    Salary = 38212,
                     StudyingPartTime = true,
                     PeriodDate = new DateTimeOffset(2025, 01, 01, 0, 0, 0, new TimeSpan(0, 0, 0)),
                     CourseStartDate = new DateTimeOffset(2020, 01, 01, 0, 0, 0, new TimeSpan(0, 0, 0)),
@@ -101,7 +101,7 @@ public class InterestRateOperationTests
                 new InterestRateOperationFact
                 {
                     LoanType = UkStudentLoanType.Type2,
-                    AnnualSalaryBeforeTax = 38212,
+                    Salary = 38212,
                     StudyingPartTime = false,
                     PeriodDate = new DateTimeOffset(2020, 03, 01, 0, 0, 0, new TimeSpan(0, 0, 0)),
                     CourseEndDate = new DateTimeOffset(2019, 07, 01, 0, 0, 0, new TimeSpan(0, 0, 0)),
@@ -113,7 +113,7 @@ public class InterestRateOperationTests
                 new InterestRateOperationFact
                 {
                     LoanType = UkStudentLoanType.Type2,
-                    AnnualSalaryBeforeTax = 38212,
+                    Salary = 38212,
                     StudyingPartTime = false,
                     PeriodDate = new DateTimeOffset(2020, 04, 01, 0, 0, 0, new TimeSpan(0, 0, 0)),
                     CourseEndDate = new DateTimeOffset(2019, 07, 01, 0, 0, 0, new TimeSpan(0, 0, 0)),
@@ -125,7 +125,7 @@ public class InterestRateOperationTests
                 new InterestRateOperationFact
                 {
                     LoanType = UkStudentLoanType.Type2,
-                    AnnualSalaryBeforeTax = 60000,
+                    Salary = 60000,
                 },
                 0.045m
             },

@@ -15,6 +15,8 @@ public class PostgraduateCalculatorRequest
     public PersonDetails PersonDetails { get; }
 
     public UkStudentLoan Loan { get; }
+    
+    public int Salary { get; set; }
 
-    public IList<UkStudentLoanTypeResult> PreviousPeriods { get; init; } = new List<UkStudentLoanTypeResult>();
+    public IList<UkStudentLoanProjection> PreviousProjections { get; init; } = new List<UkStudentLoanProjection>();
 }

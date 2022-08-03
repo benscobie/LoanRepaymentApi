@@ -50,7 +50,8 @@ public class UkStudentLoansController : ControllerBase
         var calculatorRequest = new UkStudentLoanCalculatorRequest(new PersonDetails
         {
             AnnualSalaryBeforeTax = request.AnnualSalaryBeforeTax,
-            BirthDate = request.BirthDate
+            BirthDate = request.BirthDate,
+            SalaryAdjustments = request.SalaryAdjustments
         }, loans);
 
         foreach (var loan in request.Loans)

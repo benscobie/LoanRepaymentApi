@@ -14,6 +14,8 @@ public class StandardTypeCalculatorRequest
     public PersonDetails PersonDetails { get; init; }
 
     public List<UkStudentLoan> Loans { get; init; } = new();
+    
+    public int Salary { get; set; }
 
-    public IList<UkStudentLoanTypeResult> PreviousPeriods { get; init; } = new List<UkStudentLoanTypeResult>();
+    public IList<UkStudentLoanProjection> PreviousProjections { get; init; } = new List<UkStudentLoanProjection>();
 }

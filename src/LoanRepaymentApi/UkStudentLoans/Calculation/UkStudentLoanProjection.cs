@@ -1,9 +1,9 @@
 ﻿namespace LoanRepaymentApi.UkStudentLoans.Calculation;
 
-public class UkStudentLoanTypeResult
+public class UkStudentLoanProjection
 {
     public UkStudentLoanRepaymentStatus RepaymentStatus { get; set; }
-    
+
     public UkStudentLoanType LoanType { get; set; }
 
     public int Period { get; set; }
@@ -14,11 +14,13 @@ public class UkStudentLoanTypeResult
 
     public decimal InterestRate { get; set; }
 
-    public decimal PaidInPeriod { get; set; }
+    public decimal Paid { get; set; }
 
-    public decimal InterestAppliedInPeriod { get; set; }
+    public decimal InterestApplied { get; set; }
 
     public decimal TotalPaid { get; set; }
 
     public decimal TotalInterestPaid { get; set; }
+
+    public int Salary { get; set; }
 }

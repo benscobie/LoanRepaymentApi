@@ -6,7 +6,6 @@ using AutoFixture.Xunit2;
 using FluentAssertions;
 using LoanRepaymentApi.UkStudentLoans;
 using LoanRepaymentApi.UkStudentLoans.Calculation;
-using LoanRepaymentApi.UkStudentLoans.Calculation.Operations;
 using LoanRepaymentApi.UkStudentLoans.Calculation.Operations.CanLoanBeWrittenOff;
 using LoanRepaymentApi.UkStudentLoans.Calculation.Operations.Interest;
 using LoanRepaymentApi.UkStudentLoans.Calculation.Operations.Threshold;
@@ -39,7 +38,8 @@ public class PostgraduateCalculatorTests
         {
             Period = 1,
             PeriodDate = new DateTime(2022, 02, 01),
-            PreviousPeriods = new List<UkStudentLoanTypeResult>()
+            PreviousProjections = new List<UkStudentLoanProjection>(),
+            Salary = 120_000
         };
         
         canLoanBeWrittenOffOperationMock.Setup(x => x.Execute(It.IsAny<CanLoanBeWrittenOffOperationFact>()))
@@ -49,7 +49,7 @@ public class PostgraduateCalculatorTests
         interestRateOperation.Setup(x => x.Execute(It.IsAny<InterestRateOperationFact>()))
             .Returns(0.01m);
 
-        var expected = new UkStudentLoanTypeResult
+        var expected = new UkStudentLoanProjection
         {
             Period = 1,
             PeriodDate = new DateTime(2022, 02, 01),
@@ -57,9 +57,9 @@ public class PostgraduateCalculatorTests
             InterestRate = 0.01m,
             DebtRemaining = 701m,
             TotalPaid = 500.00m,
-            PaidInPeriod = 500.00m,
+            Paid = 500.00m,
             TotalInterestPaid = 1m,
-            InterestAppliedInPeriod = 1m,
+            InterestApplied = 1m,
             RepaymentStatus = UkStudentLoanRepaymentStatus.Paying
         };
 
@@ -95,7 +95,8 @@ public class PostgraduateCalculatorTests
         {
             Period = 2,
             PeriodDate = new DateTime(2022, 03, 01),
-            PreviousPeriods = new List<UkStudentLoanTypeResult>
+            Salary = 120_000,
+            PreviousProjections = new List<UkStudentLoanProjection>
             {
                 new()
                 {
@@ -105,9 +106,9 @@ public class PostgraduateCalculatorTests
                     InterestRate = 0.01m,
                     DebtRemaining = 10m,
                     TotalPaid = 500.00m,
-                    PaidInPeriod = 500.00m,
+                    Paid = 500.00m,
                     TotalInterestPaid = 1m,
-                    InterestAppliedInPeriod = 1m
+                    InterestApplied = 1m
                 }
             }
         };
@@ -119,7 +120,7 @@ public class PostgraduateCalculatorTests
         interestRateOperation.Setup(x => x.Execute(It.IsAny<InterestRateOperationFact>()))
             .Returns(0.01m);
 
-        var expected = new UkStudentLoanTypeResult
+        var expected = new UkStudentLoanProjection
         {
             Period = 2,
             PeriodDate = new DateTime(2022, 03, 01),
@@ -127,9 +128,9 @@ public class PostgraduateCalculatorTests
             InterestRate = 0.01m,
             DebtRemaining = 0,
             TotalPaid = 510.0083m,
-            PaidInPeriod = 10.0083m,
+            Paid = 10.0083m,
             TotalInterestPaid = 1.0083m,
-            InterestAppliedInPeriod = 0.0083m,
+            InterestApplied = 0.0083m,
             RepaymentStatus = UkStudentLoanRepaymentStatus.PaidOff
         };
 
@@ -165,7 +166,8 @@ public class PostgraduateCalculatorTests
         {
             Period = 2,
             PeriodDate = new DateTime(2022, 03, 01),
-            PreviousPeriods = new List<UkStudentLoanTypeResult>
+            Salary = 120_000,
+            PreviousProjections = new List<UkStudentLoanProjection>
             {
                 new()
                 {
@@ -175,9 +177,9 @@ public class PostgraduateCalculatorTests
                     InterestRate = 0.01m,
                     DebtRemaining = 10m,
                     TotalPaid = 500.00m,
-                    PaidInPeriod = 500.00m,
+                    Paid = 500.00m,
                     TotalInterestPaid = 1m,
-                    InterestAppliedInPeriod = 1m
+                    InterestApplied = 1m
                 }
             }
         };
@@ -189,7 +191,7 @@ public class PostgraduateCalculatorTests
         interestRateOperation.Setup(x => x.Execute(It.IsAny<InterestRateOperationFact>()))
             .Returns(0.01m);
 
-        var expected = new UkStudentLoanTypeResult
+        var expected = new UkStudentLoanProjection
         {
             Period = 2,
             PeriodDate = new DateTime(2022, 03, 01),
@@ -197,9 +199,9 @@ public class PostgraduateCalculatorTests
             InterestRate = 0,
             DebtRemaining = 0,
             TotalPaid = 500.00m,
-            PaidInPeriod = 0,
+            Paid = 0,
             TotalInterestPaid = 1m,
-            InterestAppliedInPeriod = 0,
+            InterestApplied = 0,
             RepaymentStatus = UkStudentLoanRepaymentStatus.WrittenOff
         };
 
