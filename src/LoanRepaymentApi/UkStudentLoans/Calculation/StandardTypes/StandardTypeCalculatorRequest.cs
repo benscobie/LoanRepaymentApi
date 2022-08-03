@@ -11,7 +11,7 @@ public class StandardTypeCalculatorRequest
 
     public DateTimeOffset PeriodDate { get; init; }
 
-    public PersonDetails PersonDetails { get; init; }
+    public PersonDetails PersonDetails { get; }
 
     public List<UkStudentLoan> Loans { get; init; } = new();
     
