@@ -7,7 +7,6 @@ using LoanRepaymentApi.UkStudentLoans.Calculation.Operations.CanLoanBeWrittenOff
 using LoanRepaymentApi.UkStudentLoans.Calculation.Operations.Interest;
 using LoanRepaymentApi.UkStudentLoans.Calculation.Operations.Salary;
 using LoanRepaymentApi.UkStudentLoans.Calculation.Operations.Threshold;
-using LoanRepaymentApi.UkStudentLoans.Calculation.Postgraduate;
 using LoanRepaymentApi.UkStudentLoans.Calculation.StandardTypes;
 using NodaTime;
 
@@ -23,7 +22,6 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddScoped<IUkStudentLoanCalculator, UkStudentLoanCalculator>();
 builder.Services.AddScoped<IStandardTypeCalculator, StandardTypeCalculator>();
-builder.Services.AddScoped<IPostgraduateCalculator, PostgraduateCalculator>();
 
 // TODO Bulk register IOperations
 builder.Services.AddScoped<ICanLoanBeWrittenOffOperation, CanLoanBeWrittenOffOperation>();

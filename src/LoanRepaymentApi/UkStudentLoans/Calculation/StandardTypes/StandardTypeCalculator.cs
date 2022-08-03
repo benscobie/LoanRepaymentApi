@@ -102,9 +102,10 @@ public class StandardTypeCalculator : IStandardTypeCalculator
                 results.Add(result);
                 continue;
             }
-
+            
+            var percentageOfSalary = loan.Type == UkStudentLoanType.Postgraduate ? 0.06m : 0.09m;
             var amountAvailableForPayment =
-                (((annualSalaryUsableForLoanRepayment - threshold) * 0.09m) / 12) + allocationCarriedOver;
+                (((annualSalaryUsableForLoanRepayment - threshold) * percentageOfSalary) / 12) + allocationCarriedOver;
 
             decimal amountToPay;
             if (amountAvailableForPayment > balanceRemaining)

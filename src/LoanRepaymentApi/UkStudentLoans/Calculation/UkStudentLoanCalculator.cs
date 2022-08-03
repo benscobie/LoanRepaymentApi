@@ -3,7 +3,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using LoanRepaymentApi.UkStudentLoans.Calculation.Operations.Salary;
-using LoanRepaymentApi.UkStudentLoans.Calculation.Postgraduate;
 using LoanRepaymentApi.UkStudentLoans.Calculation.StandardTypes;
 using NodaTime;
 
@@ -11,17 +10,14 @@ public class UkStudentLoanCalculator : IUkStudentLoanCalculator
 {
     private readonly IClock _clock;
     private readonly IStandardTypeCalculator _standardTypeCalculator;
-    private readonly IPostgraduateCalculator _postgraduateCalculator;
     private readonly ISalaryOperation _salaryOperation;
 
     public UkStudentLoanCalculator(IClock clock,
         IStandardTypeCalculator standardTypeCalculator,
-        IPostgraduateCalculator postgraduateCalculator,
         ISalaryOperation salaryOperation)
     {
         _clock = clock;
         _standardTypeCalculator = standardTypeCalculator;
-        _postgraduateCalculator = postgraduateCalculator;
         _salaryOperation = salaryOperation;
     }
 
@@ -62,23 +58,16 @@ public class UkStudentLoanCalculator : IUkStudentLoanCalculator
                 Salary = result.Salary
             }));
 
-            if (request.Loans.Any(x => x.Type == UkStudentLoanType.Postgraduate))
-            {
-                var postgraduateResult = _postgraduateCalculator.Run(
-                    new PostgraduateCalculatorRequest(request.PersonDetails,
-                        request.Loans.Single(x => x.Type == UkStudentLoanType.Postgraduate))
-                    {
-                        Period = period,
-                        PeriodDate = periodDate,
-                        PreviousProjections = results.SelectMany(x => x.Projections).ToList(),
-                        Salary = result.Salary
-                    });
-
-                if (postgraduateResult != null)
+            // Run postgraduate separately as allocations should not be carried over
+            result.Projections.AddRange(_standardTypeCalculator.Run(
+                new StandardTypeCalculatorRequest(request.PersonDetails)
                 {
-                    result.Projections.Add(postgraduateResult);
-                }
-            }
+                    Period = period,
+                    PeriodDate = periodDate,
+                    PreviousProjections = results.SelectMany(x => x.Projections).ToList(),
+                    Salary = result.Salary,
+                    Loans = request.Loans.Where(x => x.Type == UkStudentLoanType.Postgraduate).ToList(),
+                }));
 
             loansHaveDebt = result.Projections.Any(x => x.DebtRemaining > 0);
             results.Add(result);
