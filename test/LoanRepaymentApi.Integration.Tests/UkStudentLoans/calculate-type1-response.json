@@ -14,8 +14,7 @@
         "paid": 336.0375,
         "interestApplied": 1.25,
         "totalPaid": 336.0375,
-        "totalInterestPaid": 1.25,
-        "salary": 0
+        "totalInterestPaid": 1.25
       }
     ],
     "aggregatedPaidInPeriod": 336.0375,
@@ -36,8 +35,7 @@
         "paid": 384.7875,
         "interestApplied": 0.831515625,
         "totalPaid": 720.825,
-        "totalInterestPaid": 2.081515625,
-        "salary": 0
+        "totalInterestPaid": 2.081515625
       }
     ],
     "aggregatedPaidInPeriod": 384.7875,
@@ -58,8 +56,7 @@
         "paid": 281.60808626953127,
         "interestApplied": 0.35157064453125,
         "totalPaid": 1002.4330862695313,
-        "totalInterestPaid": 2.43308626953125,
-        "salary": 0
+        "totalInterestPaid": 2.43308626953125
       }
     ],
     "aggregatedPaidInPeriod": 281.60808626953127,

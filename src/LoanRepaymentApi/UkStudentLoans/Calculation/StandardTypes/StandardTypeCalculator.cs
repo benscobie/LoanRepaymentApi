@@ -65,7 +65,7 @@ public class StandardTypeCalculator : IStandardTypeCalculator
                     InterestRate = 0,
                     InterestApplied = 0,
                     TotalPaid = previousPeriodResult?.TotalPaid ?? 0,
-                    TotalInterestPaid = previousPeriodResult?.TotalInterestPaid ?? 0,
+                    TotalInterestPaid = previousPeriodResult?.TotalInterestPaid ?? 0
                 });
 
                 continue;
@@ -122,7 +122,7 @@ public class StandardTypeCalculator : IStandardTypeCalculator
                 InterestRate = interestRate,
                 InterestApplied = interestToApply,
                 TotalPaid = amountToPay + (previousPeriodResult?.TotalPaid ?? 0),
-                TotalInterestPaid = interestToApply + (previousPeriodResult?.TotalInterestPaid ?? 0),
+                TotalInterestPaid = interestToApply + (previousPeriodResult?.TotalInterestPaid ?? 0)
             };
 
             previousLoansThreshold = threshold;

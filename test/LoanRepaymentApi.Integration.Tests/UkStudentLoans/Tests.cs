@@ -13,30 +13,32 @@ using Xunit;
 
 public class Tests
 {
-    [Fact]
-    public async Task Calculate_WithSingleLoan_ShouldReturnSuccessResponseWithCorrectData()
+    [Theory]
+    [InlineData("calculate-type1", "Salary adjustment should modify amounts.")]
+    [InlineData("calculate-type1-type2", "The type 2 interest rate should increase in the 2nd year, and paying off type 2 in the 2nd year should rollover a sufficient amount to pay off the type 1 in the same year.")]
+    public async Task Calculate_WithHappyPath_ShouldReturnSuccessResponseWithCorrectData(string filenamePrefix, string because)
     {
         await using var application = new Application();
 
         // Arrange
         var client = application.CreateClient();
 
-        var jsonRequest = await File.ReadAllTextAsync("UkStudentLoans/calculate-request.json");
-        var expectedJsonResponse = JToken.Parse(await File.ReadAllTextAsync("UkStudentLoans/calculate-response.json"));
+        var jsonRequest = await File.ReadAllTextAsync($"UkStudentLoans/{filenamePrefix}-request.json");
+        var expectedJsonResponse = JToken.Parse(await File.ReadAllTextAsync($"UkStudentLoans/{filenamePrefix}-response.json"));
 
         // Act
         var response = await client.PostAsync("/ukstudentloans/calculate",
             new StringContent(jsonRequest, Encoding.UTF8, "application/json"));
 
         // Assert
-        response.EnsureSuccessStatusCode();
         var responseBody = JToken.Parse(await response.Content.ReadAsStringAsync());
 
-        responseBody.Should().BeEquivalentTo(expectedJsonResponse);
+        responseBody.Should().BeEquivalentTo(expectedJsonResponse, because);
+        response.EnsureSuccessStatusCode();
     }
 
     [Fact]
-    public async Task Calculate_WithInvalidRequest_ShouldReturnBadRequestAndErrors()
+    public async Task Calculate_WithSadPath_ShouldReturnBadRequestAndErrors()
     {
         await using var application = new Application();
 
