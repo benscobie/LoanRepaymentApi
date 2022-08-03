@@ -13,30 +13,32 @@ using Xunit;
 
 public class Tests
 {
-    [Fact]
-    public async Task Calculate_WithSingleLoan_ShouldReturnSuccessResponseWithCorrectData()
+    [Theory]
+    [InlineData("calculate-type1")]
+    [InlineData("calculate-type1-type2")]
+    public async Task Calculate_WithHappyPath_ShouldReturnSuccessResponseWithCorrectData(string filenamePrefix)
     {
         await using var application = new Application();
 
         // Arrange
         var client = application.CreateClient();
 
-        var jsonRequest = await File.ReadAllTextAsync("UkStudentLoans/calculate-request.json");
-        var expectedJsonResponse = JToken.Parse(await File.ReadAllTextAsync("UkStudentLoans/calculate-response.json"));
+        var jsonRequest = await File.ReadAllTextAsync($"UkStudentLoans/{filenamePrefix}-request.json");
+        var expectedJsonResponse = JToken.Parse(await File.ReadAllTextAsync($"UkStudentLoans/{filenamePrefix}-response.json"));
 
         // Act
         var response = await client.PostAsync("/ukstudentloans/calculate",
             new StringContent(jsonRequest, Encoding.UTF8, "application/json"));
 
         // Assert
-        response.EnsureSuccessStatusCode();
         var responseBody = JToken.Parse(await response.Content.ReadAsStringAsync());
 
         responseBody.Should().BeEquivalentTo(expectedJsonResponse);
+        response.EnsureSuccessStatusCode();
     }
 
     [Fact]
-    public async Task Calculate_WithInvalidRequest_ShouldReturnBadRequestAndErrors()
+    public async Task Calculate_WithSadPath_ShouldReturnBadRequestAndErrors()
     {
         await using var application = new Application();
 
