@@ -14,9 +14,9 @@ using Xunit;
 public class Tests
 {
     [Theory]
-    [InlineData("calculate-type1")]
-    [InlineData("calculate-type1-type2")]
-    public async Task Calculate_WithHappyPath_ShouldReturnSuccessResponseWithCorrectData(string filenamePrefix)
+    [InlineData("calculate-type1", "Salary adjustment should modify amounts.")]
+    [InlineData("calculate-type1-type2", "The type 2 interest rate should increase in the 2nd year, and paying off type 2 in the 2nd year should rollover a sufficient amount to pay off the type 1 in the same year.")]
+    public async Task Calculate_WithHappyPath_ShouldReturnSuccessResponseWithCorrectData(string filenamePrefix, string because)
     {
         await using var application = new Application();
 
@@ -33,7 +33,7 @@ public class Tests
         // Assert
         var responseBody = JToken.Parse(await response.Content.ReadAsStringAsync());
 
-        responseBody.Should().BeEquivalentTo(expectedJsonResponse);
+        responseBody.Should().BeEquivalentTo(expectedJsonResponse, because);
         response.EnsureSuccessStatusCode();
     }
 
