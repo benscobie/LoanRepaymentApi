@@ -3,6 +3,7 @@
 using System.Collections.Generic;
 using System.Net.Mime;
 using System.Threading.Tasks;
+using AutoMapper;
 using Hellang.Middleware.ProblemDetails;
 using LoanRepaymentApi.UkStudentLoans.Calculation;
 using Microsoft.AspNetCore.Http;
@@ -16,22 +17,25 @@ public class UkStudentLoansController : ControllerBase
     private readonly ILogger<UkStudentLoansController> _logger;
     private readonly IUkStudentLoanCalculator _ukStudentLoanCalculator;
     private readonly UkStudentLoanCalculationDtoValidator _calculationDtoValidator;
+    private readonly IMapper _mapper;
 
     public UkStudentLoansController(
         ILogger<UkStudentLoansController> logger,
         IUkStudentLoanCalculator ukStudentLoanCalculator,
-        UkStudentLoanCalculationDtoValidator calculationDtoValidator)
+        UkStudentLoanCalculationDtoValidator calculationDtoValidator,
+        IMapper mapper)
     {
         _logger = logger;
         _ukStudentLoanCalculator = ukStudentLoanCalculator;
         _calculationDtoValidator = calculationDtoValidator;
+        _mapper = mapper;
     }
 
     [HttpPost("calculate")]
     [Consumes(MediaTypeNames.Application.Json)]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public async Task<ActionResult<IEnumerable<UkStudentLoanResult>>> Calculate(UkStudentLoanCalculationDto request)
+    public async Task<ActionResult<UkStudentLoanResultsDto>> Calculate(UkStudentLoanCalculationDto request)
     {
         var validationResult = await _calculationDtoValidator.ValidateAsync(request);
 
@@ -68,9 +72,13 @@ public class UkStudentLoansController : ControllerBase
             });
         }
         
-        var results = _ukStudentLoanCalculator.Run(calculatorRequest);
+        var calculationResults = _ukStudentLoanCalculator.Run(calculatorRequest);
+
+        var result = new UkStudentLoanResultsDto
+        {
+            Results = _mapper.Map<List<UkStudentLoanResultDto>>(calculationResults)
+        };
         
-        // TODO Map response to DTO + loan type enum should be string
-        return results;
+        return result;
     }
 }
