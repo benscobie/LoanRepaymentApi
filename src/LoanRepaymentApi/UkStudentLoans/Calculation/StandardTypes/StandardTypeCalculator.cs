@@ -39,7 +39,7 @@ public class StandardTypeCalculator : IStandardTypeCalculator
                 request.PreviousProjections.SingleOrDefault(x =>
                     x.Period == request.Period - 1 && x.LoanType == loan.Type);
 
-            var balanceRemaining = previousPeriodResult?.DebtRemaining ?? loan.BalanceRemaining;
+            var balanceRemaining = previousPeriodResult?.DebtRemaining ?? (request.Period == 1 ? loan.BalanceRemaining : 0);
 
             if (balanceRemaining <= 0)
             {

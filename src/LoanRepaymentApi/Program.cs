@@ -1,6 +1,7 @@
 using FluentValidation;
 using Hellang.Middleware.ProblemDetails;
 using LoanRepaymentApi;
+using LoanRepaymentApi.Infrastructure;
 using LoanRepaymentApi.UkStudentLoans;
 using LoanRepaymentApi.UkStudentLoans.Calculation;
 using LoanRepaymentApi.UkStudentLoans.Calculation.Operations.CanLoanBeWrittenOff;
@@ -20,6 +21,20 @@ builder.Services.AddProblemDetails(ConfigureProblemDetails);
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+var corsAllowedOrigins = "AllowedOrigins";
+var appSettings = builder.Configuration.GetSection("ApplicationSettings").Get<ApplicationSettings>();
+
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy(name: corsAllowedOrigins,
+        policy  =>
+        {
+            policy.WithOrigins(appSettings.CORSOrigin)
+                .AllowAnyHeader()
+                .AllowAnyMethod();
+        });
+});
+
 builder.Services.AddScoped<IUkStudentLoanCalculator, UkStudentLoanCalculator>();
 builder.Services.AddScoped<IStandardTypeCalculator, StandardTypeCalculator>();
 
@@ -31,6 +46,8 @@ builder.Services.AddScoped<ISalaryOperation, SalaryOperation>();
 
 builder.Services.AddSingleton<IClock>(SystemClock.Instance);
 builder.Services.AddValidatorsFromAssemblyContaining<UkStudentLoanCalculationDtoValidator>();
+
+builder.Services.Configure<ApplicationSettings>(builder.Configuration.GetSection("ApplicationSettings"));
 
 builder.Services.AddAutoMapper(typeof(Program));
 
@@ -46,6 +63,8 @@ if (app.Environment.IsDevelopment())
 app.UseProblemDetails();
 
 app.UseHttpsRedirection();
+
+app.UseCors(corsAllowedOrigins);
 
 app.MapControllers();
 
