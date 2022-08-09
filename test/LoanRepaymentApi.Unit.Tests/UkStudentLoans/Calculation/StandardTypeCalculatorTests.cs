@@ -80,6 +80,58 @@ public class StandardTypeCalculatorTests
     }
     
     [Theory, AutoMoqData]
+    public void Execute_WithALoanPaidOffAndPeriodInFuture_ShouldNotBeProjectedAgain(
+        [Frozen] Mock<IThresholdOperation> thresholdOperation,
+        StandardTypeCalculator sut)
+    {
+        // Arrange
+        var income = new PersonDetails
+        {
+            AnnualSalaryBeforeTax = 120_000
+        };
+
+        var loans = new List<UkStudentLoan>
+        {
+            new()
+            {
+                Type = UkStudentLoanType.Type1,
+                BalanceRemaining = 1_200m
+            }
+        };
+
+        var request = new StandardTypeCalculatorRequest(income)
+        {
+            Loans = loans,
+            Period = 50,
+            PeriodDate = new DateTime(2022, 02, 01),
+            Salary = 120_000,
+            PreviousProjections = new List<UkStudentLoanProjection>
+            {
+                new()
+                {
+                    Period = 45,
+                    Paid = 1000,
+                    LoanType = UkStudentLoanType.Type1,
+                    RepaymentStatus = UkStudentLoanRepaymentStatus.PaidOff,
+                }
+            }
+        };
+
+        thresholdOperation.Setup(x => x.Execute(It.IsAny<ThresholdOperationFact>()))
+            .Returns(20_000);
+
+        var expected = new List<UkStudentLoanProjection>();
+
+        // Act
+        var results = sut.Run(request);
+
+        // Assert
+        results.Should().BeEquivalentTo(expected, options => options
+            .Using<decimal>(ctx => ctx.Subject.Should().BeApproximately(ctx.Expectation, 0.0001m))
+            .WhenTypeIs<decimal>());
+    }
+    
+    [Theory, AutoMoqData]
     public void Execute_WithSinglePostgraduateLoanNotEndOfPeriod_ShouldPayOffSomeOfTheBalance(
         [Frozen] Mock<ICanLoanBeWrittenOffOperation> canLoanBeWrittenOffOperationMock,
         [Frozen] Mock<IThresholdOperation> thresholdOperation,
