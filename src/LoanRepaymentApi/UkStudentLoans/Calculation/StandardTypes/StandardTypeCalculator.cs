@@ -35,23 +35,27 @@ public class StandardTypeCalculator : IStandardTypeCalculator
         int? previousLoansThreshold = null;
         foreach (var loan in loansToRepayInThresholdOrder)
         {
-            var previousPeriodResult =
-                request.PreviousProjections.SingleOrDefault(x =>
-                    x.Period == request.Period - 1 && x.LoanType == loan.Type);
-
-            var balanceRemaining = previousPeriodResult?.DebtRemaining ?? (request.Period == 1 ? loan.BalanceRemaining : 0);
-
-            if (balanceRemaining <= 0)
-            {
-                continue;
-            }
-
             var result = new UkStudentLoanProjection
             {
                 LoanType = loan.Type,
                 Period = request.Period,
                 PeriodDate = request.PeriodDate
             };
+            
+            var previousPeriodResult =
+                request.PreviousProjections.SingleOrDefault(x =>
+                    x.Period == request.Period - 1 && x.LoanType == loan.Type);
+
+            var balanceRemaining = previousPeriodResult?.DebtRemaining ?? loan.BalanceRemaining;
+
+            if (balanceRemaining <= 0)
+            {
+                result.RepaymentStatus = previousPeriodResult?.RepaymentStatus ?? UkStudentLoanRepaymentStatus.PaidOff;
+                result.TotalPaid = previousPeriodResult?.TotalPaid ?? 0;
+                result.TotalInterestPaid = previousPeriodResult?.TotalInterestPaid ?? 0;
+                results.Add(result);
+                continue;
+            }
 
             if (_canLoanBeWrittenOffOperation.Execute(new CanLoanBeWrittenOffOperationFact
                 {

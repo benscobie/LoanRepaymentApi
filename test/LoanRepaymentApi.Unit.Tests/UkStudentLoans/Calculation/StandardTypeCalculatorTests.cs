@@ -80,7 +80,7 @@ public class StandardTypeCalculatorTests
     }
     
     [Theory, AutoMoqData]
-    public void Execute_WithALoanPaidOffAndPeriodInFuture_ShouldNotBeProjectedAgain(
+    public void Execute_WithALoanPaidOffAndPeriodInFuture_ShouldNotBePaidAgain(
         [Frozen] Mock<IThresholdOperation> thresholdOperation,
         StandardTypeCalculator sut)
     {
@@ -109,8 +109,10 @@ public class StandardTypeCalculatorTests
             {
                 new()
                 {
-                    Period = 45,
+                    Period = 49,
                     Paid = 1000,
+                    TotalPaid = 5000,
+                    TotalInterestPaid = 100,
                     LoanType = UkStudentLoanType.Type1,
                     RepaymentStatus = UkStudentLoanRepaymentStatus.PaidOff,
                 }
@@ -120,7 +122,18 @@ public class StandardTypeCalculatorTests
         thresholdOperation.Setup(x => x.Execute(It.IsAny<ThresholdOperationFact>()))
             .Returns(20_000);
 
-        var expected = new List<UkStudentLoanProjection>();
+        var expected = new List<UkStudentLoanProjection>
+        {
+            new UkStudentLoanProjection
+            {
+                Period = 50,
+                PeriodDate = new DateTime(2022, 02, 01),
+                TotalPaid = 5000,
+                TotalInterestPaid = 100,
+                LoanType = UkStudentLoanType.Type1,
+                RepaymentStatus = UkStudentLoanRepaymentStatus.PaidOff,
+            }
+        };
 
         // Act
         var results = sut.Run(request);
