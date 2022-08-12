@@ -27,7 +27,7 @@ jobs:
     - name: Test
       run: dotnet test --no-build --verbosity normal --collect:"XPlat Code Coverage" --settings CodeCoverage.runsettings --results-directory ${{env.BUILD_ARTIFACT_PATH}}/coverage
     - name: Publish artifacts
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v3
       with:
         path: ${{env.BUILD_ARTIFACT_PATH}}
 
@@ -52,7 +52,7 @@ jobs:
         file: Cobertura.xml
         fail_ci_if_error: false
     - name: Save combined coverage report as artifact
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v3
       with:
         name: coverage-report
         path: Cobertura.xml
