@@ -32,7 +32,7 @@ public class UkStudentLoanCalculationDtoValidatorTests
             {
                 new UkStudentLoanCalculationDto
                 {
-                    BirthDate = DateTimeOffset.Now,
+                    BirthDate = DateTimeOffset.Now.AddYears(-16),
                     Loans = new List<UkStudentLoanDto>
                     {
                         new()
@@ -66,7 +66,7 @@ public class UkStudentLoanCalculationDtoValidatorTests
             {
                 new UkStudentLoanCalculationDto
                 {
-                    BirthDate = DateTimeOffset.Now,
+                    BirthDate = DateTimeOffset.Now.AddYears(-16),
                     Loans = new List<UkStudentLoanDto>
                     {
                         new()
@@ -178,6 +178,7 @@ public class UkStudentLoanCalculationDtoValidatorTests
                 {
                     LoanType = UkStudentLoanType.Type1,
                     BalanceRemaining = 0, // Must be greater than 0
+                    AcademicYearLoanTakenOut = 2005, // Set for BirthDate validation
                 },
                 new()
                 {
@@ -196,6 +197,7 @@ public class UkStudentLoanCalculationDtoValidatorTests
                 }
             },
             AnnualSalaryBeforeTax = 0,
+            BirthDate = DateTimeOffset.Now.AddYears(-14),
             SalaryAdjustments = new List<Adjustment>
             {
                 new()
@@ -217,6 +219,7 @@ public class UkStudentLoanCalculationDtoValidatorTests
         // Assert
         result.IsValid.Should().BeFalse();
         result.ShouldHaveValidationErrorFor(x => x.Loans);
+        result.ShouldHaveValidationErrorFor(x => x.BirthDate);
         result.ShouldHaveValidationErrorFor(x => x.AnnualSalaryBeforeTax);
         result.ShouldHaveValidationErrorFor(x => x.SalaryAdjustments);
         result.ShouldHaveValidationErrorFor("Loans[0].BalanceRemaining");
