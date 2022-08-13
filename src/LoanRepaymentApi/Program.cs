@@ -19,6 +19,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddOptions();
 builder.Services.AddMemoryCache();
 
+builder.Services.Configure<ApplicationSettings>(builder.Configuration.GetSection("ApplicationSettings"));
 builder.Services.Configure<IpRateLimitOptions>(builder.Configuration.GetSection("IpRateLimiting"));
 builder.Services.Configure<IpRateLimitPolicies>(builder.Configuration.GetSection("IpRateLimitPolicies"));
 builder.Services.AddInMemoryRateLimiting();
@@ -56,8 +57,6 @@ builder.Services.AddScoped<ISalaryOperation, SalaryOperation>();
 
 builder.Services.AddSingleton<IClock>(SystemClock.Instance);
 builder.Services.AddValidatorsFromAssemblyContaining<UkStudentLoanCalculationDtoValidator>();
-
-builder.Services.Configure<ApplicationSettings>(builder.Configuration.GetSection("ApplicationSettings"));
 
 builder.Services.AddAutoMapper(typeof(Program));
 
