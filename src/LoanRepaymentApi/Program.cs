@@ -1,3 +1,4 @@
+using AspNetCoreRateLimit;
 using FluentValidation;
 using Hellang.Middleware.ProblemDetails;
 using LoanRepaymentApi;
@@ -15,6 +16,14 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
+builder.Services.AddOptions();
+builder.Services.AddMemoryCache();
+
+builder.Services.Configure<IpRateLimitOptions>(builder.Configuration.GetSection("IpRateLimiting"));
+builder.Services.Configure<IpRateLimitPolicies>(builder.Configuration.GetSection("IpRateLimitPolicies"));
+builder.Services.AddInMemoryRateLimiting();
+
+builder.Services.AddHealthChecks();
 builder.Services.AddControllers();
 builder.Services.AddProblemDetails(ConfigureProblemDetails);
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -27,7 +36,7 @@ var appSettings = builder.Configuration.GetSection("ApplicationSettings").Get<Ap
 builder.Services.AddCors(options =>
 {
     options.AddPolicy(name: corsAllowedOrigins,
-        policy  =>
+        policy =>
         {
             policy.WithOrigins(appSettings.CORSOrigin)
                 .AllowAnyHeader()
@@ -35,6 +44,7 @@ builder.Services.AddCors(options =>
         });
 });
 
+builder.Services.AddSingleton<IRateLimitConfiguration, RateLimitConfiguration>();
 builder.Services.AddScoped<IUkStudentLoanCalculator, UkStudentLoanCalculator>();
 builder.Services.AddScoped<IStandardTypeCalculator, StandardTypeCalculator>();
 
@@ -59,6 +69,10 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+else
+{
+    app.UseIpRateLimiting();
+}
 
 app.UseProblemDetails();
 
@@ -67,6 +81,8 @@ app.UseHttpsRedirection();
 app.UseCors(corsAllowedOrigins);
 
 app.MapControllers();
+
+app.MapHealthChecks("/health");
 
 app.Run();
 
@@ -95,4 +111,6 @@ void ConfigureProblemDetails(ProblemDetailsOptions options)
 }
 
 // Make the implicit Program class public so test projects can access it
-public partial class Program { }
+public partial class Program
+{
+}
