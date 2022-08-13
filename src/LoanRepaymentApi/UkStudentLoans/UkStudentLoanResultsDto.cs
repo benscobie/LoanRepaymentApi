@@ -8,7 +8,7 @@ public class UkStudentLoanResultsDto
 
     public int DebtClearedNumberOfPeriods => Results.Max(x => x.Period);
 
-    public decimal TotalPaid => Results.Sum(x => x.AggregatedTotalPaid);
+    public decimal TotalPaid => Results.Last().AggregatedTotalPaid;
 
-    public decimal TotalInterestPaid => Results.Sum(x => x.AggregatedTotalInterestPaid);
+    public decimal TotalInterestPaid => Results.Last().AggregatedTotalInterestPaid;
 }
