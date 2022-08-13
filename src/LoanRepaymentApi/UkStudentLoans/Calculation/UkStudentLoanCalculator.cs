@@ -33,7 +33,7 @@ public class UkStudentLoanCalculator : IUkStudentLoanCalculator
         do
         {
             var periodDate = now.AddMonths(period);
-            
+
             var result = new UkStudentLoanResult
             {
                 Period = period,
@@ -52,15 +52,16 @@ public class UkStudentLoanCalculator : IUkStudentLoanCalculator
                 Results = results
             });
 
-            result.Projections.AddRange(_standardTypeCalculator.Run(new StandardTypeCalculatorRequest(request.PersonDetails)
-            {
-                Period = period,
-                PeriodDate = periodDate,
-                PreviousProjections = results.SelectMany(x => x.Projections).ToList(),
-                Salary = result.Salary,
-                Loans = request.Loans.Where(x => standardLoanTypes.Contains(x.Type)).ToList(),
-                AnnualEarningsGrowth = request.AnnualEarningsGrowth
-            }));
+            result.Projections.AddRange(_standardTypeCalculator.Run(
+                new StandardTypeCalculatorRequest(request.PersonDetails)
+                {
+                    Period = period,
+                    PeriodDate = periodDate,
+                    PreviousProjections = results.SelectMany(x => x.Projections).ToList(),
+                    Salary = result.Salary,
+                    Loans = request.Loans.Where(x => standardLoanTypes.Contains(x.Type)).ToList(),
+                    AnnualEarningsGrowth = request.AnnualEarningsGrowth
+                }));
 
             // Run postgraduate separately as allocations should not be carried over
             result.Projections.AddRange(_standardTypeCalculator.Run(

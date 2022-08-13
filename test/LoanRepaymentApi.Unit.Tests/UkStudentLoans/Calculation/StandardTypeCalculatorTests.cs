@@ -79,7 +79,7 @@ public class StandardTypeCalculatorTests
             .Using<decimal>(ctx => ctx.Subject.Should().BeApproximately(ctx.Expectation, 0.0001m))
             .WhenTypeIs<decimal>());
     }
-    
+
     [Theory, AutoMoqData]
     public void Execute_WithALoanPaidOffAndPeriodInFuture_ShouldNotBePaidAgain(
         [Frozen] Mock<IThresholdOperation> thresholdOperation,
@@ -145,7 +145,7 @@ public class StandardTypeCalculatorTests
             .Using<decimal>(ctx => ctx.Subject.Should().BeApproximately(ctx.Expectation, 0.0001m))
             .WhenTypeIs<decimal>());
     }
-    
+
     [Theory, AutoMoqData]
     public void Execute_WithSinglePostgraduateLoanNotEndOfPeriod_ShouldPayOffSomeOfTheBalance(
         [Frozen] Mock<ICanLoanBeWrittenOffOperation> canLoanBeWrittenOffOperationMock,
@@ -354,9 +354,11 @@ public class StandardTypeCalculatorTests
 
         canLoanBeWrittenOffOperationMock.Setup(x => x.Execute(It.IsAny<CanLoanBeWrittenOffOperationFact>()))
             .Returns(false);
-        thresholdOperation.Setup(x => x.Execute(It.Is<ThresholdOperationFact>(x => x.LoanType == UkStudentLoanType.Type1)))
+        thresholdOperation.Setup(x =>
+                x.Execute(It.Is<ThresholdOperationFact>(x => x.LoanType == UkStudentLoanType.Type1)))
             .Returns(20_000);
-        thresholdOperation.Setup(x => x.Execute(It.Is<ThresholdOperationFact>(x => x.LoanType == UkStudentLoanType.Type2)))
+        thresholdOperation.Setup(x =>
+                x.Execute(It.Is<ThresholdOperationFact>(x => x.LoanType == UkStudentLoanType.Type2)))
             .Returns(30_000);
         interestRateOperation.Setup(x => x.Execute(It.IsAny<InterestRateOperationFact>()))
             .Returns(0.01m);
@@ -401,7 +403,7 @@ public class StandardTypeCalculatorTests
             .Using<decimal>(ctx => ctx.Subject.Should().BeApproximately(ctx.Expectation, 0.0001m))
             .WhenTypeIs<decimal>());
     }
-    
+
     [Theory, AutoMoqData]
     public void Execute_WithSingleLoanThatIsBeingWrittenOff_ShouldReturnWrittenOffResult(
         [Frozen] Mock<ICanLoanBeWrittenOffOperation> canLoanBeWrittenOffOperationMock,
@@ -480,7 +482,7 @@ public class StandardTypeCalculatorTests
             .Using<decimal>(ctx => ctx.Subject.Should().BeApproximately(ctx.Expectation, 0.0001m))
             .WhenTypeIs<decimal>());
     }
-    
+
     [Theory, AutoMoqData]
     public void Execute_WithSingleLoanWithFuturePaymentDate_ShouldNotPayLoan(
         [Frozen] Mock<ICanLoanBeWrittenOffOperation> canLoanBeWrittenOffOperationMock,

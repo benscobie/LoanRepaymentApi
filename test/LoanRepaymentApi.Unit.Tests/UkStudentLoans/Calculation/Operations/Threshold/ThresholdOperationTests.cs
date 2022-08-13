@@ -35,9 +35,10 @@ public class ThresholdOperationTests
         // Assert
         result.Should().Be(expectedResult);
     }
-    
+
     [Theory, AutoMoqData]
-    public void Execute_WhenLastThresholdGrowthWithin12Months_ShouldNotGrow(ThresholdOperation sut, ThresholdOperationFact fact)
+    public void Execute_WhenLastThresholdGrowthWithin12Months_ShouldNotGrow(ThresholdOperation sut,
+        ThresholdOperationFact fact)
     {
         // Arrange
         fact.Period = 24;
@@ -75,9 +76,10 @@ public class ThresholdOperationTests
         // Assert
         result.Should().Be(33000);
     }
-    
+
     [Theory, AutoMoqData]
-    public void Execute_WhenLastThresholdGrowthOutside12MonthsWithPreviousGrowth_ShouldGrow(ThresholdOperation sut, ThresholdOperationFact fact)
+    public void Execute_WhenLastThresholdGrowthOutside12MonthsWithPreviousGrowth_ShouldGrow(ThresholdOperation sut,
+        ThresholdOperationFact fact)
     {
         // Arrange
         fact.Period = 24;
@@ -115,9 +117,10 @@ public class ThresholdOperationTests
         // Assert
         result.Should().Be(36300);
     }
-    
+
     [Theory, AutoMoqData]
-    public void Execute_WhenLastThresholdGrowthOutside12MonthsWithNoPreviousGrowth_ShouldGrow(ThresholdOperation sut, ThresholdOperationFact fact)
+    public void Execute_WhenLastThresholdGrowthOutside12MonthsWithNoPreviousGrowth_ShouldGrow(ThresholdOperation sut,
+        ThresholdOperationFact fact)
     {
         // Arrange
         fact.Period = 13;
@@ -148,7 +151,7 @@ public class ThresholdOperationTests
         // Assert
         result.Should().Be(36300);
     }
-    
+
     public static IEnumerable<object[]> TestData()
     {
         return new List<object[]>

@@ -12,9 +12,9 @@ public class UkStudentLoanCalculationDto
     public int AnnualSalaryBeforeTax { get; set; }
 
     public List<Adjustment> SalaryAdjustments { get; set; } = new();
-    
+
     public decimal SalaryGrowth { get; set; }
-    
+
     public decimal AnnualEarningsGrowth { get; set; }
 
     /// <summary>

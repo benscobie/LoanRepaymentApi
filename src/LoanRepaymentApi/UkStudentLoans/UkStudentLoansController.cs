@@ -49,7 +49,7 @@ public class UkStudentLoansController : ControllerBase
 
             throw new ProblemDetailsException(validation);
         }
-        
+
         var loans = new List<UkStudentLoan>();
         var calculatorRequest = new UkStudentLoanCalculatorRequest(new PersonDetails
         {
@@ -75,14 +75,14 @@ public class UkStudentLoansController : ControllerBase
                 StudyingPartTime = loan.StudyingPartTime
             });
         }
-        
+
         var calculationResults = _ukStudentLoanCalculator.Run(calculatorRequest);
 
         var result = new UkStudentLoanResultsDto
         {
             Results = _mapper.Map<List<UkStudentLoanResultDto>>(calculationResults)
         };
-        
+
         return result;
     }
 
