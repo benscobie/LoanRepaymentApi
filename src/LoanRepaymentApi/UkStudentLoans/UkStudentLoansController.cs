@@ -81,4 +81,16 @@ public class UkStudentLoansController : ControllerBase
         
         return result;
     }
+
+    [HttpGet("assumptions")]
+    [Consumes(MediaTypeNames.Application.Json)]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    public async Task<ActionResult<UkStudentLoanAssumptionsDto>> GetAssumptions()
+    {
+        return new UkStudentLoanAssumptionsDto
+        {
+            SalaryGrowth = 0.05m,
+            AnnualEarningsGrowth = 0.042m
+        };
+    }
 }

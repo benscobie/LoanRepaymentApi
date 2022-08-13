@@ -12,6 +12,10 @@ public class UkStudentLoanCalculationDto
     public int AnnualSalaryBeforeTax { get; set; }
 
     public List<Adjustment> SalaryAdjustments { get; set; } = new();
+    
+    public decimal SalaryGrowth { get; set; }
+    
+    public decimal AnnualEarningsGrowth { get; set; }
 
     /// <summary>
     /// Required for Type 1 and Type 4 loans when below their respective academic year thresholds.
@@ -30,6 +34,8 @@ public class UkStudentLoanCalculationDtoValidator : AbstractValidator<UkStudentL
             x.Loans.Any(x => x.LoanType == UkStudentLoanType.Type1 && x.AcademicYearLoanTakenOut <= 2005) ||
             x.Loans.Any(x => x.LoanType == UkStudentLoanType.Type4 && x.AcademicYearLoanTakenOut <= 2006));
         RuleFor(x => x.Loans).Must(HaveUniqueLoanTypes).WithMessage("Only one loan of each type allowed.");
+        RuleFor(x => x.SalaryGrowth).InclusiveBetween(-1, 1);
+        RuleFor(x => x.AnnualEarningsGrowth).InclusiveBetween(-1, 1);
         RuleFor(x => x.SalaryAdjustments).Must(HaveMaximumAdjustmentOfOnePerMonth)
             .WithMessage("Only one salary adjustment allowed per month.");
         RuleFor(x => x.Loans).NotEmpty().WithMessage("At least one loan must be supplied.");
