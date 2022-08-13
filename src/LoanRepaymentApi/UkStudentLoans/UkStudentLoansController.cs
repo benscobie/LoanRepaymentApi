@@ -56,7 +56,11 @@ public class UkStudentLoansController : ControllerBase
             AnnualSalaryBeforeTax = request.AnnualSalaryBeforeTax,
             BirthDate = request.BirthDate,
             SalaryAdjustments = request.SalaryAdjustments
-        }, loans);
+        }, loans)
+        {
+            SalaryGrowth = request.SalaryGrowth,
+            AnnualEarningsGrowth = request.AnnualEarningsGrowth
+        };
 
         foreach (var loan in request.Loans)
         {

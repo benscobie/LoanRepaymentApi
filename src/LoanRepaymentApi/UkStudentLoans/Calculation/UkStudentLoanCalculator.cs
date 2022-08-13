@@ -44,18 +44,22 @@ public class UkStudentLoanCalculator : IUkStudentLoanCalculator
 
             result.Salary = _salaryOperation.Execute(new SalaryOperationFact
             {
-                CurrentSalary = previousResult?.Salary ?? request.PersonDetails.AnnualSalaryBeforeTax,
+                PreviousPeriodSalary = previousResult?.Salary ?? request.PersonDetails.AnnualSalaryBeforeTax,
                 PeriodDate = periodDate,
-                SalaryAdjustments = request.PersonDetails.SalaryAdjustments
+                SalaryAdjustments = request.PersonDetails.SalaryAdjustments,
+                Period = period,
+                SalaryGrowth = request.SalaryGrowth,
+                Results = results
             });
 
             result.Projections.AddRange(_standardTypeCalculator.Run(new StandardTypeCalculatorRequest(request.PersonDetails)
             {
-                Loans = request.Loans.Where(x => standardLoanTypes.Contains(x.Type)).ToList(),
                 Period = period,
                 PeriodDate = periodDate,
                 PreviousProjections = results.SelectMany(x => x.Projections).ToList(),
-                Salary = result.Salary
+                Salary = result.Salary,
+                Loans = request.Loans.Where(x => standardLoanTypes.Contains(x.Type)).ToList(),
+                AnnualEarningsGrowth = request.AnnualEarningsGrowth
             }));
 
             // Run postgraduate separately as allocations should not be carried over
@@ -67,6 +71,7 @@ public class UkStudentLoanCalculator : IUkStudentLoanCalculator
                     PreviousProjections = results.SelectMany(x => x.Projections).ToList(),
                     Salary = result.Salary,
                     Loans = request.Loans.Where(x => x.Type == UkStudentLoanType.Postgraduate).ToList(),
+                    AnnualEarningsGrowth = request.AnnualEarningsGrowth
                 }));
 
             loansHaveDebt = result.Projections.Any(x => x.DebtRemaining > 0);

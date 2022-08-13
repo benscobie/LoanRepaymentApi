@@ -6,9 +6,9 @@ public class SalaryOperationFact
     
     public DateTimeOffset PeriodDate { get; set; }
 
-    public int CurrentSalary { get; init; }
+    public int PreviousPeriodSalary { get; init; }
     
-    public decimal AnnualEarningsGrowth { get; set; }
+    public decimal SalaryGrowth { get; set; }
     
     public List<UkStudentLoanResult> Results { get; set; } = new();
 

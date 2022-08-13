@@ -4,11 +4,40 @@ public class ThresholdOperation : IThresholdOperation
 {
     public int Execute(ThresholdOperationFact fact)
     {
-        return Thresholds.Single(x =>
+        var thresholdBandWithinPeriod = Thresholds.SingleOrDefault(x =>
+            x.LoanType == fact.LoanType && fact.PeriodDate >= x.DateFrom && x.DateTo != null &&
+            fact.PeriodDate < x.DateTo);
+
+        if (thresholdBandWithinPeriod != null)
+        {
+            return thresholdBandWithinPeriod.Threshold;
+        }
+
+        var mostRecentThresholdBand = Thresholds.Single(x =>
             x.LoanType == fact.LoanType && fact.PeriodDate >= x.DateFrom &&
-            (x.DateTo == null || fact.PeriodDate < x.DateTo)).Threshold;
+            x.DateTo == null);
+
+        if (fact.Period == 1)
+        {
+            return mostRecentThresholdBand.Threshold;
+        }
+
+        var previousPeriodsThreshold =
+            fact.PreviousProjections.Single(x => x.LoanType == fact.LoanType && x.Period == fact.Period - 1).Threshold;
+
+        var lastThresholdChange = fact.PreviousProjections.OrderByDescending(x => x.Period)
+            .FirstOrDefault(x =>
+                x.LoanType == fact.LoanType && x.Period < fact.Period && x.Threshold != previousPeriodsThreshold)
+            ?.Period + 1 ?? 1;
+
+        if (lastThresholdChange <= fact.Period - 12)
+        {
+            return (int)Math.Round(previousPeriodsThreshold + (previousPeriodsThreshold * fact.AnnualEarningsGrowth));
+        }
+
+        return previousPeriodsThreshold;
     }
-    
+
     private List<ThresholdBand> Thresholds => new()
     {
         new ThresholdBand
@@ -40,16 +69,16 @@ public class ThresholdOperation : IThresholdOperation
             Threshold = 21000
         }
     };
-    
+
 
     private class ThresholdBand
     {
         public DateTimeOffset DateFrom { get; init; }
-        
+
         public DateTimeOffset? DateTo { get; init; }
-        
+
         public UkStudentLoanType LoanType { get; init; }
-        
+
         public int Threshold { get; init; }
     }
 }

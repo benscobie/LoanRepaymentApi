@@ -15,7 +15,7 @@ public class SalaryOperationTests
         // Arrange
         var fact = new SalaryOperationFact
         {
-            CurrentSalary = 50000,
+            PreviousPeriodSalary = 50000,
             PeriodDate = DateTimeOffset.Now,
             SalaryAdjustments = new List<Adjustment>()
         };
@@ -33,9 +33,9 @@ public class SalaryOperationTests
         // Arrange
         var fact = new SalaryOperationFact
         {
-            CurrentSalary = 50125,
+            PreviousPeriodSalary = 50125,
             PeriodDate = new DateTimeOffset(2022, 04, 06, 0, 0, 0, new TimeSpan(0, 0, 0)),
-            AnnualEarningsGrowth = 0.1m,
+            SalaryGrowth = 0.1m,
             SalaryAdjustments = new List<Adjustment>
             {
                 new()
@@ -69,10 +69,10 @@ public class SalaryOperationTests
         // Arrange
         var fact = new SalaryOperationFact
         {
-            CurrentSalary = 50125,
+            PreviousPeriodSalary = 50125,
             Period = 20,
             PeriodDate = new DateTimeOffset(2022, 04, 06, 0, 0, 0, new TimeSpan(0, 0, 0)),
-            AnnualEarningsGrowth = 0.1m,
+            SalaryGrowth = 0.1m,
             Results = new List<UkStudentLoanResult>
             {
                 new()
@@ -100,15 +100,44 @@ public class SalaryOperationTests
     }
     
     [Theory, AutoMoqData]
-    public void Execute_WhenCalledWithASalaryThatIsDueAnnualGrowth_ShouldGrowSalaryByAnnualEarningsGrowth(SalaryOperation sut)
+    public void Execute_WhenCalledWithASalaryThatIsDueAnnualGrowthWithNoPreviousGrowth_ShouldGrowSalaryBySalaryGrowth(SalaryOperation sut)
     {
         // Arrange
         var fact = new SalaryOperationFact
         {
-            CurrentSalary = 50125,
+            PreviousPeriodSalary = 50125,
+            Period = 13,
+            PeriodDate = new DateTimeOffset(2022, 04, 06, 0, 0, 0, new TimeSpan(0, 0, 0)),
+            SalaryGrowth = 0.1m,
+            Results = new List<UkStudentLoanResult>
+            {
+                new()
+                {
+                    Salary = 50125,
+                    PeriodDate = new DateTimeOffset(2021, 03, 06, 0, 0, 0, new TimeSpan(0, 0, 0)),
+                    Period = 12,
+                }
+            },
+            SalaryAdjustments = new List<Adjustment>()
+        };
+        
+        // Act
+        var result = sut.Execute(fact);
+
+        // Assert
+        result.Should().Be(55138);
+    }
+    
+    [Theory, AutoMoqData]
+    public void Execute_WhenCalledWithASalaryThatIsDueAnnualGrowthWithPreviousGrowth_ShouldGrowSalaryBySalaryGrowth(SalaryOperation sut)
+    {
+        // Arrange
+        var fact = new SalaryOperationFact
+        {
+            PreviousPeriodSalary = 50125,
             Period = 20,
             PeriodDate = new DateTimeOffset(2022, 04, 06, 0, 0, 0, new TimeSpan(0, 0, 0)),
-            AnnualEarningsGrowth = 0.1m,
+            SalaryGrowth = 0.1m,
             Results = new List<UkStudentLoanResult>
             {
                 new()
@@ -140,10 +169,10 @@ public class SalaryOperationTests
         // Arrange
         var fact = new SalaryOperationFact
         {
-            CurrentSalary = 50125,
+            PreviousPeriodSalary = 50125,
             Period = 20,
             PeriodDate = new DateTimeOffset(2022, 04, 06, 0, 0, 0, new TimeSpan(0, 0, 0)),
-            AnnualEarningsGrowth = 0.1m,
+            SalaryGrowth = 0.1m,
             Results = new List<UkStudentLoanResult>
             {
                 new()

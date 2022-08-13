@@ -41,7 +41,7 @@ public class UkStudentLoanCalculatorTests
 
         salaryOperation.Setup(x =>
                 x.Execute(It.Is<SalaryOperationFact>(
-                    s => s.CurrentSalary == request.PersonDetails.AnnualSalaryBeforeTax)))
+                    s => s.PreviousPeriodSalary == request.PersonDetails.AnnualSalaryBeforeTax)))
             .Returns(52500);
 
         standardTypeCalculator.Setup(x =>
@@ -126,8 +126,8 @@ public class UkStudentLoanCalculatorTests
                 x.Loans.Any(x => x.Type == UkStudentLoanType.Postgraduate))), Times.Exactly(3));
         salaryOperation.Verify(
             x => x.Execute(It.Is<SalaryOperationFact>(s =>
-                s.CurrentSalary == request.PersonDetails.AnnualSalaryBeforeTax)), Times.Once);
-        salaryOperation.Verify(x => x.Execute(It.Is<SalaryOperationFact>(s => s.CurrentSalary == 52500)),
+                s.PreviousPeriodSalary == request.PersonDetails.AnnualSalaryBeforeTax)), Times.Once);
+        salaryOperation.Verify(x => x.Execute(It.Is<SalaryOperationFact>(s => s.PreviousPeriodSalary == 52500)),
             Times.AtLeastOnce);
         results.Sum(x => x.Projections.Count(l => l.LoanType == UkStudentLoanType.Type1)).Should().Be(3);
         results.Sum(x => x.Projections.Count(l => l.LoanType == UkStudentLoanType.Type2)).Should().Be(1);

@@ -14,13 +14,14 @@ public class SalaryOperation : ISalaryOperation
         else
         {
             var lastSalaryChange =
-                fact.Results.SingleOrDefault(x => x.Salary != fact.CurrentSalary && x.Period < fact.Period);
-            if (lastSalaryChange != null && lastSalaryChange.Period + 1 <= fact.Period - 12)
+                fact.Results.OrderByDescending(x => x.Period).FirstOrDefault(x => x.Salary != fact.PreviousPeriodSalary && x.Period < fact.Period)?.Period + 1 ?? 1;
+
+            if (lastSalaryChange <= fact.Period - 12)
             {
-                growthPercentage = fact.AnnualEarningsGrowth;
+                growthPercentage = fact.SalaryGrowth;
             }
         }
 
-        return (int)Math.Round(fact.CurrentSalary + (fact.CurrentSalary * growthPercentage));
+        return (int)Math.Round(fact.PreviousPeriodSalary + (fact.PreviousPeriodSalary * growthPercentage));
     }
 }

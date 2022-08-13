@@ -17,5 +17,7 @@ public class StandardTypeCalculatorRequest
     
     public int Salary { get; set; }
 
-    public IList<UkStudentLoanProjection> PreviousProjections { get; init; } = new List<UkStudentLoanProjection>();
+    public List<UkStudentLoanProjection> PreviousProjections { get; init; } = new List<UkStudentLoanProjection>();
+    
+    public decimal AnnualEarningsGrowth { get; set; }
 }

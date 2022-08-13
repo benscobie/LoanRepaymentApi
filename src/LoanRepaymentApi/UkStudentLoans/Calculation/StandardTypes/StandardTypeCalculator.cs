@@ -28,7 +28,10 @@ public class StandardTypeCalculator : IStandardTypeCalculator
             .OrderByDescending(x => _thresholdOperation.Execute(new ThresholdOperationFact
             {
                 LoanType = x.Type,
-                PeriodDate = request.PeriodDate
+                PeriodDate = request.PeriodDate,
+                Period = request.Period,
+                AnnualEarningsGrowth = request.AnnualEarningsGrowth,
+                PreviousProjections = request.PreviousProjections
             })).ToList();
 
         decimal allocationCarriedOver = 0;
@@ -41,6 +44,16 @@ public class StandardTypeCalculator : IStandardTypeCalculator
                 Period = request.Period,
                 PeriodDate = request.PeriodDate
             };
+            
+            var threshold = _thresholdOperation.Execute(new ThresholdOperationFact
+            {
+                LoanType = loan.Type,
+                PeriodDate = request.PeriodDate,
+                Period = request.Period,
+                PreviousProjections = request.PreviousProjections,
+                AnnualEarningsGrowth = request.AnnualEarningsGrowth
+            });
+            result.Threshold = threshold;
             
             var previousPeriodResult =
                 request.PreviousProjections.SingleOrDefault(x =>
@@ -85,12 +98,6 @@ public class StandardTypeCalculator : IStandardTypeCalculator
 
             var interestToApply = balanceRemaining * interestRate / 12;
             balanceRemaining += interestToApply;
-
-            var threshold = _thresholdOperation.Execute(new ThresholdOperationFact
-            {
-                LoanType = loan.Type,
-                PeriodDate = request.PeriodDate
-            });
 
             var annualSalaryUsableForLoanRepayment = previousLoansThreshold ?? request.Salary;
 
