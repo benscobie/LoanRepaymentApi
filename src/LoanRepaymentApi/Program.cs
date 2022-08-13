@@ -36,7 +36,7 @@ var appSettings = builder.Configuration.GetSection("ApplicationSettings").Get<Ap
 builder.Services.AddCors(options =>
 {
     options.AddPolicy(name: corsAllowedOrigins,
-        policy  =>
+        policy =>
         {
             policy.WithOrigins(appSettings.CORSOrigin)
                 .AllowAnyHeader()
@@ -111,4 +111,6 @@ void ConfigureProblemDetails(ProblemDetailsOptions options)
 }
 
 // Make the implicit Program class public so test projects can access it
-public partial class Program { }
+public partial class Program
+{
+}
