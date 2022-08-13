@@ -26,11 +26,12 @@ public class UkStudentLoanCalculationDtoValidator : AbstractValidator<UkStudentL
     public UkStudentLoanCalculationDtoValidator()
     {
         RuleFor(x => x.AnnualSalaryBeforeTax).GreaterThan(0);
-        RuleFor(x => x.BirthDate).NotNull().When(x =>
+        RuleFor(x => x.BirthDate).NotNull().Must(x => x <= DateTimeOffset.Now.AddYears(-15)).When(x =>
             x.Loans.Any(x => x.LoanType == UkStudentLoanType.Type1 && x.AcademicYearLoanTakenOut <= 2005) ||
-             x.Loans.Any(x => x.LoanType == UkStudentLoanType.Type4 && x.AcademicYearLoanTakenOut <= 2006));
+            x.Loans.Any(x => x.LoanType == UkStudentLoanType.Type4 && x.AcademicYearLoanTakenOut <= 2006));
         RuleFor(x => x.Loans).Must(HaveUniqueLoanTypes).WithMessage("Only one loan of each type allowed.");
-        RuleFor(x => x.SalaryAdjustments).Must(HaveMaximumAdjustmentOfOnePerMonth).WithMessage("Only one salary adjustment allowed per month.");
+        RuleFor(x => x.SalaryAdjustments).Must(HaveMaximumAdjustmentOfOnePerMonth)
+            .WithMessage("Only one salary adjustment allowed per month.");
         RuleFor(x => x.Loans).NotEmpty().WithMessage("At least one loan must be supplied.");
 
         RuleForEach(x => x.Loans)
@@ -55,7 +56,7 @@ public class UkStudentLoanCalculationDtoValidator : AbstractValidator<UkStudentL
 
     private bool HaveMaximumAdjustmentOfOnePerMonth(UkStudentLoanCalculationDto loan, List<Adjustment> adjustments)
     {
-        var groupedAdjustments = adjustments.GroupBy(x => new { x.Date.Year, x.Date.Month});
+        var groupedAdjustments = adjustments.GroupBy(x => new { x.Date.Year, x.Date.Month });
 
         return groupedAdjustments.Count() == adjustments.Count;
     }
