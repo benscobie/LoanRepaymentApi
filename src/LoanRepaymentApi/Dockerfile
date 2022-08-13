@@ -17,4 +17,7 @@ RUN dotnet publish "LoanRepaymentApi.csproj" -c Release -o /app/publish
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
+
+HEALTHCHECK CMD curl --fail http://localhost/health || exit
+
 ENTRYPOINT ["dotnet", "LoanRepaymentApi.dll"]
