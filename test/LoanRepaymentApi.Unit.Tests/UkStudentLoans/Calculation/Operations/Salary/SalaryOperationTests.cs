@@ -19,14 +19,14 @@ public class SalaryOperationTests
             PeriodDate = DateTimeOffset.Now,
             SalaryAdjustments = new List<Adjustment>()
         };
-        
+
         // Act
         var result = sut.Execute(fact);
 
         // Assert
         result.Should().Be(50000);
     }
-    
+
     [Theory, AutoMoqData]
     public void Execute_WhenCalledWithAnAdjustment_ShouldReturnCorrectSalaryIncrease(SalaryOperation sut)
     {
@@ -55,16 +55,17 @@ public class SalaryOperationTests
                 }
             }
         };
-        
+
         // Act
         var result = sut.Execute(fact);
 
         // Assert
         result.Should().Be(50802);
     }
-    
+
     [Theory, AutoMoqData]
-    public void Execute_WhenCalledWithAnAdjustmentAndIsDueAnnualGrowth_ShouldGrowByTheAdjustmentAndNotAnnualGrowth(SalaryOperation sut)
+    public void Execute_WhenCalledWithAnAdjustmentAndIsDueAnnualGrowth_ShouldGrowByTheAdjustmentAndNotAnnualGrowth(
+        SalaryOperation sut)
     {
         // Arrange
         var fact = new SalaryOperationFact
@@ -91,16 +92,17 @@ public class SalaryOperationTests
                 },
             }
         };
-        
+
         // Act
         var result = sut.Execute(fact);
 
         // Assert
         result.Should().Be(50802);
     }
-    
+
     [Theory, AutoMoqData]
-    public void Execute_WhenCalledWithASalaryThatIsDueAnnualGrowthWithNoPreviousGrowth_ShouldGrowSalaryBySalaryGrowth(SalaryOperation sut)
+    public void Execute_WhenCalledWithASalaryThatIsDueAnnualGrowthWithNoPreviousGrowth_ShouldGrowSalaryBySalaryGrowth(
+        SalaryOperation sut)
     {
         // Arrange
         var fact = new SalaryOperationFact
@@ -120,16 +122,17 @@ public class SalaryOperationTests
             },
             SalaryAdjustments = new List<Adjustment>()
         };
-        
+
         // Act
         var result = sut.Execute(fact);
 
         // Assert
         result.Should().Be(55138);
     }
-    
+
     [Theory, AutoMoqData]
-    public void Execute_WhenCalledWithASalaryThatIsDueAnnualGrowthWithPreviousGrowth_ShouldGrowSalaryBySalaryGrowth(SalaryOperation sut)
+    public void Execute_WhenCalledWithASalaryThatIsDueAnnualGrowthWithPreviousGrowth_ShouldGrowSalaryBySalaryGrowth(
+        SalaryOperation sut)
     {
         // Arrange
         var fact = new SalaryOperationFact
@@ -155,14 +158,14 @@ public class SalaryOperationTests
             },
             SalaryAdjustments = new List<Adjustment>()
         };
-        
+
         // Act
         var result = sut.Execute(fact);
 
         // Assert
         result.Should().Be(55138);
     }
-    
+
     [Theory, AutoMoqData]
     public void Execute_WhenCalledWithASalaryThatIsNotDueGrowth_ShouldNotGrow(SalaryOperation sut)
     {
@@ -190,7 +193,7 @@ public class SalaryOperationTests
             },
             SalaryAdjustments = new List<Adjustment>()
         };
-        
+
         // Act
         var result = sut.Execute(fact);
 

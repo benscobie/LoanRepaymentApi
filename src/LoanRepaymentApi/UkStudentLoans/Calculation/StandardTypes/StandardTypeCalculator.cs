@@ -70,14 +70,15 @@ public class StandardTypeCalculator : IStandardTypeCalculator
                 continue;
             }
 
-            if (_canLoanBeWrittenOffOperation.Execute(new CanLoanBeWrittenOffOperationFact
-                {
-                    BirthDate = request.PersonDetails.BirthDate,
-                    LoanType = loan.Type,
-                    PeriodDate = request.PeriodDate,
-                    FirstRepaymentDate = loan.FirstRepaymentDate,
-                    AcademicYearLoanTakenOut = loan.AcademicYearLoanTakenOut
-                }))
+            if (_canLoanBeWrittenOffOperation.Execute(
+                    new CanLoanBeWrittenOffOperationFact
+                    {
+                        BirthDate = request.PersonDetails.BirthDate,
+                        LoanType = loan.Type,
+                        PeriodDate = request.PeriodDate,
+                        FirstRepaymentDate = loan.FirstRepaymentDate,
+                        AcademicYearLoanTakenOut = loan.AcademicYearLoanTakenOut
+                    }))
             {
                 result.RepaymentStatus = UkStudentLoanRepaymentStatus.WrittenOff;
                 result.TotalPaid = previousPeriodResult?.TotalPaid ?? 0;
