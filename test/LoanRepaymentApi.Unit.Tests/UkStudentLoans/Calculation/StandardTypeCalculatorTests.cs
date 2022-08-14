@@ -66,7 +66,8 @@ public class StandardTypeCalculatorTests
                 Paid = 750m,
                 TotalInterestPaid = 1m,
                 InterestApplied = 1m,
-                RepaymentStatus = UkStudentLoanRepaymentStatus.Paying
+                RepaymentStatus = UkStudentLoanRepaymentStatus.Paying,
+                Threshold = 20_000
             }
         };
 
@@ -78,7 +79,7 @@ public class StandardTypeCalculatorTests
             .Using<decimal>(ctx => ctx.Subject.Should().BeApproximately(ctx.Expectation, 0.0001m))
             .WhenTypeIs<decimal>());
     }
-    
+
     [Theory, AutoMoqData]
     public void Execute_WithALoanPaidOffAndPeriodInFuture_ShouldNotBePaidAgain(
         [Frozen] Mock<IThresholdOperation> thresholdOperation,
@@ -124,7 +125,7 @@ public class StandardTypeCalculatorTests
 
         var expected = new List<UkStudentLoanProjection>
         {
-            new UkStudentLoanProjection
+            new()
             {
                 Period = 50,
                 PeriodDate = new DateTime(2022, 02, 01),
@@ -132,6 +133,7 @@ public class StandardTypeCalculatorTests
                 TotalInterestPaid = 100,
                 LoanType = UkStudentLoanType.Type1,
                 RepaymentStatus = UkStudentLoanRepaymentStatus.PaidOff,
+                Threshold = 20_000
             }
         };
 
@@ -143,7 +145,7 @@ public class StandardTypeCalculatorTests
             .Using<decimal>(ctx => ctx.Subject.Should().BeApproximately(ctx.Expectation, 0.0001m))
             .WhenTypeIs<decimal>());
     }
-    
+
     [Theory, AutoMoqData]
     public void Execute_WithSinglePostgraduateLoanNotEndOfPeriod_ShouldPayOffSomeOfTheBalance(
         [Frozen] Mock<ICanLoanBeWrittenOffOperation> canLoanBeWrittenOffOperationMock,
@@ -195,7 +197,8 @@ public class StandardTypeCalculatorTests
                 Paid = 500m,
                 TotalInterestPaid = 1m,
                 InterestApplied = 1m,
-                RepaymentStatus = UkStudentLoanRepaymentStatus.Paying
+                RepaymentStatus = UkStudentLoanRepaymentStatus.Paying,
+                Threshold = 20_000
             }
         };
 
@@ -273,7 +276,8 @@ public class StandardTypeCalculatorTests
                 Paid = 451.3758m,
                 TotalInterestPaid = 1.3758m,
                 InterestApplied = 0.3758m,
-                RepaymentStatus = UkStudentLoanRepaymentStatus.PaidOff
+                RepaymentStatus = UkStudentLoanRepaymentStatus.PaidOff,
+                Threshold = 20_000
             }
         };
 
@@ -350,9 +354,11 @@ public class StandardTypeCalculatorTests
 
         canLoanBeWrittenOffOperationMock.Setup(x => x.Execute(It.IsAny<CanLoanBeWrittenOffOperationFact>()))
             .Returns(false);
-        thresholdOperation.Setup(x => x.Execute(It.Is<ThresholdOperationFact>(x => x.LoanType == UkStudentLoanType.Type1)))
+        thresholdOperation.Setup(x =>
+                x.Execute(It.Is<ThresholdOperationFact>(x => x.LoanType == UkStudentLoanType.Type1)))
             .Returns(20_000);
-        thresholdOperation.Setup(x => x.Execute(It.Is<ThresholdOperationFact>(x => x.LoanType == UkStudentLoanType.Type2)))
+        thresholdOperation.Setup(x =>
+                x.Execute(It.Is<ThresholdOperationFact>(x => x.LoanType == UkStudentLoanType.Type2)))
             .Returns(30_000);
         interestRateOperation.Setup(x => x.Execute(It.IsAny<InterestRateOperationFact>()))
             .Returns(0.01m);
@@ -370,7 +376,8 @@ public class StandardTypeCalculatorTests
                 TotalPaid = 298.5616m,
                 TotalInterestPaid = 0.9379m,
                 DebtRemaining = 302.3762m,
-                RepaymentStatus = UkStudentLoanRepaymentStatus.Paying
+                RepaymentStatus = UkStudentLoanRepaymentStatus.Paying,
+                Threshold = 20_000
             },
             new()
             {
@@ -383,7 +390,8 @@ public class StandardTypeCalculatorTests
                 TotalPaid = 1201.4383m,
                 TotalInterestPaid = 1.4383m,
                 DebtRemaining = 0,
-                RepaymentStatus = UkStudentLoanRepaymentStatus.PaidOff
+                RepaymentStatus = UkStudentLoanRepaymentStatus.PaidOff,
+                Threshold = 30_000
             }
         };
 
@@ -395,7 +403,7 @@ public class StandardTypeCalculatorTests
             .Using<decimal>(ctx => ctx.Subject.Should().BeApproximately(ctx.Expectation, 0.0001m))
             .WhenTypeIs<decimal>());
     }
-    
+
     [Theory, AutoMoqData]
     public void Execute_WithSingleLoanThatIsBeingWrittenOff_ShouldReturnWrittenOffResult(
         [Frozen] Mock<ICanLoanBeWrittenOffOperation> canLoanBeWrittenOffOperationMock,
@@ -461,7 +469,8 @@ public class StandardTypeCalculatorTests
                 Paid = 0m,
                 TotalInterestPaid = 1m,
                 InterestApplied = 0m,
-                RepaymentStatus = UkStudentLoanRepaymentStatus.WrittenOff
+                RepaymentStatus = UkStudentLoanRepaymentStatus.WrittenOff,
+                Threshold = 20_000
             }
         };
 
@@ -473,7 +482,7 @@ public class StandardTypeCalculatorTests
             .Using<decimal>(ctx => ctx.Subject.Should().BeApproximately(ctx.Expectation, 0.0001m))
             .WhenTypeIs<decimal>());
     }
-    
+
     [Theory, AutoMoqData]
     public void Execute_WithSingleLoanWithFuturePaymentDate_ShouldNotPayLoan(
         [Frozen] Mock<ICanLoanBeWrittenOffOperation> canLoanBeWrittenOffOperationMock,
@@ -526,7 +535,8 @@ public class StandardTypeCalculatorTests
                 Paid = 0,
                 TotalInterestPaid = 0,
                 InterestApplied = 1m,
-                RepaymentStatus = UkStudentLoanRepaymentStatus.NotPaying
+                RepaymentStatus = UkStudentLoanRepaymentStatus.NotPaying,
+                Threshold = 20_000
             }
         };
 

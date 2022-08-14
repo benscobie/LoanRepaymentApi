@@ -18,6 +18,8 @@ public class UkStudentLoanProjection
 
     public decimal InterestApplied { get; set; }
 
+    public int Threshold { get; set; }
+
     public decimal TotalPaid { get; set; }
 
     public decimal TotalInterestPaid { get; set; }

@@ -49,14 +49,18 @@ public class UkStudentLoansController : ControllerBase
 
             throw new ProblemDetailsException(validation);
         }
-        
+
         var loans = new List<UkStudentLoan>();
         var calculatorRequest = new UkStudentLoanCalculatorRequest(new PersonDetails
         {
             AnnualSalaryBeforeTax = request.AnnualSalaryBeforeTax,
             BirthDate = request.BirthDate,
             SalaryAdjustments = request.SalaryAdjustments
-        }, loans);
+        }, loans)
+        {
+            SalaryGrowth = request.SalaryGrowth,
+            AnnualEarningsGrowth = request.AnnualEarningsGrowth
+        };
 
         foreach (var loan in request.Loans)
         {
@@ -71,14 +75,26 @@ public class UkStudentLoansController : ControllerBase
                 StudyingPartTime = loan.StudyingPartTime
             });
         }
-        
+
         var calculationResults = _ukStudentLoanCalculator.Run(calculatorRequest);
 
         var result = new UkStudentLoanResultsDto
         {
             Results = _mapper.Map<List<UkStudentLoanResultDto>>(calculationResults)
         };
-        
+
         return result;
+    }
+
+    [HttpGet("assumptions")]
+    [Consumes(MediaTypeNames.Application.Json)]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    public async Task<ActionResult<UkStudentLoanAssumptionsDto>> GetAssumptions()
+    {
+        return new UkStudentLoanAssumptionsDto
+        {
+            SalaryGrowth = 0.05m,
+            AnnualEarningsGrowth = 0.042m
+        };
     }
 }

@@ -9,8 +9,12 @@ public class UkStudentLoanCalculatorRequest
         PersonDetails = personDetails;
         Loans = loans;
     }
-    
+
     public PersonDetails PersonDetails { get; }
+
+    public decimal SalaryGrowth { get; set; }
+
+    public decimal AnnualEarningsGrowth { get; set; }
 
     public List<UkStudentLoan> Loans { get; }
 }

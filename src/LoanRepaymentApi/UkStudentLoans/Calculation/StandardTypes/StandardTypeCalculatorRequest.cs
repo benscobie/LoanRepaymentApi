@@ -6,7 +6,7 @@ public class StandardTypeCalculatorRequest
     {
         PersonDetails = personDetails;
     }
-    
+
     public int Period { get; init; }
 
     public DateTimeOffset PeriodDate { get; init; }
@@ -14,8 +14,10 @@ public class StandardTypeCalculatorRequest
     public PersonDetails PersonDetails { get; }
 
     public List<UkStudentLoan> Loans { get; init; } = new();
-    
+
     public int Salary { get; set; }
 
-    public IList<UkStudentLoanProjection> PreviousProjections { get; init; } = new List<UkStudentLoanProjection>();
+    public List<UkStudentLoanProjection> PreviousProjections { get; init; } = new List<UkStudentLoanProjection>();
+
+    public decimal AnnualEarningsGrowth { get; set; }
 }
