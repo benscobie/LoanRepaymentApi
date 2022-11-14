@@ -11,6 +11,7 @@ using LoanRepaymentApi.UkStudentLoans.Calculation.Operations.Salary;
 using LoanRepaymentApi.UkStudentLoans.Calculation.Operations.Threshold;
 using LoanRepaymentApi.UkStudentLoans.Calculation.StandardTypes;
 using NodaTime;
+using ProblemDetailsOptions = Hellang.Middleware.ProblemDetails.ProblemDetailsOptions;
 
 var builder = WebApplication.CreateBuilder(args);
 

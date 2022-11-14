@@ -71,7 +71,7 @@ public class ThresholdOperationTests
         };
 
         // Act
-        var result = new ThresholdOperation().Execute(fact);
+        var result = sut.Execute(fact);
 
         // Assert
         result.Should().Be(33000);
@@ -112,7 +112,7 @@ public class ThresholdOperationTests
         };
 
         // Act
-        var result = new ThresholdOperation().Execute(fact);
+        var result = sut.Execute(fact);
 
         // Assert
         result.Should().Be(36300);
@@ -146,7 +146,7 @@ public class ThresholdOperationTests
         };
 
         // Act
-        var result = new ThresholdOperation().Execute(fact);
+        var result = sut.Execute(fact);
 
         // Assert
         result.Should().Be(36300);

@@ -89,7 +89,7 @@ public class UkStudentLoansController : ControllerBase
     [HttpGet("assumptions")]
     [Consumes(MediaTypeNames.Application.Json)]
     [ProducesResponseType(StatusCodes.Status200OK)]
-    public async Task<ActionResult<UkStudentLoanAssumptionsDto>> GetAssumptions()
+    public ActionResult<UkStudentLoanAssumptionsDto> GetAssumptions()
     {
         return new UkStudentLoanAssumptionsDto
         {
