@@ -1,7 +1,8 @@
-using AspNetCoreRateLimit;
+﻿using AspNetCoreRateLimit;
 using FluentValidation;
 using Hellang.Middleware.ProblemDetails;
 using LoanRepaymentApi;
+using LoanRepaymentApi.Common;
 using LoanRepaymentApi.Infrastructure;
 using LoanRepaymentApi.UkStudentLoans;
 using LoanRepaymentApi.UkStudentLoans.Calculation;
@@ -49,6 +50,9 @@ builder.Services.AddCors(options =>
 builder.Services.AddSingleton<IRateLimitConfiguration, RateLimitConfiguration>();
 builder.Services.AddScoped<IUkStudentLoanCalculator, UkStudentLoanCalculator>();
 builder.Services.AddScoped<IStandardTypeCalculator, StandardTypeCalculator>();
+builder.Services.AddScoped<IRetailPriceIndex, RetailPriceIndex>();
+builder.Services.AddScoped<IPlan2AndPostgraduateInterestRateCap, Plan2AndPostgraduateInterestRateCap>();
+builder.Services.AddScoped<IPlan1And4InterestRate, Plan1And4InterestRate>();
 
 // TODO Bulk register IOperations
 builder.Services.AddScoped<ICanLoanBeWrittenOffOperation, CanLoanBeWrittenOffOperation>();
