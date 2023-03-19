@@ -1,5 +1,7 @@
 ﻿namespace LoanRepaymentApi.Integration.Tests;
 
+using LoanRepaymentApi.Common;
+using LoanRepaymentApi.UkStudentLoans.Calculation.Operations.Interest;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -23,6 +25,9 @@ public class Application : WebApplicationFactory<Program>
         builder.ConfigureServices(services =>
         {
             services.AddSingleton<IClock>(new FakeClock(Instant.FromUtc(2022, 04, 1, 0, 0, 0)));
+            services.AddScoped<IRetailPriceIndex, TestRetailPriceIndex>();
+            services.AddScoped<IPlan2AndPostgraduateInterestRateCap, TestPlan2AndPostgraduateInterestRateCap>();
+            services.AddScoped<IPlan1And4InterestRate, TestPlan1And4InterestRate>();
         });
 
         return base.CreateHost(builder);
