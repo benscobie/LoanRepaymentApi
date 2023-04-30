@@ -65,7 +65,7 @@ public class StandardTypeCalculator : IStandardTypeCalculator
             {
                 result.RepaymentStatus = previousPeriodResult?.RepaymentStatus ?? UkStudentLoanRepaymentStatus.PaidOff;
                 result.TotalPaid = previousPeriodResult?.TotalPaid ?? 0;
-                result.TotalInterestPaid = previousPeriodResult?.TotalInterestPaid ?? 0;
+                result.TotalInterestApplied = previousPeriodResult?.TotalInterestApplied ?? 0;
                 results.Add(result);
                 continue;
             }
@@ -82,7 +82,7 @@ public class StandardTypeCalculator : IStandardTypeCalculator
             {
                 result.RepaymentStatus = UkStudentLoanRepaymentStatus.WrittenOff;
                 result.TotalPaid = previousPeriodResult?.TotalPaid ?? 0;
-                result.TotalInterestPaid = previousPeriodResult?.TotalInterestPaid ?? 0;
+                result.TotalInterestApplied = previousPeriodResult?.TotalInterestApplied ?? 0;
                 results.Add(result);
                 continue;
             }
@@ -110,7 +110,7 @@ public class StandardTypeCalculator : IStandardTypeCalculator
                 result.InterestRate = interestRate;
                 result.InterestApplied = interestToApply;
                 result.TotalPaid = previousPeriodResult?.TotalPaid ?? 0;
-                result.TotalInterestPaid = previousPeriodResult?.TotalInterestPaid ?? 0;
+                result.TotalInterestApplied = interestToApply += (previousPeriodResult?.TotalInterestApplied ?? 0);
                 results.Add(result);
                 continue;
             }
@@ -142,7 +142,7 @@ public class StandardTypeCalculator : IStandardTypeCalculator
             result.InterestRate = interestRate;
             result.InterestApplied = interestToApply;
             result.TotalPaid = amountToPay + (previousPeriodResult?.TotalPaid ?? 0);
-            result.TotalInterestPaid = interestToApply + (previousPeriodResult?.TotalInterestPaid ?? 0);
+            result.TotalInterestApplied = interestToApply + (previousPeriodResult?.TotalInterestApplied ?? 0);
 
             results.Add(result);
         }

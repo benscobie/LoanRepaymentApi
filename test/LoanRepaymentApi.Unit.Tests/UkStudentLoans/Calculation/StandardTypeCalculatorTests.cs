@@ -64,7 +64,7 @@ public class StandardTypeCalculatorTests
                 DebtRemaining = 451m,
                 TotalPaid = 750m,
                 Paid = 750m,
-                TotalInterestPaid = 1m,
+                TotalInterestApplied = 1m,
                 InterestApplied = 1m,
                 RepaymentStatus = UkStudentLoanRepaymentStatus.Paying,
                 Threshold = 20_000
@@ -113,7 +113,7 @@ public class StandardTypeCalculatorTests
                     Period = 49,
                     Paid = 1000,
                     TotalPaid = 5000,
-                    TotalInterestPaid = 100,
+                    TotalInterestApplied = 100,
                     LoanType = UkStudentLoanType.Type1,
                     RepaymentStatus = UkStudentLoanRepaymentStatus.PaidOff,
                 }
@@ -130,7 +130,7 @@ public class StandardTypeCalculatorTests
                 Period = 50,
                 PeriodDate = new DateTime(2022, 02, 01),
                 TotalPaid = 5000,
-                TotalInterestPaid = 100,
+                TotalInterestApplied = 100,
                 LoanType = UkStudentLoanType.Type1,
                 RepaymentStatus = UkStudentLoanRepaymentStatus.PaidOff,
                 Threshold = 20_000
@@ -195,7 +195,7 @@ public class StandardTypeCalculatorTests
                 DebtRemaining = 701.00M,
                 TotalPaid = 500m,
                 Paid = 500m,
-                TotalInterestPaid = 1m,
+                TotalInterestApplied = 1m,
                 InterestApplied = 1m,
                 RepaymentStatus = UkStudentLoanRepaymentStatus.Paying,
                 Threshold = 20_000
@@ -250,7 +250,7 @@ public class StandardTypeCalculatorTests
                     DebtRemaining = 451m,
                     TotalPaid = 750m,
                     Paid = 750m,
-                    TotalInterestPaid = 1m,
+                    TotalInterestApplied = 1m,
                     InterestApplied = 1m
                 }
             }
@@ -274,7 +274,7 @@ public class StandardTypeCalculatorTests
                 DebtRemaining = 0,
                 TotalPaid = 1201.3758m,
                 Paid = 451.3758m,
-                TotalInterestPaid = 1.3758m,
+                TotalInterestApplied = 1.3758m,
                 InterestApplied = 0.3758m,
                 RepaymentStatus = UkStudentLoanRepaymentStatus.PaidOff,
                 Threshold = 20_000
@@ -334,7 +334,7 @@ public class StandardTypeCalculatorTests
                     Paid = 75m,
                     InterestApplied = 0.50m,
                     TotalPaid = 75m,
-                    TotalInterestPaid = 0.50m,
+                    TotalInterestApplied = 0.50m,
                     DebtRemaining = 525.50m
                 },
                 new()
@@ -346,7 +346,7 @@ public class StandardTypeCalculatorTests
                     Paid = 675m,
                     InterestApplied = 1m,
                     TotalPaid = 675m,
-                    TotalInterestPaid = 1m,
+                    TotalInterestApplied = 1m,
                     DebtRemaining = 526m
                 }
             }
@@ -374,7 +374,7 @@ public class StandardTypeCalculatorTests
                 Paid = 223.5616m,
                 InterestApplied = 0.4379m,
                 TotalPaid = 298.5616m,
-                TotalInterestPaid = 0.9379m,
+                TotalInterestApplied = 0.9379m,
                 DebtRemaining = 302.3762m,
                 RepaymentStatus = UkStudentLoanRepaymentStatus.Paying,
                 Threshold = 20_000
@@ -388,7 +388,7 @@ public class StandardTypeCalculatorTests
                 Paid = 526.4383m,
                 InterestApplied = 0.4383m,
                 TotalPaid = 1201.4383m,
-                TotalInterestPaid = 1.4383m,
+                TotalInterestApplied = 1.4383m,
                 DebtRemaining = 0,
                 RepaymentStatus = UkStudentLoanRepaymentStatus.PaidOff,
                 Threshold = 30_000
@@ -443,7 +443,7 @@ public class StandardTypeCalculatorTests
                     DebtRemaining = 451m,
                     TotalPaid = 750m,
                     Paid = 750m,
-                    TotalInterestPaid = 1m,
+                    TotalInterestApplied = 1m,
                     InterestApplied = 1m,
                 }
             }
@@ -467,7 +467,7 @@ public class StandardTypeCalculatorTests
                 DebtRemaining = 0,
                 TotalPaid = 750m,
                 Paid = 0m,
-                TotalInterestPaid = 1m,
+                TotalInterestApplied = 1m,
                 InterestApplied = 0m,
                 RepaymentStatus = UkStudentLoanRepaymentStatus.WrittenOff,
                 Threshold = 20_000
@@ -533,7 +533,7 @@ public class StandardTypeCalculatorTests
                 DebtRemaining = 1201,
                 TotalPaid = 0,
                 Paid = 0,
-                TotalInterestPaid = 0,
+                TotalInterestApplied = 1m,
                 InterestApplied = 1m,
                 RepaymentStatus = UkStudentLoanRepaymentStatus.NotPaying,
                 Threshold = 20_000

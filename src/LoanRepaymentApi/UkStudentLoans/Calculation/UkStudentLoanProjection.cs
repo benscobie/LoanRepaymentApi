@@ -22,5 +22,5 @@ public class UkStudentLoanProjection
 
     public decimal TotalPaid { get; set; }
 
-    public decimal TotalInterestPaid { get; set; }
+    public decimal TotalInterestApplied { get; set; }
 }

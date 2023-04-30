@@ -13,13 +13,13 @@
           "paid": 0,
           "interestApplied": 0.0625,
           "totalPaid": 0,
-          "totalInterestPaid": 0
+          "totalInterestApplied": 0.0625
         }
       ],
       "aggregatedDebtRemaining": 50.0625,
       "aggregatedPaidInPeriod": 0,
       "aggregatedInterestAppliedInPeriod": 0.0625,
-      "aggregatedTotalInterestPaid": 0,
+      "aggregatedTotalInterestApplied": 0.0625,
       "aggregatedTotalPaid": 0
     },
     {
@@ -35,18 +35,18 @@
           "paid": 50.125078125,
           "interestApplied": 0.062578125,
           "totalPaid": 50.125078125,
-          "totalInterestPaid": 0.062578125
+          "totalInterestApplied": 0.125078125
         }
       ],
       "aggregatedDebtRemaining": 0.0,
       "aggregatedPaidInPeriod": 50.125078125,
       "aggregatedInterestAppliedInPeriod": 0.062578125,
-      "aggregatedTotalInterestPaid": 0.062578125,
+      "aggregatedTotalInterestApplied": 0.125078125,
       "aggregatedTotalPaid": 50.125078125
     }
   ],
   "debtClearedDate": "2022-06-01T01:00:00+01:00",
   "debtClearedNumberOfPeriods": 2,
   "totalPaid": 50.125078125,
-  "totalInterestPaid": 0.062578125
+  "totalInterestApplied": 0.125078125
 }
