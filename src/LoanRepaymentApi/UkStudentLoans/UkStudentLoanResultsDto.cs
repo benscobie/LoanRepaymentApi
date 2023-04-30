@@ -10,5 +10,5 @@ public class UkStudentLoanResultsDto
 
     public decimal TotalPaid => Results.Last().AggregatedTotalPaid;
 
-    public decimal TotalInterestPaid => Results.Last().AggregatedTotalInterestPaid;
+    public decimal TotalInterestApplied => Results.Last().AggregatedTotalInterestApplied;
 }
