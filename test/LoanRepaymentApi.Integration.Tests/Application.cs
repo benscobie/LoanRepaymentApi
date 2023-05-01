@@ -2,6 +2,7 @@
 
 using LoanRepaymentApi.Common;
 using LoanRepaymentApi.UkStudentLoans.Calculation.Operations.Interest;
+using LoanRepaymentApi.UkStudentLoans.Calculation.Operations.Threshold;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -28,6 +29,7 @@ public class Application : WebApplicationFactory<Program>
             services.AddScoped<IRetailPriceIndex, TestRetailPriceIndex>();
             services.AddScoped<IPlan2AndPostgraduateInterestRateCap, TestPlan2AndPostgraduateInterestRateCap>();
             services.AddScoped<IPlan1And4InterestRate, TestPlan1And4InterestRate>();
+            services.AddScoped<IThresholdsProvider, TestThresholdsProvider>();
         });
 
         return base.CreateHost(builder);

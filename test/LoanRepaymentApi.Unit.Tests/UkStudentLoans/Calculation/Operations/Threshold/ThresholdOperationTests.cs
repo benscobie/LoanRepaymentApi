@@ -2,10 +2,12 @@
 
 using System;
 using System.Collections.Generic;
+using AutoFixture.Xunit2;
 using FluentAssertions;
 using LoanRepaymentApi.UkStudentLoans;
 using LoanRepaymentApi.UkStudentLoans.Calculation;
 using LoanRepaymentApi.UkStudentLoans.Calculation.Operations.Threshold;
+using Moq;
 using Xunit;
 
 public class ThresholdOperationTests
@@ -29,18 +31,25 @@ public class ThresholdOperationTests
     public void Execute_WhenCalledWithPeriodInBetweenBand_ShouldReturnExpectedResult(ThresholdOperationFact fact,
         int expectedResult)
     {
-        // Arrange & Act
-        var result = new ThresholdOperation().Execute(fact);
+        // Arrange
+        var mockThresholdProvider = new Mock<IThresholdsProvider>();
+        mockThresholdProvider.Setup(x => x.Get()).Returns(TestThresholds.Get);
+
+        // Act
+        var result = new ThresholdOperation(mockThresholdProvider.Object).Execute(fact);
 
         // Assert
         result.Should().Be(expectedResult);
     }
 
     [Theory, AutoMoqData]
-    public void Execute_WhenLastThresholdGrowthWithin12Months_ShouldNotGrow(ThresholdOperation sut,
-        ThresholdOperationFact fact)
+    public void Execute_WhenLastThresholdGrowthWithin12Months_ShouldNotGrow(
+        ThresholdOperationFact fact,
+        Mock<IThresholdsProvider> mockThresholdProvider)
     {
         // Arrange
+        mockThresholdProvider.Setup(x => x.Get()).Returns(TestThresholds.Get);
+
         fact.Period = 24;
         fact.PeriodDate = new DateTimeOffset(2022, 04, 06, 0, 0, 0, new TimeSpan(0, 0, 0));
         fact.AnnualEarningsGrowth = 0.10m;
@@ -71,17 +80,20 @@ public class ThresholdOperationTests
         };
 
         // Act
-        var result = sut.Execute(fact);
+        var result = new ThresholdOperation(mockThresholdProvider.Object).Execute(fact);
 
         // Assert
         result.Should().Be(33000);
     }
 
     [Theory, AutoMoqData]
-    public void Execute_WhenLastThresholdGrowthOutside12MonthsWithPreviousGrowth_ShouldGrow(ThresholdOperation sut,
-        ThresholdOperationFact fact)
+    public void Execute_WhenLastThresholdGrowthOutside12MonthsWithPreviousGrowth_ShouldGrow(
+        ThresholdOperationFact fact,
+        Mock<IThresholdsProvider> mockThresholdProvider)
     {
         // Arrange
+        mockThresholdProvider.Setup(x => x.Get()).Returns(TestThresholds.Get);
+
         fact.Period = 24;
         fact.PeriodDate = new DateTimeOffset(2022, 04, 06, 0, 0, 0, new TimeSpan(0, 0, 0));
         fact.AnnualEarningsGrowth = 0.10m;
@@ -112,17 +124,20 @@ public class ThresholdOperationTests
         };
 
         // Act
-        var result = sut.Execute(fact);
+        var result = new ThresholdOperation(mockThresholdProvider.Object).Execute(fact);
 
         // Assert
         result.Should().Be(36300);
     }
 
     [Theory, AutoMoqData]
-    public void Execute_WhenLastThresholdGrowthOutside12MonthsWithNoPreviousGrowth_ShouldGrow(ThresholdOperation sut,
-        ThresholdOperationFact fact)
+    public void Execute_WhenLastThresholdGrowthOutside12MonthsWithNoPreviousGrowth_ShouldGrow(
+        ThresholdOperationFact fact,
+        Mock<IThresholdsProvider> mockThresholdProvider)
     {
         // Arrange
+        mockThresholdProvider.Setup(x => x.Get()).Returns(TestThresholds.Get);
+
         fact.Period = 13;
         fact.PeriodDate = new DateTimeOffset(2022, 04, 06, 0, 0, 0, new TimeSpan(0, 0, 0));
         fact.AnnualEarningsGrowth = 0.10m;
@@ -146,7 +161,7 @@ public class ThresholdOperationTests
         };
 
         // Act
-        var result = sut.Execute(fact);
+        var result = new ThresholdOperation(mockThresholdProvider.Object).Execute(fact);
 
         // Assert
         result.Should().Be(36300);
