@@ -4,13 +4,13 @@ namespace LoanRepaymentApi.UkStudentLoans.Calculation.Operations.Interest;
 
 public class InterestRateOperation : IInterestRateOperation
 {
-    private readonly decimal _plan2AndPostgraduateInterestRateCap;
+    private readonly decimal _prevailingMarketRateCap;
     private readonly decimal _retailPriceIndex;
     private readonly decimal _plan1And4InterestRate;
 
-    public InterestRateOperation(IPlan2AndPostgraduateInterestRateCap plan2AndPostgraduateInterestRateCap, IPlan1And4InterestRate plan1And4InterestRate, IRetailPriceIndex retailPriceIndex)
+    public InterestRateOperation(IPrevailingMarketRateCap prevailingMarketRateCap, IPlan1And4InterestRate plan1And4InterestRate, IRetailPriceIndex retailPriceIndex)
     {
-        _plan2AndPostgraduateInterestRateCap = plan2AndPostgraduateInterestRateCap.Get();
+        _prevailingMarketRateCap = prevailingMarketRateCap.Get();
         _retailPriceIndex = retailPriceIndex.GetForPreviousMarch();
         _plan1And4InterestRate = plan1And4InterestRate.Get();
     }
@@ -24,19 +24,19 @@ public class InterestRateOperation : IInterestRateOperation
 
         if (fact.LoanType == UkStudentLoanType.Type5)
         {
-            return _retailPriceIndex;
+            return decimal.Min(_retailPriceIndex, _prevailingMarketRateCap);
         }
 
         if (fact.LoanType == UkStudentLoanType.Postgraduate)
         {
-            return decimal.Min(_retailPriceIndex + 0.03m, _plan2AndPostgraduateInterestRateCap);
+            return decimal.Min(_retailPriceIndex + 0.03m, _prevailingMarketRateCap);
         }
 
         if (fact.LoanType == UkStudentLoanType.Type2)
         {
             if (fact.Salary < 27295)
             {
-                return decimal.Min(_retailPriceIndex, _plan2AndPostgraduateInterestRateCap);
+                return decimal.Min(_retailPriceIndex, _prevailingMarketRateCap);
             }
             else if (fact.Salary < 49130)
             {
@@ -45,17 +45,17 @@ public class InterestRateOperation : IInterestRateOperation
                         fact.CourseEndDate!.Value.Year + (fact.CourseEndDate!.Value.Month < 4 ? 0 : 1), 04, 01, 0, 0, 0,
                         TimeSpan.Zero))
                 {
-                    return decimal.Min(_retailPriceIndex + 0.03m, _plan2AndPostgraduateInterestRateCap);
+                    return decimal.Min(_retailPriceIndex + 0.03m, _prevailingMarketRateCap);
                 }
 
                 decimal percentagePortionOfIncome = (fact.Salary - 27295m) / (49129m - 27295m);
                 var rate = Math.Round(percentagePortionOfIncome * 0.03m, 3);
 
-                return decimal.Min(_retailPriceIndex + rate, _plan2AndPostgraduateInterestRateCap);
+                return decimal.Min(_retailPriceIndex + rate, _prevailingMarketRateCap);
             }
             else
             {
-                return decimal.Min(_retailPriceIndex + 0.03m, _plan2AndPostgraduateInterestRateCap);
+                return decimal.Min(_retailPriceIndex + 0.03m, _prevailingMarketRateCap);
             }
         }
 

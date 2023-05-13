@@ -33,14 +33,14 @@ public class InterestRateOperationTests
         decimal expectedResult)
     {
         // Arrange & Act
-        var plan2And4InterestRateCapMock = new Mock<IPlan2AndPostgraduateInterestRateCap>();
-        plan2And4InterestRateCapMock.Setup(x => x.Get()).Returns(plan2And4InterestRateCap);
+        var prevailingMarketRateCapMock = new Mock<IPrevailingMarketRateCap>();
+        prevailingMarketRateCapMock.Setup(x => x.Get()).Returns(plan2And4InterestRateCap);
         var plan1And4InterestRateMock = new Mock<IPlan1And4InterestRate>();
         plan1And4InterestRateMock.Setup(x => x.Get()).Returns(0.015m);
         var retailPriceIndexMock = new Mock<IRetailPriceIndex>();
         retailPriceIndexMock.Setup(x => x.GetForPreviousMarch()).Returns(0.015m);
 
-        var result = new InterestRateOperation(plan2And4InterestRateCapMock.Object, plan1And4InterestRateMock.Object, retailPriceIndexMock.Object).Execute(fact);
+        var result = new InterestRateOperation(prevailingMarketRateCapMock.Object, plan1And4InterestRateMock.Object, retailPriceIndexMock.Object).Execute(fact);
 
         // Assert
         result.Should().Be(expectedResult);
