@@ -56,7 +56,7 @@ public class UkStudentLoanCalculationDtoValidator : AbstractValidator<UkStudentL
                 loan.RuleFor(x => x.FirstRepaymentDate).NotNull().When(x =>
                     (x.LoanType == UkStudentLoanType.Type1 && x.AcademicYearLoanTakenOut >= 2006) ||
                     x.LoanType == UkStudentLoanType.Type4 || x.LoanType == UkStudentLoanType.Postgraduate ||
-                    x.LoanType == UkStudentLoanType.Type2);
+                    x.LoanType == UkStudentLoanType.Type2 || x.LoanType == UkStudentLoanType.Type5);
             });
     }
 

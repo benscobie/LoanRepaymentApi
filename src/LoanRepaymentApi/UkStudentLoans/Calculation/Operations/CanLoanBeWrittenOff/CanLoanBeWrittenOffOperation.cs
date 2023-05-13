@@ -4,14 +4,14 @@ public class CanLoanBeWrittenOffOperation : ICanLoanBeWrittenOffOperation
 {
     public bool Execute(CanLoanBeWrittenOffOperationFact fact)
     {
-        if (fact.LoanType == UkStudentLoanType.Postgraduate)
+        if (fact.LoanType == UkStudentLoanType.Postgraduate || fact.LoanType == UkStudentLoanType.Type2)
         {
             return fact.PeriodDate >= fact.FirstRepaymentDate!.Value.AddYears(30);
         }
 
-        if (fact.LoanType == UkStudentLoanType.Type2)
+        if (fact.LoanType == UkStudentLoanType.Type5)
         {
-            return fact.PeriodDate >= fact.FirstRepaymentDate!.Value.AddYears(30);
+            return fact.PeriodDate >= fact.FirstRepaymentDate!.Value.AddYears(40);
         }
 
         int personAge = 0;
@@ -20,7 +20,7 @@ public class CanLoanBeWrittenOffOperation : ICanLoanBeWrittenOffOperation
             personAge = fact.PeriodDate.Year - fact.BirthDate.Value.Year;
             if (fact.BirthDate.Value.Date > fact.PeriodDate.AddYears(-personAge)) personAge--;
         }
-        
+
         if (fact.LoanType == UkStudentLoanType.Type1)
         {
             return (fact.AcademicYearLoanTakenOut!.Value <= 2005 && personAge >= 65) ||
