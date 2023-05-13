@@ -22,6 +22,11 @@ public class InterestRateOperation : IInterestRateOperation
             return _plan1And4InterestRate;
         }
 
+        if (fact.LoanType == UkStudentLoanType.Type5)
+        {
+            return _retailPriceIndex;
+        }
+
         if (fact.LoanType == UkStudentLoanType.Postgraduate)
         {
             return decimal.Min(_retailPriceIndex + 0.03m, _plan2AndPostgraduateInterestRateCap);

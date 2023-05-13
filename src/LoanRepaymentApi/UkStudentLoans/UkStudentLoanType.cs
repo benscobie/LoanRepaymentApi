@@ -6,5 +6,6 @@ public enum UkStudentLoanType
     Type1,
     Type2,
     Type4,
-    Postgraduate
+    Postgraduate,
+    Type5
 }

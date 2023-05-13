@@ -136,6 +136,22 @@ public class UkStudentLoanCalculationDtoValidatorTests
             {
                 new UkStudentLoanCalculationDto
                 {
+                    Loans = new List<UkStudentLoanDto>
+                    {
+                        new()
+                        {
+                            LoanType = UkStudentLoanType.Type5,
+                            BalanceRemaining = 1,
+                            FirstRepaymentDate = DateTimeOffset.Now
+                        }
+                    },
+                    AnnualSalaryBeforeTax = 1
+                }
+            },
+            new object[]
+            {
+                new UkStudentLoanCalculationDto
+                {
                     SalaryAdjustments = new List<Adjustment>
                     {
                         new()
@@ -342,6 +358,14 @@ public class UkStudentLoanCalculationDtoValidatorTests
                 new IncorrectLoanDataSuppliedData
                 {
                     LoanType = UkStudentLoanType.Type4,
+                    FieldThatShouldHaveError = "Loans[0].FirstRepaymentDate"
+                }
+            },
+            new object[]
+            {
+                new IncorrectLoanDataSuppliedData
+                {
+                    LoanType = UkStudentLoanType.Type5,
                     FieldThatShouldHaveError = "Loans[0].FirstRepaymentDate"
                 }
             }

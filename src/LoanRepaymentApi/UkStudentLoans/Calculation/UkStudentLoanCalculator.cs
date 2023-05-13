@@ -28,7 +28,7 @@ public class UkStudentLoanCalculator : IUkStudentLoanCalculator
         bool loansHaveDebt;
         var now = _clock.GetCurrentInstant().ToDateTimeUtc();
 
-        var standardLoanTypes = new[] { UkStudentLoanType.Type1, UkStudentLoanType.Type2, UkStudentLoanType.Type4 };
+        var standardLoanTypes = new[] { UkStudentLoanType.Type1, UkStudentLoanType.Type2, UkStudentLoanType.Type4, UkStudentLoanType.Type5 };
 
         do
         {

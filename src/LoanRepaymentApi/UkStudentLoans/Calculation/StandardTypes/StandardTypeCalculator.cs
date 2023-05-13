@@ -110,7 +110,7 @@ public class StandardTypeCalculator : IStandardTypeCalculator
                 result.InterestRate = interestRate;
                 result.InterestApplied = interestToApply;
                 result.TotalPaid = previousPeriodResult?.TotalPaid ?? 0;
-                result.TotalInterestApplied = interestToApply += (previousPeriodResult?.TotalInterestApplied ?? 0);
+                result.TotalInterestApplied = interestToApply + (previousPeriodResult?.TotalInterestApplied ?? 0);
                 results.Add(result);
                 continue;
             }
