@@ -1,9 +1,9 @@
 ﻿namespace LoanRepaymentApi.UkStudentLoans.Calculation.Operations.Interest;
 
-public class Plan2AndPostgraduateInterestRateCap : IPlan2AndPostgraduateInterestRateCap
+public class PrevailingMarketRateCap : IPrevailingMarketRateCap
 {
     public decimal Get()
     {
-        return 0.069m;
+        return 0.073m;
     }
 }

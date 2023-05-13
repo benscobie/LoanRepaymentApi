@@ -51,7 +51,7 @@ builder.Services.AddSingleton<IRateLimitConfiguration, RateLimitConfiguration>()
 builder.Services.AddScoped<IUkStudentLoanCalculator, UkStudentLoanCalculator>();
 builder.Services.AddScoped<IStandardTypeCalculator, StandardTypeCalculator>();
 builder.Services.AddScoped<IRetailPriceIndex, RetailPriceIndex>();
-builder.Services.AddScoped<IPlan2AndPostgraduateInterestRateCap, Plan2AndPostgraduateInterestRateCap>();
+builder.Services.AddScoped<IPrevailingMarketRateCap, PrevailingMarketRateCap>();
 builder.Services.AddScoped<IPlan1And4InterestRate, Plan1And4InterestRate>();
 builder.Services.AddScoped<IThresholdsProvider, ThresholdsProvider>();
 

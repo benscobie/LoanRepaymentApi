@@ -2,7 +2,7 @@
 
 namespace LoanRepaymentApi.Integration.Tests
 {
-    public class TestPlan2AndPostgraduateInterestRateCap : IPlan2AndPostgraduateInterestRateCap
+    public class TestPrevailingMarketRateCap : IPrevailingMarketRateCap
     {
         public decimal Get()
         {
