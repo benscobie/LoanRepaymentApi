@@ -1,23 +1,27 @@
-﻿namespace LoanRepaymentApi.UkStudentLoans.Calculation.StandardTypes;
-
+﻿using LoanRepaymentApi.UkStudentLoans.Calculation.Operations.FirstPossibleRepaymentDate;
 using LoanRepaymentApi.UkStudentLoans.Calculation.Operations.CanLoanBeWrittenOff;
 using LoanRepaymentApi.UkStudentLoans.Calculation.Operations.Interest;
 using LoanRepaymentApi.UkStudentLoans.Calculation.Operations.Threshold;
+
+namespace LoanRepaymentApi.UkStudentLoans.Calculation.StandardTypes;
 
 public class StandardTypeCalculator : IStandardTypeCalculator
 {
     private readonly ICanLoanBeWrittenOffOperation _canLoanBeWrittenOffOperation;
     private readonly IThresholdOperation _thresholdOperation;
     private readonly IInterestRateOperation _interestRateOperation;
+    private readonly IFirstPossibleRepaymentDateOperation _firstPossibleRepaymentDateOperation;
 
     public StandardTypeCalculator(
         ICanLoanBeWrittenOffOperation canLoanBeWrittenOffOperation,
         IThresholdOperation thresholdOperation,
-        IInterestRateOperation interestRateOperation)
+        IInterestRateOperation interestRateOperation,
+        IFirstPossibleRepaymentDateOperation firstPossibleRepaymentDateOperation)
     {
         _canLoanBeWrittenOffOperation = canLoanBeWrittenOffOperation;
         _thresholdOperation = thresholdOperation;
         _interestRateOperation = interestRateOperation;
+        _firstPossibleRepaymentDateOperation = firstPossibleRepaymentDateOperation;
     }
 
     public List<UkStudentLoanProjection> Run(StandardTypeCalculatorRequest request)
@@ -70,13 +74,22 @@ public class StandardTypeCalculator : IStandardTypeCalculator
                 continue;
             }
 
+            var firstPossibleRepaymentDate = _firstPossibleRepaymentDateOperation.Execute(
+                new FirstPossibleRepaymentDateOperationFact
+                {
+                    LoanType = loan.Type,
+                    CourseStartDate = loan.CourseStartDate,
+                    CourseEndDate = loan.CourseEndDate,
+                    StudyingPartTime = loan.StudyingPartTime
+                });
+
             if (_canLoanBeWrittenOffOperation.Execute(
                     new CanLoanBeWrittenOffOperationFact
                     {
                         BirthDate = request.PersonDetails.BirthDate,
                         LoanType = loan.Type,
                         PeriodDate = request.PeriodDate,
-                        FirstRepaymentDate = loan.FirstRepaymentDate,
+                        FirstRepaymentDate = firstPossibleRepaymentDate,
                         AcademicYearLoanTakenOut = loan.AcademicYearLoanTakenOut
                     }))
             {
@@ -102,7 +115,7 @@ public class StandardTypeCalculator : IStandardTypeCalculator
 
             var annualSalaryUsableForLoanRepayment = previousLoansThreshold ?? request.Salary;
 
-            if ((loan.FirstRepaymentDate != null && request.PeriodDate < loan.FirstRepaymentDate) ||
+            if ((firstPossibleRepaymentDate != null && request.PeriodDate < firstPossibleRepaymentDate) ||
                 annualSalaryUsableForLoanRepayment < threshold)
             {
                 result.RepaymentStatus = UkStudentLoanRepaymentStatus.NotPaying;

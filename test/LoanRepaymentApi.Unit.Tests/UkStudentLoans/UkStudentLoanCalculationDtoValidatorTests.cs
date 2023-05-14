@@ -38,6 +38,7 @@ public class UkStudentLoanCalculationDtoValidatorTests
                         new()
                         {
                             LoanType = UkStudentLoanType.Type1,
+                            CourseEndDate = DateTimeOffset.Now,
                             BalanceRemaining = 1,
                             AcademicYearLoanTakenOut = 2005,
                         }
@@ -56,7 +57,8 @@ public class UkStudentLoanCalculationDtoValidatorTests
                             LoanType = UkStudentLoanType.Type1,
                             BalanceRemaining = 1,
                             AcademicYearLoanTakenOut = 2006,
-                            FirstRepaymentDate = DateTimeOffset.Now
+                            StudyingPartTime = false,
+                            CourseEndDate = DateTimeOffset.Now
                         }
                     },
                     AnnualSalaryBeforeTax = 1
@@ -74,7 +76,8 @@ public class UkStudentLoanCalculationDtoValidatorTests
                             LoanType = UkStudentLoanType.Type4,
                             BalanceRemaining = 1,
                             AcademicYearLoanTakenOut = 2006,
-                            FirstRepaymentDate = DateTimeOffset.Now
+                            StudyingPartTime = false,
+                            CourseEndDate = DateTimeOffset.Now
                         }
                     },
                     AnnualSalaryBeforeTax = 1
@@ -91,7 +94,8 @@ public class UkStudentLoanCalculationDtoValidatorTests
                             LoanType = UkStudentLoanType.Type4,
                             BalanceRemaining = 1,
                             AcademicYearLoanTakenOut = 2007,
-                            FirstRepaymentDate = DateTimeOffset.Now
+                            StudyingPartTime = false,
+                            CourseEndDate = DateTimeOffset.Now
                         }
                     },
                     AnnualSalaryBeforeTax = 1
@@ -107,7 +111,6 @@ public class UkStudentLoanCalculationDtoValidatorTests
                         {
                             LoanType = UkStudentLoanType.Type2,
                             BalanceRemaining = 1,
-                            FirstRepaymentDate = DateTimeOffset.Now,
                             CourseStartDate = DateTimeOffset.Now,
                             CourseEndDate = DateTimeOffset.Now,
                             StudyingPartTime = false
@@ -126,7 +129,8 @@ public class UkStudentLoanCalculationDtoValidatorTests
                         {
                             LoanType = UkStudentLoanType.Postgraduate,
                             BalanceRemaining = 1,
-                            FirstRepaymentDate = DateTimeOffset.Now
+                            StudyingPartTime = false,
+                            CourseEndDate = DateTimeOffset.Now,
                         }
                     },
                     AnnualSalaryBeforeTax = 1
@@ -142,7 +146,7 @@ public class UkStudentLoanCalculationDtoValidatorTests
                         {
                             LoanType = UkStudentLoanType.Type5,
                             BalanceRemaining = 1,
-                            FirstRepaymentDate = DateTimeOffset.Now
+                            StudyingPartTime = false,
                         }
                     },
                     AnnualSalaryBeforeTax = 1
@@ -171,7 +175,8 @@ public class UkStudentLoanCalculationDtoValidatorTests
                         {
                             LoanType = UkStudentLoanType.Postgraduate,
                             BalanceRemaining = 1,
-                            FirstRepaymentDate = DateTimeOffset.Now
+                            StudyingPartTime = false,
+                            CourseEndDate = DateTimeOffset.Now,
                         }
                     },
                     AnnualSalaryBeforeTax = 1
@@ -209,7 +214,6 @@ public class UkStudentLoanCalculationDtoValidatorTests
                     LoanType = UkStudentLoanType.Type2,
                     CourseStartDate = null, // Must be set for type 2
                     CourseEndDate = null, // Must be set for type 2
-                    StudyingPartTime = null // Must be set for type 2
                 }
             },
             AnnualSalaryBeforeTax = 0,
@@ -242,7 +246,6 @@ public class UkStudentLoanCalculationDtoValidatorTests
         result.ShouldHaveValidationErrorFor("Loans[2].LoanType");
         result.ShouldHaveValidationErrorFor("Loans[3].CourseStartDate");
         result.ShouldHaveValidationErrorFor("Loans[3].CourseEndDate");
-        result.ShouldHaveValidationErrorFor("Loans[3].StudyingPartTime");
     }
 
     [Theory]
@@ -261,7 +264,9 @@ public class UkStudentLoanCalculationDtoValidatorTests
                 {
                     LoanType = data.LoanType,
                     BalanceRemaining = 1,
-                    FirstRepaymentDate = data.FirstRepaymentDate,
+                    StudyingPartTime = data.StudyingPartTime,
+                    CourseStartDate = data.CourseStartDate,
+                    CourseEndDate = data.CourseEndDate,
                     AcademicYearLoanTakenOut = data.AcademicYearLoanTakenOut
                 },
             },
@@ -283,7 +288,11 @@ public class UkStudentLoanCalculationDtoValidatorTests
 
         public int? AcademicYearLoanTakenOut { get; set; }
 
-        public DateTimeOffset? FirstRepaymentDate { get; set; }
+        public DateTimeOffset? CourseStartDate { get; set; }
+
+        public DateTimeOffset? CourseEndDate { get; set; }
+
+        public bool StudyingPartTime { get; set; }
 
         public DateTimeOffset? BirthDate { get; set; }
 
@@ -334,7 +343,7 @@ public class UkStudentLoanCalculationDtoValidatorTests
                 {
                     LoanType = UkStudentLoanType.Type1,
                     AcademicYearLoanTakenOut = 2006,
-                    FieldThatShouldHaveError = "Loans[0].FirstRepaymentDate"
+                    FieldThatShouldHaveError = "Loans[0].CourseEndDate"
                 }
             },
             new object[]
@@ -342,7 +351,7 @@ public class UkStudentLoanCalculationDtoValidatorTests
                 new IncorrectLoanDataSuppliedData
                 {
                     LoanType = UkStudentLoanType.Postgraduate,
-                    FieldThatShouldHaveError = "Loans[0].FirstRepaymentDate"
+                    FieldThatShouldHaveError = "Loans[0].CourseEndDate"
                 }
             },
             new object[]
@@ -350,7 +359,7 @@ public class UkStudentLoanCalculationDtoValidatorTests
                 new IncorrectLoanDataSuppliedData
                 {
                     LoanType = UkStudentLoanType.Type2,
-                    FieldThatShouldHaveError = "Loans[0].FirstRepaymentDate"
+                    FieldThatShouldHaveError = "Loans[0].CourseEndDate"
                 }
             },
             new object[]
@@ -358,17 +367,54 @@ public class UkStudentLoanCalculationDtoValidatorTests
                 new IncorrectLoanDataSuppliedData
                 {
                     LoanType = UkStudentLoanType.Type4,
-                    FieldThatShouldHaveError = "Loans[0].FirstRepaymentDate"
+                    FieldThatShouldHaveError = "Loans[0].CourseEndDate"
                 }
             },
             new object[]
             {
                 new IncorrectLoanDataSuppliedData
                 {
-                    LoanType = UkStudentLoanType.Type5,
-                    FieldThatShouldHaveError = "Loans[0].FirstRepaymentDate"
+                    LoanType = UkStudentLoanType.Type1,
+                    StudyingPartTime = true,
+                    FieldThatShouldHaveError = "Loans[0].CourseStartDate"
                 }
-            }
+            },
+            new object[]
+            {
+                new IncorrectLoanDataSuppliedData
+                {
+                    LoanType = UkStudentLoanType.Postgraduate,
+                    StudyingPartTime = true,
+                    FieldThatShouldHaveError = "Loans[0].CourseStartDate"
+                }
+            },
+            new object[]
+            {
+                new IncorrectLoanDataSuppliedData
+                {
+                    LoanType = UkStudentLoanType.Type2,
+                    StudyingPartTime = true,
+                    FieldThatShouldHaveError = "Loans[0].CourseStartDate"
+                }
+            },
+            new object[]
+            {
+                new IncorrectLoanDataSuppliedData
+                {
+                    LoanType = UkStudentLoanType.Type2,
+                    StudyingPartTime = false,
+                    FieldThatShouldHaveError = "Loans[0].CourseStartDate"
+                }
+            },
+            new object[]
+            {
+                new IncorrectLoanDataSuppliedData
+                {
+                    LoanType = UkStudentLoanType.Type4,
+                    StudyingPartTime = true,
+                    FieldThatShouldHaveError = "Loans[0].CourseStartDate"
+                }
+            },
         };
     }
 }

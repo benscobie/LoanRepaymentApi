@@ -5,7 +5,7 @@ namespace LoanRepaymentApi.UkStudentLoans;
 using System.Collections.Generic;
 using System.Linq;
 using FluentValidation;
-using LoanRepaymentApi.UkStudentLoans.Calculation;
+using Calculation;
 
 public class UkStudentLoanCalculationDto
 {
@@ -46,17 +46,12 @@ public class UkStudentLoanCalculationDtoValidator : AbstractValidator<UkStudentL
                 loan.RuleFor(x => x.LoanType).NotEmpty().IsInEnum();
                 loan.RuleFor(x => x.BalanceRemaining).GreaterThan(0);
                 loan.RuleFor(x => x.CourseStartDate).NotNull()
-                    .When(x => x.LoanType == UkStudentLoanType.Type2);
+                    .When(x => x.LoanType == UkStudentLoanType.Type2 || x.StudyingPartTime);
                 loan.RuleFor(x => x.CourseEndDate).NotNull()
-                    .When(x => x.LoanType == UkStudentLoanType.Type2);
-                loan.RuleFor(x => x.StudyingPartTime).NotNull()
-                    .When(x => x.LoanType == UkStudentLoanType.Type2);
+                    .When(x => x.LoanType != UkStudentLoanType.Type5);
+                loan.RuleFor(x => x.StudyingPartTime).NotNull();
                 loan.RuleFor(x => x.AcademicYearLoanTakenOut).NotNull().When(x =>
                     x.LoanType == UkStudentLoanType.Type1 || x.LoanType == UkStudentLoanType.Type4);
-                loan.RuleFor(x => x.FirstRepaymentDate).NotNull().When(x =>
-                    (x.LoanType == UkStudentLoanType.Type1 && x.AcademicYearLoanTakenOut >= 2006) ||
-                    x.LoanType == UkStudentLoanType.Type4 || x.LoanType == UkStudentLoanType.Postgraduate ||
-                    x.LoanType == UkStudentLoanType.Type2 || x.LoanType == UkStudentLoanType.Type5);
             });
     }
 

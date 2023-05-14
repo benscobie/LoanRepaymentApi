@@ -7,6 +7,7 @@ using LoanRepaymentApi.Infrastructure;
 using LoanRepaymentApi.UkStudentLoans;
 using LoanRepaymentApi.UkStudentLoans.Calculation;
 using LoanRepaymentApi.UkStudentLoans.Calculation.Operations.CanLoanBeWrittenOff;
+using LoanRepaymentApi.UkStudentLoans.Calculation.Operations.FirstPossibleRepaymentDate;
 using LoanRepaymentApi.UkStudentLoans.Calculation.Operations.Interest;
 using LoanRepaymentApi.UkStudentLoans.Calculation.Operations.Salary;
 using LoanRepaymentApi.UkStudentLoans.Calculation.Operations.Threshold;
@@ -60,6 +61,7 @@ builder.Services.AddScoped<ICanLoanBeWrittenOffOperation, CanLoanBeWrittenOffOpe
 builder.Services.AddScoped<IThresholdOperation, ThresholdOperation>();
 builder.Services.AddScoped<IInterestRateOperation, InterestRateOperation>();
 builder.Services.AddScoped<ISalaryOperation, SalaryOperation>();
+builder.Services.AddScoped<IFirstPossibleRepaymentDateOperation, FirstPossibleRepaymentDateOperation>();
 
 builder.Services.AddSingleton<IClock>(SystemClock.Instance);
 builder.Services.AddValidatorsFromAssemblyContaining<UkStudentLoanCalculationDtoValidator>();
