@@ -1,4 +1,6 @@
-﻿namespace LoanRepaymentApi.Tests.UkStudentLoans.Calculation;
+﻿using LoanRepaymentApi.UkStudentLoans.Calculation.Operations.FirstPossibleRepaymentDate;
+
+namespace LoanRepaymentApi.Tests.UkStudentLoans.Calculation;
 
 using System;
 using System.Collections.Generic;
@@ -488,6 +490,7 @@ public class StandardTypeCalculatorTests
         [Frozen] Mock<ICanLoanBeWrittenOffOperation> canLoanBeWrittenOffOperationMock,
         [Frozen] Mock<IThresholdOperation> thresholdOperation,
         [Frozen] Mock<IInterestRateOperation> interestRateOperation,
+        [Frozen] Mock<IFirstPossibleRepaymentDateOperation> firstPossibleRepaymentDateOperationMock,
         StandardTypeCalculator sut)
     {
         // Arrange
@@ -502,7 +505,8 @@ public class StandardTypeCalculatorTests
             {
                 Type = UkStudentLoanType.Type1,
                 BalanceRemaining = 1_200m,
-                FirstRepaymentDate = new DateTime(2022, 03, 01)
+                StudyingPartTime = false,
+                CourseEndDate = new DateTime(2022, 07, 01)
             }
         };
 
@@ -510,11 +514,14 @@ public class StandardTypeCalculatorTests
         {
             Loans = loans,
             Period = 1,
-            PeriodDate = new DateTime(2022, 02, 01),
+            PeriodDate = new DateTime(2023, 03, 01),
             Salary = 120_000,
             PreviousProjections = new List<UkStudentLoanProjection>()
         };
 
+        firstPossibleRepaymentDateOperationMock
+            .Setup(x => x.Execute(It.IsAny<FirstPossibleRepaymentDateOperationFact>()))
+            .Returns(new DateTimeOffset(2023, 04, 01, 0, 0, 0, new TimeSpan(0, 0, 0)));
         canLoanBeWrittenOffOperationMock.Setup(x => x.Execute(It.IsAny<CanLoanBeWrittenOffOperationFact>()))
             .Returns(false);
         thresholdOperation.Setup(x => x.Execute(It.IsAny<ThresholdOperationFact>()))
@@ -527,7 +534,7 @@ public class StandardTypeCalculatorTests
             new()
             {
                 Period = 1,
-                PeriodDate = new DateTime(2022, 02, 01),
+                PeriodDate = new DateTime(2023, 03, 01),
                 LoanType = UkStudentLoanType.Type1,
                 InterestRate = 0.01m,
                 DebtRemaining = 1201,

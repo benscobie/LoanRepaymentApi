@@ -11,7 +11,7 @@
       "loanType": "Type1",
       "balanceRemaining": 1000,
       "academicYearLoanTakenOut": 2010,
-      "firstRepaymentDate": "2015-04-01T00:00:00+00:00"
+      "courseEndDate": "2015-04-01T00:00:00+00:00"
     }
   ]
 }

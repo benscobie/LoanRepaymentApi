@@ -6,30 +6,25 @@ using System.Text.Json.Serialization;
 
 public class UkStudentLoanDto
 {
-    [JsonConverter(typeof(JsonStringEnumConverter ))]
+    [JsonConverter(typeof(JsonStringEnumConverter))]
     public UkStudentLoanType LoanType { get; set; }
 
     public decimal BalanceRemaining { get; set; }
-
-    public DateTimeOffset? FirstRepaymentDate { get; set; }
 
     /// <summary>
     /// Required for Type 1 and Type 4 loans.
     /// </summary>
     public int? AcademicYearLoanTakenOut { get; set; }
 
-    /// <summary>
-    /// Required for Type 2 loans.
-    /// </summary>
-    public bool? StudyingPartTime { get; set; }
+    public bool StudyingPartTime { get; set; }
 
     /// <summary>
-    /// Required for Type 2 loans.
+    /// Required for Type 2 loans or when studying part times.
     /// </summary>
     public DateTimeOffset? CourseStartDate { get; set; }
 
     /// <summary>
-    /// Required for Type 2 loans.
+    /// Required for Non-Type 5 loans.
     /// </summary>
     public DateTimeOffset? CourseEndDate { get; set; }
 }

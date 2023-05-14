@@ -11,15 +11,14 @@
       "loanType": "Type1",
       "balanceRemaining": 240,
       "academicYearLoanTakenOut": 2009,
-      "firstRepaymentDate": "2013-04-01T00:00:00+00:00"
+      "courseEndDate": "2012-07-01T00:00:00+00:00"
     },
     {
       "loanType": "Type2",
       "balanceRemaining": 200,
-      "firstRepaymentDate": "2015-04-01T00:00:00+00:00",
       "studyingPartTime": false,
-      "courseStartDate": "2014-09-01T00:00:00+00:00",
-      "courseEndDate": "2015-07-01T00:00:00+00:00"
+      "courseStartDate": "2013-09-01T00:00:00+00:00",
+      "courseEndDate": "2014-07-01T00:00:00+00:00"
     }
   ]
 }

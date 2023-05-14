@@ -9,11 +9,17 @@
     "AnnualSalaryBeforeTax": [
       "'Annual Salary Before Tax' must be greater than '0'."
     ],
+    "Loans[0].CourseEndDate": [
+      "'Course End Date' must not be empty."
+    ],
     "Loans[0].BalanceRemaining": [
       "'Balance Remaining' must be greater than '0'."
     ],
     "Loans[0].AcademicYearLoanTakenOut": [
       "'Academic Year Loan Taken Out' must not be empty."
+    ],
+    "Loans[1].CourseEndDate": [
+      "'Course End Date' must not be empty."
     ],
     "Loans[1].AcademicYearLoanTakenOut": [
       "'Academic Year Loan Taken Out' must not be empty."
