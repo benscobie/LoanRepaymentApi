@@ -41,17 +41,17 @@ public class SalaryOperationTests
                 new()
                 {
                     Date = new DateTimeOffset(2022, 03, 01, 0, 0, 0, new TimeSpan(0, 0, 0)),
-                    Value = 0.02m
+                    Value = 52500
                 },
                 new()
                 {
                     Date = new DateTimeOffset(2022, 04, 17, 0, 0, 0, new TimeSpan(0, 0, 0)),
-                    Value = 0.0135m
+                    Value = 55000
                 },
                 new()
                 {
                     Date = new DateTimeOffset(2022, 05, 06, 0, 0, 0, new TimeSpan(0, 0, 0)),
-                    Value = 0.04m
+                    Value = 57000
                 }
             }
         };
@@ -60,7 +60,7 @@ public class SalaryOperationTests
         var result = sut.Execute(fact);
 
         // Assert
-        result.Should().Be(50802);
+        result.Should().Be(55000);
     }
 
     [Theory, AutoMoqData]
@@ -88,7 +88,7 @@ public class SalaryOperationTests
                 new()
                 {
                     Date = new DateTimeOffset(2022, 04, 17, 0, 0, 0, new TimeSpan(0, 0, 0)),
-                    Value = 0.0135m
+                    Value = 52000
                 },
             }
         };
@@ -97,7 +97,7 @@ public class SalaryOperationTests
         var result = sut.Execute(fact);
 
         // Assert
-        result.Should().Be(50802);
+        result.Should().Be(52000);
     }
 
     [Theory, AutoMoqData]
