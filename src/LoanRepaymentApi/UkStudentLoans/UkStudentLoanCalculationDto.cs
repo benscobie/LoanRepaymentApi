@@ -20,7 +20,7 @@ public class UkStudentLoanCalculationDto
     /// <summary>
     /// Required for Type 1 and Type 4 loans when below their respective academic year thresholds.
     /// </summary>
-    public DateTimeOffset? BirthDate { get; set; }
+    public DateTime? BirthDate { get; set; }
 
     public List<UkStudentLoanDto> Loans { get; set; } = new();
 }

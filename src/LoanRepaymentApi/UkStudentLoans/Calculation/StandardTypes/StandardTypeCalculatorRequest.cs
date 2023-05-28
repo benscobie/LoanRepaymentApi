@@ -9,7 +9,7 @@ public class StandardTypeCalculatorRequest
 
     public int Period { get; init; }
 
-    public DateTimeOffset PeriodDate { get; init; }
+    public DateTime PeriodDate { get; init; }
 
     public PersonDetails PersonDetails { get; }
 

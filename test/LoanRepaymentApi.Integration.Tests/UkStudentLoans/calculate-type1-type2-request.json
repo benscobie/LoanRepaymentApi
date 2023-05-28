@@ -2,7 +2,7 @@
   "annualSalaryBeforeTax": 47500,
   "salaryAdjustments": [
     {
-      "date": "2022-06-01T00:00:00+00:00",
+      "date": "2022-06-01T00:00:00Z",
       "value": 52250
     }
   ],
@@ -11,14 +11,14 @@
       "loanType": "Type1",
       "balanceRemaining": 240,
       "academicYearLoanTakenOut": 2009,
-      "courseEndDate": "2012-07-01T00:00:00+00:00"
+      "courseEndDate": "2012-07-01T00:00:00"
     },
     {
       "loanType": "Type2",
       "balanceRemaining": 200,
       "studyingPartTime": false,
-      "courseStartDate": "2013-09-01T00:00:00+00:00",
-      "courseEndDate": "2014-07-01T00:00:00+00:00"
+      "courseStartDate": "2013-09-01T00:00:00Z",
+      "courseEndDate": "2014-07-01T00:00:00"
     }
   ]
 }

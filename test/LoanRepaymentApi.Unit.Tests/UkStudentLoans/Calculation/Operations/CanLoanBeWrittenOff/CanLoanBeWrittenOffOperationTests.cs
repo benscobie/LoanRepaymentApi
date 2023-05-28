@@ -45,8 +45,8 @@ public class CanLoanBeWrittenOffOperationTests
                 new CanLoanBeWrittenOffOperationFact
                 {
                     LoanType = UkStudentLoanType.Postgraduate,
-                    PeriodDate = new DateTimeOffset(2040, 04, 01, 0, 0, 0, new TimeSpan(0, 0, 0)),
-                    FirstRepaymentDate = new DateTimeOffset(2010, 04, 01, 0, 0, 0, new TimeSpan(0, 0, 0)),
+                    PeriodDate = new DateTime(2040, 04, 01, 0, 0, 0),
+                    FirstRepaymentDate = new DateTime(2010, 04, 01, 0, 0, 0),
                 },
                 true
             },
@@ -56,8 +56,8 @@ public class CanLoanBeWrittenOffOperationTests
                 new CanLoanBeWrittenOffOperationFact
                 {
                     LoanType = UkStudentLoanType.Postgraduate,
-                    PeriodDate = new DateTimeOffset(2040, 03, 01, 0, 0, 0, new TimeSpan(0, 0, 0)),
-                    FirstRepaymentDate = new DateTimeOffset(2010, 04, 01, 0, 0, 0, new TimeSpan(0, 0, 0)),
+                    PeriodDate = new DateTime(2040, 03, 01, 0, 0, 0),
+                    FirstRepaymentDate = new DateTime(2010, 04, 01, 0, 0, 0),
                 },
                 false
             },
@@ -67,8 +67,8 @@ public class CanLoanBeWrittenOffOperationTests
                 new CanLoanBeWrittenOffOperationFact
                 {
                     LoanType = UkStudentLoanType.Type2,
-                    PeriodDate = new DateTimeOffset(2040, 04, 01, 0, 0, 0, new TimeSpan(0, 0, 0)),
-                    FirstRepaymentDate = new DateTimeOffset(2010, 04, 01, 0, 0, 0, new TimeSpan(0, 0, 0)),
+                    PeriodDate = new DateTime(2040, 04, 01, 0, 0, 0),
+                    FirstRepaymentDate = new DateTime(2010, 04, 01, 0, 0, 0),
                 },
                 true
             },
@@ -78,8 +78,8 @@ public class CanLoanBeWrittenOffOperationTests
                 new CanLoanBeWrittenOffOperationFact
                 {
                     LoanType = UkStudentLoanType.Type2,
-                    PeriodDate = new DateTimeOffset(2040, 03, 01, 0, 0, 0, new TimeSpan(0, 0, 0)),
-                    FirstRepaymentDate = new DateTimeOffset(2010, 04, 01, 0, 0, 0, new TimeSpan(0, 0, 0)),
+                    PeriodDate = new DateTime(2040, 03, 01, 0, 0, 0),
+                    FirstRepaymentDate = new DateTime(2010, 04, 01, 0, 0, 0),
                 },
                 false
             },
@@ -90,9 +90,9 @@ public class CanLoanBeWrittenOffOperationTests
                 {
                     LoanType = UkStudentLoanType.Type1,
                     AcademicYearLoanTakenOut = 2005,
-                    BirthDate = new DateTimeOffset(1990, 01, 01, 0, 0, 0, new TimeSpan(0, 0, 0)),
-                    PeriodDate = new DateTimeOffset(2055, 01, 01, 0, 0, 0, new TimeSpan(0, 0, 0)),
-                    FirstRepaymentDate = new DateTimeOffset(2050, 01, 01, 0, 0, 0, new TimeSpan(0, 0, 0)),
+                    BirthDate = new DateTime(1990, 01, 01, 0, 0, 0),
+                    PeriodDate = new DateTime(2055, 01, 01, 0, 0, 0),
+                    FirstRepaymentDate = new DateTime(2050, 01, 01, 0, 0, 0),
                 },
                 true
             },
@@ -103,9 +103,9 @@ public class CanLoanBeWrittenOffOperationTests
                 {
                     LoanType = UkStudentLoanType.Type1,
                     AcademicYearLoanTakenOut = 2005,
-                    BirthDate = new DateTimeOffset(1990, 01, 01, 0, 0, 0, new TimeSpan(0, 0, 0)),
-                    PeriodDate = new DateTimeOffset(2054, 12, 01, 0, 0, 0, new TimeSpan(0, 0, 0)),
-                    FirstRepaymentDate = new DateTimeOffset(2050, 01, 01, 0, 0, 0, new TimeSpan(0, 0, 0)),
+                    BirthDate = new DateTime(1990, 01, 01, 0, 0, 0),
+                    PeriodDate = new DateTime(2054, 12, 01, 0, 0, 0),
+                    FirstRepaymentDate = new DateTime(2050, 01, 01, 0, 0, 0),
                 },
                 false
             },
@@ -116,9 +116,9 @@ public class CanLoanBeWrittenOffOperationTests
                 {
                     LoanType = UkStudentLoanType.Type1,
                     AcademicYearLoanTakenOut = 2006,
-                    FirstRepaymentDate = new DateTimeOffset(2010, 01, 01, 0, 0, 0, new TimeSpan(0, 0, 0)),
-                    BirthDate = new DateTimeOffset(1995, 01, 01, 0, 0, 0, new TimeSpan(0, 0, 0)),
-                    PeriodDate = new DateTimeOffset(2035, 01, 01, 0, 0, 0, new TimeSpan(0, 0, 0))
+                    FirstRepaymentDate = new DateTime(2010, 01, 01, 0, 0, 0),
+                    BirthDate = new DateTime(1995, 01, 01, 0, 0, 0),
+                    PeriodDate = new DateTime(2035, 01, 01, 0, 0, 0)
                 },
                 true
             },
@@ -129,9 +129,9 @@ public class CanLoanBeWrittenOffOperationTests
                 {
                     LoanType = UkStudentLoanType.Type1,
                     AcademicYearLoanTakenOut = 2006,
-                    FirstRepaymentDate = new DateTimeOffset(2010, 01, 01, 0, 0, 0, new TimeSpan(0, 0, 0)),
-                    BirthDate = new DateTimeOffset(1995, 01, 01, 0, 0, 0, new TimeSpan(0, 0, 0)),
-                    PeriodDate = new DateTimeOffset(2034, 12, 01, 0, 0, 0, new TimeSpan(0, 0, 0))
+                    FirstRepaymentDate = new DateTime(2010, 01, 01, 0, 0, 0),
+                    BirthDate = new DateTime(1995, 01, 01, 0, 0, 0),
+                    PeriodDate = new DateTime(2034, 12, 01, 0, 0, 0)
                 },
                 false
             },
@@ -142,9 +142,9 @@ public class CanLoanBeWrittenOffOperationTests
                 {
                     LoanType = UkStudentLoanType.Type4,
                     AcademicYearLoanTakenOut = 2007,
-                    FirstRepaymentDate = new DateTimeOffset(2010, 01, 01, 0, 0, 0, new TimeSpan(0, 0, 0)),
-                    BirthDate = new DateTimeOffset(1995, 01, 01, 0, 0, 0, new TimeSpan(0, 0, 0)),
-                    PeriodDate = new DateTimeOffset(2040, 01, 01, 0, 0, 0, new TimeSpan(0, 0, 0))
+                    FirstRepaymentDate = new DateTime(2010, 01, 01, 0, 0, 0),
+                    BirthDate = new DateTime(1995, 01, 01, 0, 0, 0),
+                    PeriodDate = new DateTime(2040, 01, 01, 0, 0, 0)
                 },
                 true
             },
@@ -155,9 +155,9 @@ public class CanLoanBeWrittenOffOperationTests
                 {
                     LoanType = UkStudentLoanType.Type4,
                     AcademicYearLoanTakenOut = 2007,
-                    FirstRepaymentDate = new DateTimeOffset(2010, 01, 01, 0, 0, 0, new TimeSpan(0, 0, 0)),
-                    BirthDate = new DateTimeOffset(1995, 01, 01, 0, 0, 0, new TimeSpan(0, 0, 0)),
-                    PeriodDate = new DateTimeOffset(2039, 12, 01, 0, 0, 0, new TimeSpan(0, 0, 0))
+                    FirstRepaymentDate = new DateTime(2010, 01, 01, 0, 0, 0),
+                    BirthDate = new DateTime(1995, 01, 01, 0, 0, 0),
+                    PeriodDate = new DateTime(2039, 12, 01, 0, 0, 0)
                 },
                 false
             },
@@ -168,9 +168,9 @@ public class CanLoanBeWrittenOffOperationTests
                 {
                     LoanType = UkStudentLoanType.Type4,
                     AcademicYearLoanTakenOut = 2006,
-                    FirstRepaymentDate = new DateTimeOffset(2059, 01, 01, 0, 0, 0, new TimeSpan(0, 0, 0)),
-                    BirthDate = new DateTimeOffset(1995, 01, 01, 0, 0, 0, new TimeSpan(0, 0, 0)),
-                    PeriodDate = new DateTimeOffset(2060, 01, 01, 0, 0, 0, new TimeSpan(0, 0, 0))
+                    FirstRepaymentDate = new DateTime(2059, 01, 01, 0, 0, 0),
+                    BirthDate = new DateTime(1995, 01, 01, 0, 0, 0),
+                    PeriodDate = new DateTime(2060, 01, 01, 0, 0, 0)
                 },
                 true
             },
@@ -181,9 +181,9 @@ public class CanLoanBeWrittenOffOperationTests
                 {
                     LoanType = UkStudentLoanType.Type4,
                     AcademicYearLoanTakenOut = 2006,
-                    FirstRepaymentDate = new DateTimeOffset(2059, 01, 01, 0, 0, 0, new TimeSpan(0, 0, 0)),
-                    BirthDate = new DateTimeOffset(1995, 01, 01, 0, 0, 0, new TimeSpan(0, 0, 0)),
-                    PeriodDate = new DateTimeOffset(2059, 12, 01, 0, 0, 0, new TimeSpan(0, 0, 0))
+                    FirstRepaymentDate = new DateTime(2059, 01, 01, 0, 0, 0),
+                    BirthDate = new DateTime(1995, 01, 01, 0, 0, 0),
+                    PeriodDate = new DateTime(2059, 12, 01, 0, 0, 0)
                 },
                 false
             },
@@ -194,9 +194,9 @@ public class CanLoanBeWrittenOffOperationTests
                 {
                     LoanType = UkStudentLoanType.Type4,
                     AcademicYearLoanTakenOut = 2006,
-                    FirstRepaymentDate = new DateTimeOffset(2010, 01, 01, 0, 0, 0, new TimeSpan(0, 0, 0)),
-                    BirthDate = new DateTimeOffset(1995, 01, 01, 0, 0, 0, new TimeSpan(0, 0, 0)),
-                    PeriodDate = new DateTimeOffset(2040, 01, 01, 0, 0, 0, new TimeSpan(0, 0, 0))
+                    FirstRepaymentDate = new DateTime(2010, 01, 01, 0, 0, 0),
+                    BirthDate = new DateTime(1995, 01, 01, 0, 0, 0),
+                    PeriodDate = new DateTime(2040, 01, 01, 0, 0, 0)
                 },
                 true
             },
@@ -207,9 +207,9 @@ public class CanLoanBeWrittenOffOperationTests
                 {
                     LoanType = UkStudentLoanType.Type4,
                     AcademicYearLoanTakenOut = 2006,
-                    FirstRepaymentDate = new DateTimeOffset(2010, 01, 01, 0, 0, 0, new TimeSpan(0, 0, 0)),
-                    BirthDate = new DateTimeOffset(1995, 01, 01, 0, 0, 0, new TimeSpan(0, 0, 0)),
-                    PeriodDate = new DateTimeOffset(2039, 12, 01, 0, 0, 0, new TimeSpan(0, 0, 0))
+                    FirstRepaymentDate = new DateTime(2010, 01, 01, 0, 0, 0),
+                    BirthDate = new DateTime(1995, 01, 01, 0, 0, 0),
+                    PeriodDate = new DateTime(2039, 12, 01, 0, 0, 0)
                 },
                 false
             },

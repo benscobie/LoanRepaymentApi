@@ -16,7 +16,7 @@ public class SalaryOperationTests
         var fact = new SalaryOperationFact
         {
             PreviousPeriodSalary = 50000,
-            PeriodDate = DateTimeOffset.Now,
+            PeriodDate = DateTime.Now,
             SalaryAdjustments = new List<Adjustment>()
         };
 
@@ -34,23 +34,23 @@ public class SalaryOperationTests
         var fact = new SalaryOperationFact
         {
             PreviousPeriodSalary = 50125,
-            PeriodDate = new DateTimeOffset(2022, 04, 06, 0, 0, 0, new TimeSpan(0, 0, 0)),
+            PeriodDate = new DateTime(2022, 04, 06, 0, 0, 0),
             SalaryGrowth = 0.1m,
             SalaryAdjustments = new List<Adjustment>
             {
                 new()
                 {
-                    Date = new DateTimeOffset(2022, 03, 01, 0, 0, 0, new TimeSpan(0, 0, 0)),
+                    Date = new DateTime(2022, 03, 01, 0, 0, 0),
                     Value = 52500
                 },
                 new()
                 {
-                    Date = new DateTimeOffset(2022, 04, 17, 0, 0, 0, new TimeSpan(0, 0, 0)),
+                    Date = new DateTime(2022, 04, 17, 0, 0, 0),
                     Value = 55000
                 },
                 new()
                 {
-                    Date = new DateTimeOffset(2022, 05, 06, 0, 0, 0, new TimeSpan(0, 0, 0)),
+                    Date = new DateTime(2022, 05, 06, 0, 0, 0),
                     Value = 57000
                 }
             }
@@ -72,14 +72,14 @@ public class SalaryOperationTests
         {
             PreviousPeriodSalary = 50125,
             Period = 20,
-            PeriodDate = new DateTimeOffset(2022, 04, 06, 0, 0, 0, new TimeSpan(0, 0, 0)),
+            PeriodDate = new DateTime(2022, 04, 06, 0, 0, 0),
             SalaryGrowth = 0.1m,
             Results = new List<UkStudentLoanResult>
             {
                 new()
                 {
                     Salary = 50125,
-                    PeriodDate = new DateTimeOffset(2021, 04, 06, 0, 0, 0, new TimeSpan(0, 0, 0)),
+                    PeriodDate = new DateTime(2021, 04, 06, 0, 0, 0),
                     Period = 8,
                 }
             },
@@ -87,7 +87,7 @@ public class SalaryOperationTests
             {
                 new()
                 {
-                    Date = new DateTimeOffset(2022, 04, 17, 0, 0, 0, new TimeSpan(0, 0, 0)),
+                    Date = new DateTime(2022, 04, 17, 0, 0, 0),
                     Value = 52000
                 },
             }
@@ -109,14 +109,14 @@ public class SalaryOperationTests
         {
             PreviousPeriodSalary = 50125,
             Period = 13,
-            PeriodDate = new DateTimeOffset(2022, 04, 06, 0, 0, 0, new TimeSpan(0, 0, 0)),
+            PeriodDate = new DateTime(2022, 04, 06, 0, 0, 0),
             SalaryGrowth = 0.1m,
             Results = new List<UkStudentLoanResult>
             {
                 new()
                 {
                     Salary = 50125,
-                    PeriodDate = new DateTimeOffset(2021, 03, 06, 0, 0, 0, new TimeSpan(0, 0, 0)),
+                    PeriodDate = new DateTime(2021, 03, 06, 0, 0, 0),
                     Period = 12,
                 }
             },
@@ -139,20 +139,20 @@ public class SalaryOperationTests
         {
             PreviousPeriodSalary = 50125,
             Period = 20,
-            PeriodDate = new DateTimeOffset(2022, 04, 06, 0, 0, 0, new TimeSpan(0, 0, 0)),
+            PeriodDate = new DateTime(2022, 04, 06, 0, 0, 0),
             SalaryGrowth = 0.1m,
             Results = new List<UkStudentLoanResult>
             {
                 new()
                 {
                     Salary = 50000,
-                    PeriodDate = new DateTimeOffset(2021, 03, 06, 0, 0, 0, new TimeSpan(0, 0, 0)),
+                    PeriodDate = new DateTime(2021, 03, 06, 0, 0, 0),
                     Period = 7,
                 },
                 new()
                 {
                     Salary = 50125,
-                    PeriodDate = new DateTimeOffset(2021, 04, 06, 0, 0, 0, new TimeSpan(0, 0, 0)),
+                    PeriodDate = new DateTime(2021, 04, 06, 0, 0, 0),
                     Period = 8,
                 }
             },
@@ -174,20 +174,20 @@ public class SalaryOperationTests
         {
             PreviousPeriodSalary = 50125,
             Period = 20,
-            PeriodDate = new DateTimeOffset(2022, 04, 06, 0, 0, 0, new TimeSpan(0, 0, 0)),
+            PeriodDate = new DateTime(2022, 04, 06, 0, 0, 0),
             SalaryGrowth = 0.1m,
             Results = new List<UkStudentLoanResult>
             {
                 new()
                 {
                     Salary = 50000,
-                    PeriodDate = new DateTimeOffset(2021, 04, 06, 0, 0, 0, new TimeSpan(0, 0, 0)),
+                    PeriodDate = new DateTime(2021, 04, 06, 0, 0, 0),
                     Period = 8,
                 },
                 new()
                 {
                     Salary = 50125,
-                    PeriodDate = new DateTimeOffset(2021, 05, 06, 0, 0, 0, new TimeSpan(0, 0, 0)),
+                    PeriodDate = new DateTime(2021, 05, 06, 0, 0, 0),
                     Period = 9,
                 }
             },

@@ -2,7 +2,7 @@
   "results": [
     {
       "period": 1,
-      "periodDate": "2022-05-01T01:00:00+01:00",
+      "periodDate": "2022-05-01T00:00:00Z",
       "salary": 47500,
       "projections": [
         {
@@ -34,7 +34,7 @@
     },
     {
       "period": 2,
-      "periodDate": "2022-06-01T01:00:00+01:00",
+      "periodDate": "2022-06-01T00:00:00Z",
       "salary": 52250,
       "projections": [
         {
@@ -65,7 +65,7 @@
       "aggregatedTotalPaid": 441.43490104166665
     }
   ],
-  "debtClearedDate": "2022-06-01T01:00:00+01:00",
+  "debtClearedDate": "2022-06-01T00:00:00Z",
   "debtClearedNumberOfPeriods": 2,
   "totalPaid": 441.43490104166665,
   "totalInterestApplied": 1.4349010416666668

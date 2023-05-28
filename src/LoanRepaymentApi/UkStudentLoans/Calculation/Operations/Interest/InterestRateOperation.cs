@@ -41,9 +41,8 @@ public class InterestRateOperation : IInterestRateOperation
             else if (fact.Salary < 49130)
             {
                 if ((fact.StudyingPartTime && fact.PeriodDate < fact.CourseStartDate!.Value.AddYears(4)) ||
-                    !fact.StudyingPartTime && fact.PeriodDate < new DateTimeOffset(
-                        fact.CourseEndDate!.Value.Year + (fact.CourseEndDate!.Value.Month < 4 ? 0 : 1), 04, 01, 0, 0, 0,
-                        TimeSpan.Zero))
+                    !fact.StudyingPartTime && fact.PeriodDate < new DateTime(
+                        fact.CourseEndDate!.Value.Year + (fact.CourseEndDate!.Value.Month < 4 ? 0 : 1), 04, 01, 0, 0, 0))
                 {
                     return decimal.Min(_retailPriceIndex + 0.03m, _prevailingMarketRateCap);
                 }

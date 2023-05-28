@@ -51,7 +51,7 @@ public class ThresholdOperationTests
         mockThresholdProvider.Setup(x => x.Get()).Returns(TestThresholds.Get);
 
         fact.Period = 24;
-        fact.PeriodDate = new DateTimeOffset(2022, 04, 06, 0, 0, 0, new TimeSpan(0, 0, 0));
+        fact.PeriodDate = new DateTime(2022, 04, 06, 0, 0, 0);
         fact.AnnualEarningsGrowth = 0.10m;
         fact.LoanType = UkStudentLoanType.Type1;
         fact.PreviousProjections = new List<UkStudentLoanProjection>
@@ -59,21 +59,21 @@ public class ThresholdOperationTests
             new()
             {
                 Period = 23,
-                PeriodDate = new DateTimeOffset(2022, 03, 06, 0, 0, 0, new TimeSpan(0, 0, 0)),
+                PeriodDate = new DateTime(2022, 03, 06, 0, 0, 0),
                 Threshold = 33000,
                 LoanType = fact.LoanType,
             },
             new()
             {
                 Period = 13,
-                PeriodDate = new DateTimeOffset(2021, 05, 06, 0, 0, 0, new TimeSpan(0, 0, 0)),
+                PeriodDate = new DateTime(2021, 05, 06, 0, 0, 0),
                 Threshold = 33000,
                 LoanType = fact.LoanType,
             },
             new()
             {
                 Period = 12,
-                PeriodDate = new DateTimeOffset(2021, 04, 06, 0, 0, 0, new TimeSpan(0, 0, 0)),
+                PeriodDate = new DateTime(2021, 04, 06, 0, 0, 0),
                 Threshold = 32000,
                 LoanType = fact.LoanType,
             },
@@ -95,7 +95,7 @@ public class ThresholdOperationTests
         mockThresholdProvider.Setup(x => x.Get()).Returns(TestThresholds.Get);
 
         fact.Period = 24;
-        fact.PeriodDate = new DateTimeOffset(2022, 04, 06, 0, 0, 0, new TimeSpan(0, 0, 0));
+        fact.PeriodDate = new DateTime(2022, 04, 06, 0, 0, 0);
         fact.AnnualEarningsGrowth = 0.10m;
         fact.LoanType = UkStudentLoanType.Type1;
         fact.PreviousProjections = new List<UkStudentLoanProjection>
@@ -103,21 +103,21 @@ public class ThresholdOperationTests
             new()
             {
                 Period = 23,
-                PeriodDate = new DateTimeOffset(2021, 03, 06, 0, 0, 0, new TimeSpan(0, 0, 0)),
+                PeriodDate = new DateTime(2021, 03, 06, 0, 0, 0),
                 Threshold = 33000,
                 LoanType = fact.LoanType,
             },
             new()
             {
                 Period = 12,
-                PeriodDate = new DateTimeOffset(2021, 04, 06, 0, 0, 0, new TimeSpan(0, 0, 0)),
+                PeriodDate = new DateTime(2021, 04, 06, 0, 0, 0),
                 Threshold = 33000,
                 LoanType = fact.LoanType,
             },
             new()
             {
                 Period = 11,
-                PeriodDate = new DateTimeOffset(2021, 03, 06, 0, 0, 0, new TimeSpan(0, 0, 0)),
+                PeriodDate = new DateTime(2021, 03, 06, 0, 0, 0),
                 Threshold = 31000,
                 LoanType = fact.LoanType,
             },
@@ -139,7 +139,7 @@ public class ThresholdOperationTests
         mockThresholdProvider.Setup(x => x.Get()).Returns(TestThresholds.Get);
 
         fact.Period = 13;
-        fact.PeriodDate = new DateTimeOffset(2022, 04, 06, 0, 0, 0, new TimeSpan(0, 0, 0));
+        fact.PeriodDate = new DateTime(2022, 04, 06, 0, 0, 0);
         fact.AnnualEarningsGrowth = 0.10m;
         fact.LoanType = UkStudentLoanType.Type1;
         fact.PreviousProjections = new List<UkStudentLoanProjection>
@@ -147,14 +147,14 @@ public class ThresholdOperationTests
             new()
             {
                 Period = 12,
-                PeriodDate = new DateTimeOffset(2022, 03, 06, 0, 0, 0, new TimeSpan(0, 0, 0)),
+                PeriodDate = new DateTime(2022, 03, 06, 0, 0, 0),
                 Threshold = 33000,
                 LoanType = fact.LoanType,
             },
             new()
             {
                 Period = 1,
-                PeriodDate = new DateTimeOffset(2021, 03, 06, 0, 0, 0, new TimeSpan(0, 0, 0)),
+                PeriodDate = new DateTime(2021, 03, 06, 0, 0, 0),
                 Threshold = 33000,
                 LoanType = fact.LoanType,
             },
@@ -176,7 +176,7 @@ public class ThresholdOperationTests
                 new ThresholdOperationFact
                 {
                     LoanType = UkStudentLoanType.Type1,
-                    PeriodDate = new DateTimeOffset(2022, 04, 06, 0, 0, 0, new TimeSpan(0, 0, 0)),
+                    PeriodDate = new DateTime(2022, 04, 06, 0, 0, 0),
                     AnnualEarningsGrowth = 0.10m,
                     Period = 1
                 },
@@ -187,7 +187,7 @@ public class ThresholdOperationTests
                 new ThresholdOperationFact
                 {
                     LoanType = UkStudentLoanType.Type2,
-                    PeriodDate = new DateTimeOffset(2022, 04, 06, 0, 0, 0, new TimeSpan(0, 0, 0)),
+                    PeriodDate = new DateTime(2022, 04, 06, 0, 0, 0),
                     AnnualEarningsGrowth = 0.10m,
                     Period = 1
                 },
@@ -198,7 +198,7 @@ public class ThresholdOperationTests
                 new ThresholdOperationFact
                 {
                     LoanType = UkStudentLoanType.Type4,
-                    PeriodDate = new DateTimeOffset(2022, 04, 06, 0, 0, 0, new TimeSpan(0, 0, 0)),
+                    PeriodDate = new DateTime(2022, 04, 06, 0, 0, 0),
                     AnnualEarningsGrowth = 0.10m,
                     Period = 1
                 },
@@ -209,7 +209,7 @@ public class ThresholdOperationTests
                 new ThresholdOperationFact
                 {
                     LoanType = UkStudentLoanType.Postgraduate,
-                    PeriodDate = new DateTimeOffset(2022, 04, 06, 0, 0, 0, new TimeSpan(0, 0, 0)),
+                    PeriodDate = new DateTime(2022, 04, 06, 0, 0, 0),
                     AnnualEarningsGrowth = 0.10m,
                     Period = 1
                 },

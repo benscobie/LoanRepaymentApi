@@ -521,7 +521,7 @@ public class StandardTypeCalculatorTests
 
         firstPossibleRepaymentDateOperationMock
             .Setup(x => x.Execute(It.IsAny<FirstPossibleRepaymentDateOperationFact>()))
-            .Returns(new DateTimeOffset(2023, 04, 01, 0, 0, 0, new TimeSpan(0, 0, 0)));
+            .Returns(new DateTime(2023, 04, 01, 0, 0, 0));
         canLoanBeWrittenOffOperationMock.Setup(x => x.Execute(It.IsAny<CanLoanBeWrittenOffOperationFact>()))
             .Returns(false);
         thresholdOperation.Setup(x => x.Execute(It.IsAny<ThresholdOperationFact>()))

@@ -6,7 +6,7 @@ public class FirstPossibleRepaymentDateOperationFact
 
     public bool StudyingPartTime { get; set; }
 
-    public DateTimeOffset? CourseStartDate { get; set; }
+    public DateTime? CourseStartDate { get; set; }
 
-    public DateTimeOffset? CourseEndDate { get; set; }
+    public DateTime? CourseEndDate { get; set; }
 }
