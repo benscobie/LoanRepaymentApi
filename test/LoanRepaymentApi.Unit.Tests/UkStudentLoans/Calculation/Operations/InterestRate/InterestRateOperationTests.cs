@@ -104,8 +104,8 @@ public class InterestRateOperationTests
                     LoanType = UkStudentLoanType.Type2,
                     Salary = 49129,
                     StudyingPartTime = true,
-                    PeriodDate = new DateTimeOffset(2023, 12, 01, 0, 0, 0, new TimeSpan(0, 0, 0)),
-                    CourseStartDate = new DateTimeOffset(2020, 01, 01, 0, 0, 0, new TimeSpan(0, 0, 0)),
+                    PeriodDate = new DateTime(2023, 12, 01, 0, 0, 0),
+                    CourseStartDate = new DateTime(2020, 01, 01, 0, 0, 0),
                 },
                 1m,
                 0.045m
@@ -117,8 +117,8 @@ public class InterestRateOperationTests
                     LoanType = UkStudentLoanType.Type2,
                     Salary = 38212,
                     StudyingPartTime = true,
-                    PeriodDate = new DateTimeOffset(2025, 01, 01, 0, 0, 0, new TimeSpan(0, 0, 0)),
-                    CourseStartDate = new DateTimeOffset(2020, 01, 01, 0, 0, 0, new TimeSpan(0, 0, 0)),
+                    PeriodDate = new DateTime(2025, 01, 01, 0, 0, 0),
+                    CourseStartDate = new DateTime(2020, 01, 01, 0, 0, 0),
                 },
                 1m,
                 0.030m
@@ -130,8 +130,8 @@ public class InterestRateOperationTests
                     LoanType = UkStudentLoanType.Type2,
                     Salary = 38212,
                     StudyingPartTime = false,
-                    PeriodDate = new DateTimeOffset(2020, 03, 01, 0, 0, 0, new TimeSpan(0, 0, 0)),
-                    CourseEndDate = new DateTimeOffset(2019, 07, 01, 0, 0, 0, new TimeSpan(0, 0, 0)),
+                    PeriodDate = new DateTime(2020, 03, 01, 0, 0, 0),
+                    CourseEndDate = new DateTime(2019, 07, 01, 0, 0, 0),
                 },
                 1m,
                 0.045m
@@ -143,8 +143,8 @@ public class InterestRateOperationTests
                     LoanType = UkStudentLoanType.Type2,
                     Salary = 38212,
                     StudyingPartTime = false,
-                    PeriodDate = new DateTimeOffset(2020, 04, 01, 0, 0, 0, new TimeSpan(0, 0, 0)),
-                    CourseEndDate = new DateTimeOffset(2019, 07, 01, 0, 0, 0, new TimeSpan(0, 0, 0)),
+                    PeriodDate = new DateTime(2020, 04, 01, 0, 0, 0),
+                    CourseEndDate = new DateTime(2019, 07, 01, 0, 0, 0),
                 },
                 1m,
                 0.030m

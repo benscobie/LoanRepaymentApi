@@ -4,7 +4,7 @@ public class SalaryOperationFact
 {
     public int Period { get; set; }
 
-    public DateTimeOffset PeriodDate { get; set; }
+    public DateTime PeriodDate { get; set; }
 
     public int PreviousPeriodSalary { get; init; }
 

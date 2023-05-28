@@ -32,13 +32,13 @@ public class UkStudentLoanCalculationDtoValidatorTests
             {
                 new UkStudentLoanCalculationDto
                 {
-                    BirthDate = DateTimeOffset.Now.AddYears(-16),
+                    BirthDate = DateTime.Now.AddYears(-16),
                     Loans = new List<UkStudentLoanDto>
                     {
                         new()
                         {
                             LoanType = UkStudentLoanType.Type1,
-                            CourseEndDate = DateTimeOffset.Now,
+                            CourseEndDate = DateTime.Now,
                             BalanceRemaining = 1,
                             AcademicYearLoanTakenOut = 2005,
                         }
@@ -58,7 +58,7 @@ public class UkStudentLoanCalculationDtoValidatorTests
                             BalanceRemaining = 1,
                             AcademicYearLoanTakenOut = 2006,
                             StudyingPartTime = false,
-                            CourseEndDate = DateTimeOffset.Now
+                            CourseEndDate = DateTime.Now
                         }
                     },
                     AnnualSalaryBeforeTax = 1
@@ -68,7 +68,7 @@ public class UkStudentLoanCalculationDtoValidatorTests
             {
                 new UkStudentLoanCalculationDto
                 {
-                    BirthDate = DateTimeOffset.Now.AddYears(-16),
+                    BirthDate = DateTime.Now.AddYears(-16),
                     Loans = new List<UkStudentLoanDto>
                     {
                         new()
@@ -77,7 +77,7 @@ public class UkStudentLoanCalculationDtoValidatorTests
                             BalanceRemaining = 1,
                             AcademicYearLoanTakenOut = 2006,
                             StudyingPartTime = false,
-                            CourseEndDate = DateTimeOffset.Now
+                            CourseEndDate = DateTime.Now
                         }
                     },
                     AnnualSalaryBeforeTax = 1
@@ -95,7 +95,7 @@ public class UkStudentLoanCalculationDtoValidatorTests
                             BalanceRemaining = 1,
                             AcademicYearLoanTakenOut = 2007,
                             StudyingPartTime = false,
-                            CourseEndDate = DateTimeOffset.Now
+                            CourseEndDate = DateTime.Now
                         }
                     },
                     AnnualSalaryBeforeTax = 1
@@ -111,8 +111,8 @@ public class UkStudentLoanCalculationDtoValidatorTests
                         {
                             LoanType = UkStudentLoanType.Type2,
                             BalanceRemaining = 1,
-                            CourseStartDate = DateTimeOffset.Now,
-                            CourseEndDate = DateTimeOffset.Now,
+                            CourseStartDate = DateTime.Now,
+                            CourseEndDate = DateTime.Now,
                             StudyingPartTime = false
                         }
                     },
@@ -130,7 +130,7 @@ public class UkStudentLoanCalculationDtoValidatorTests
                             LoanType = UkStudentLoanType.Postgraduate,
                             BalanceRemaining = 1,
                             StudyingPartTime = false,
-                            CourseEndDate = DateTimeOffset.Now,
+                            CourseEndDate = DateTime.Now,
                         }
                     },
                     AnnualSalaryBeforeTax = 1
@@ -160,12 +160,12 @@ public class UkStudentLoanCalculationDtoValidatorTests
                     {
                         new()
                         {
-                            Date = new DateTimeOffset(2022, 03, 01, 0, 0, 0, new TimeSpan(0, 0, 0)),
+                            Date = new DateTime(2022, 03, 01, 0, 0, 0),
                             Value = 0.02m
                         },
                         new()
                         {
-                            Date = new DateTimeOffset(2022, 04, 17, 0, 0, 0, new TimeSpan(0, 0, 0)),
+                            Date = new DateTime(2022, 04, 17, 0, 0, 0),
                             Value = 0.05m
                         },
                     },
@@ -176,7 +176,7 @@ public class UkStudentLoanCalculationDtoValidatorTests
                             LoanType = UkStudentLoanType.Postgraduate,
                             BalanceRemaining = 1,
                             StudyingPartTime = false,
-                            CourseEndDate = DateTimeOffset.Now,
+                            CourseEndDate = DateTime.Now,
                         }
                     },
                     AnnualSalaryBeforeTax = 1
@@ -217,17 +217,17 @@ public class UkStudentLoanCalculationDtoValidatorTests
                 }
             },
             AnnualSalaryBeforeTax = 0,
-            BirthDate = DateTimeOffset.Now.AddYears(-14),
+            BirthDate = DateTime.Now.AddYears(-14),
             SalaryAdjustments = new List<Adjustment>
             {
                 new()
                 {
-                    Date = new DateTimeOffset(2050, 01, 01, 0, 0, 0, new TimeSpan(0, 0, 0)),
+                    Date = new DateTime(2050, 01, 01, 0, 0, 0),
                     Value = 0.01m
                 },
                 new()
                 {
-                    Date = new DateTimeOffset(2050, 01, 25, 0, 0, 0, new TimeSpan(0, 0, 0)),
+                    Date = new DateTime(2050, 01, 25, 0, 0, 0),
                     Value = 0.01m
                 }
             }
@@ -288,13 +288,13 @@ public class UkStudentLoanCalculationDtoValidatorTests
 
         public int? AcademicYearLoanTakenOut { get; set; }
 
-        public DateTimeOffset? CourseStartDate { get; set; }
+        public DateTime? CourseStartDate { get; set; }
 
-        public DateTimeOffset? CourseEndDate { get; set; }
+        public DateTime? CourseEndDate { get; set; }
 
         public bool StudyingPartTime { get; set; }
 
-        public DateTimeOffset? BirthDate { get; set; }
+        public DateTime? BirthDate { get; set; }
 
         public string FieldThatShouldHaveError { get; set; } = String.Empty;
     }

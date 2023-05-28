@@ -4,7 +4,7 @@ public class UkStudentLoanResultsDto
 {
     public List<UkStudentLoanResultDto> Results { get; set; } = new();
 
-    public DateTimeOffset DebtClearedDate => Results.Max(x => x.PeriodDate);
+    public DateTime DebtClearedDate => Results.Max(x => x.PeriodDate);
 
     public int DebtClearedNumberOfPeriods => Results.Max(x => x.Period);
 

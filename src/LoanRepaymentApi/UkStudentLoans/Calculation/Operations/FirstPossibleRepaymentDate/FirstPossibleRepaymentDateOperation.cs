@@ -2,11 +2,11 @@
 
 public class FirstPossibleRepaymentDateOperation : IFirstPossibleRepaymentDateOperation
 {
-    public DateTimeOffset? Execute(FirstPossibleRepaymentDateOperationFact fact)
+    public DateTime? Execute(FirstPossibleRepaymentDateOperationFact fact)
     {
         if (fact.LoanType == UkStudentLoanType.Type5)
         {
-            return new DateTimeOffset(2026, 4, 1, 0, 0, 0, new TimeSpan(0, 0, 0));
+            return new DateTime(2026, 4, 1, 0, 0, 0);
         }
 
         if (!fact.StudyingPartTime)
@@ -17,7 +17,7 @@ public class FirstPossibleRepaymentDateOperation : IFirstPossibleRepaymentDateOp
                 year += 1;
             }
 
-            return new DateTimeOffset(year, 4, 1, 0, 0, 0, new TimeSpan(0, 0, 0));
+            return new DateTime(year, 4, 1, 0, 0, 0);
         }
 
         var fourYearsAfterStart = fact.CourseStartDate!.Value.AddYears(4);
@@ -27,7 +27,7 @@ public class FirstPossibleRepaymentDateOperation : IFirstPossibleRepaymentDateOp
             startYear += 1;
         }
 
-        var aprilFourYearsAfterStart = new DateTimeOffset(startYear, 4, 1, 0, 0, 0, new TimeSpan(0, 0, 0));
+        var aprilFourYearsAfterStart = new DateTime(startYear, 4, 1, 0, 0, 0);
 
         var endYear = fact.CourseEndDate!.Value.Year;
         if (fact.CourseEndDate!.Value.Month >= 4)
@@ -35,7 +35,7 @@ public class FirstPossibleRepaymentDateOperation : IFirstPossibleRepaymentDateOp
             endYear += 1;
         }
 
-        var aprilAfterEndOfCourse = new DateTimeOffset(endYear, 4, 1, 0, 0, 0, new TimeSpan(0, 0, 0));
+        var aprilAfterEndOfCourse = new DateTime(endYear, 4, 1, 0, 0, 0);
 
         return aprilFourYearsAfterStart < aprilAfterEndOfCourse ? aprilFourYearsAfterStart : aprilAfterEndOfCourse;
     }

@@ -21,10 +21,10 @@ public class UkStudentLoanDto
     /// <summary>
     /// Required for Type 2 loans or when studying part times.
     /// </summary>
-    public DateTimeOffset? CourseStartDate { get; set; }
+    public DateTime? CourseStartDate { get; set; }
 
     /// <summary>
     /// Required for Non-Type 5 loans.
     /// </summary>
-    public DateTimeOffset? CourseEndDate { get; set; }
+    public DateTime? CourseEndDate { get; set; }
 }

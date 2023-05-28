@@ -2,7 +2,7 @@
   "annualSalaryBeforeTax": 20000,
   "salaryAdjustments": [
     {
-      "date": "2022-06-01T00:00:00+00:00",
+      "date": "2022-06-01T00:00:00Z",
       "value": 30000
     }
   ],
@@ -11,7 +11,7 @@
       "loanType": "Type1",
       "balanceRemaining": 50,
       "academicYearLoanTakenOut": 2010,
-      "courseEndDate": "2021-07-01T00:00:00+00:00"
+      "courseEndDate": "2021-07-01T00:00:00"
     }
   ]
 }

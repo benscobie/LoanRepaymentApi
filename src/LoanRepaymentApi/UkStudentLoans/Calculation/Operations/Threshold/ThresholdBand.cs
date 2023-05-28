@@ -4,9 +4,9 @@ using LoanRepaymentApi.UkStudentLoans;
 
 public class ThresholdBand
 {
-    public DateTimeOffset DateFrom { get; init; }
+    public DateTime DateFrom { get; init; }
 
-    public DateTimeOffset? DateTo { get; init; }
+    public DateTime? DateTo { get; init; }
 
     public UkStudentLoanType LoanType { get; init; }
 

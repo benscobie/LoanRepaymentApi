@@ -14,28 +14,28 @@ namespace LoanRepaymentApi.Integration.Tests
                 new ThresholdBand
                 {
                     LoanType = UkStudentLoanType.Type1,
-                    DateFrom = new DateTimeOffset(2022, 04, 06, 0, 0, 0, new TimeSpan(0, 0, 0)),
+                    DateFrom = new DateTime(2022, 04, 06, 0, 0, 0),
                     DateTo = null,
                     Threshold = 20195
                 },
                 new ThresholdBand
                 {
                     LoanType = UkStudentLoanType.Type2,
-                    DateFrom = new DateTimeOffset(2022, 04, 06, 0, 0, 0, new TimeSpan(0, 0, 0)),
+                    DateFrom = new DateTime(2022, 04, 06, 0, 0, 0),
                     DateTo = null,
                     Threshold = 27295
                 },
                 new ThresholdBand
                 {
                     LoanType = UkStudentLoanType.Type4,
-                    DateFrom = new DateTimeOffset(2022, 04, 06, 0, 0, 0, new TimeSpan(0, 0, 0)),
+                    DateFrom = new DateTime(2022, 04, 06, 0, 0, 0),
                     DateTo = null,
                     Threshold = 25375
                 },
                 new ThresholdBand
                 {
                     LoanType = UkStudentLoanType.Postgraduate,
-                    DateFrom = new DateTimeOffset(2022, 04, 06, 0, 0, 0, new TimeSpan(0, 0, 0)),
+                    DateFrom = new DateTime(2022, 04, 06, 0, 0, 0),
                     DateTo = null,
                     Threshold = 21000
                 }

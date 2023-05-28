@@ -2,7 +2,7 @@
 
 public class ThresholdOperationFact
 {
-    public DateTimeOffset PeriodDate { get; set; }
+    public DateTime PeriodDate { get; set; }
 
     public int Period { get; set; }
 
