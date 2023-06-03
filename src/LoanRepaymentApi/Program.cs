@@ -11,6 +11,7 @@ using LoanRepaymentApi.UkStudentLoans.Calculation.Operations.FirstPossibleRepaym
 using LoanRepaymentApi.UkStudentLoans.Calculation.Operations.Interest;
 using LoanRepaymentApi.UkStudentLoans.Calculation.Operations.Salary;
 using LoanRepaymentApi.UkStudentLoans.Calculation.Operations.Threshold;
+using LoanRepaymentApi.UkStudentLoans.Calculation.Operations.VoluntaryRepayment;
 using LoanRepaymentApi.UkStudentLoans.Calculation.StandardTypes;
 using NodaTime;
 using ProblemDetailsOptions = Hellang.Middleware.ProblemDetails.ProblemDetailsOptions;
@@ -62,6 +63,7 @@ builder.Services.AddScoped<IThresholdOperation, ThresholdOperation>();
 builder.Services.AddScoped<IInterestRateOperation, InterestRateOperation>();
 builder.Services.AddScoped<ISalaryOperation, SalaryOperation>();
 builder.Services.AddScoped<IFirstPossibleRepaymentDateOperation, FirstPossibleRepaymentDateOperation>();
+builder.Services.AddScoped<IVoluntaryRepaymentOperation, VoluntaryRepaymentOperation>();
 
 builder.Services.AddSingleton<IClock>(SystemClock.Instance);
 builder.Services.AddValidatorsFromAssemblyContaining<UkStudentLoanCalculationDtoValidator>();

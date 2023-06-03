@@ -2,6 +2,7 @@
 using LoanRepaymentApi.UkStudentLoans.Calculation.Operations.CanLoanBeWrittenOff;
 using LoanRepaymentApi.UkStudentLoans.Calculation.Operations.Interest;
 using LoanRepaymentApi.UkStudentLoans.Calculation.Operations.Threshold;
+using LoanRepaymentApi.UkStudentLoans.Calculation.Operations.VoluntaryRepayment;
 
 namespace LoanRepaymentApi.UkStudentLoans.Calculation.StandardTypes;
 
@@ -11,22 +12,63 @@ public class StandardTypeCalculator : IStandardTypeCalculator
     private readonly IThresholdOperation _thresholdOperation;
     private readonly IInterestRateOperation _interestRateOperation;
     private readonly IFirstPossibleRepaymentDateOperation _firstPossibleRepaymentDateOperation;
+    private readonly IVoluntaryRepaymentOperation _voluntaryRepaymentOperation;
 
     public StandardTypeCalculator(
         ICanLoanBeWrittenOffOperation canLoanBeWrittenOffOperation,
         IThresholdOperation thresholdOperation,
         IInterestRateOperation interestRateOperation,
-        IFirstPossibleRepaymentDateOperation firstPossibleRepaymentDateOperation)
+        IFirstPossibleRepaymentDateOperation firstPossibleRepaymentDateOperation,
+        IVoluntaryRepaymentOperation voluntaryRepaymentOperation)
     {
         _canLoanBeWrittenOffOperation = canLoanBeWrittenOffOperation;
         _thresholdOperation = thresholdOperation;
         _interestRateOperation = interestRateOperation;
         _firstPossibleRepaymentDateOperation = firstPossibleRepaymentDateOperation;
+        _voluntaryRepaymentOperation = voluntaryRepaymentOperation;
     }
 
     public List<UkStudentLoanProjection> Run(StandardTypeCalculatorRequest request)
     {
         var results = new List<UkStudentLoanProjection>();
+
+        var loanInterestRates = new Dictionary<UkStudentLoanType, decimal>();
+        var balancesRemaining = new Dictionary<UkStudentLoanType, decimal>();
+        foreach (var loan in request.Loans)
+        {
+            var interestRate = _interestRateOperation.Execute(new InterestRateOperationFact
+            {
+                LoanType = loan.Type,
+                PeriodDate = request.PeriodDate,
+                CourseStartDate = loan.CourseStartDate,
+                CourseEndDate = loan.CourseEndDate,
+                StudyingPartTime = loan.StudyingPartTime,
+                Salary = request.Salary
+            });
+
+            loanInterestRates.Add(loan.Type, interestRate);
+
+            var previousPeriodResult =
+                request.PreviousProjections.SingleOrDefault(x =>
+                    x.Period == request.Period - 1 && x.LoanType == loan.Type);
+
+            var balanceRemaining = previousPeriodResult?.DebtRemaining ?? loan.BalanceRemaining;
+            balancesRemaining.Add(loan.Type, balanceRemaining);
+        }
+
+        var voluntaryRepayments = _voluntaryRepaymentOperation.Execute(new VoluntaryRepaymentOperationFact
+        {
+            PeriodDate = request.PeriodDate,
+            Loans = request.Loans,
+            VoluntaryRepayments = request.VoluntaryRepayments,
+            LoanBalancesRemaining = balancesRemaining,
+            LoanInterestRates = loanInterestRates
+        });
+
+        foreach (var voluntaryRepayment in voluntaryRepayments)
+        {
+            balancesRemaining[voluntaryRepayment.Key] -= voluntaryRepayment.Value;
+        }
 
         var loansToRepayInThresholdOrder = request.Loans
             .OrderByDescending(x => _thresholdOperation.Execute(new ThresholdOperationFact
@@ -62,8 +104,7 @@ public class StandardTypeCalculator : IStandardTypeCalculator
             var previousPeriodResult =
                 request.PreviousProjections.SingleOrDefault(x =>
                     x.Period == request.Period - 1 && x.LoanType == loan.Type);
-
-            var balanceRemaining = previousPeriodResult?.DebtRemaining ?? loan.BalanceRemaining;
+            var balanceRemaining = balancesRemaining[loan.Type];
 
             if (balanceRemaining <= 0)
             {
@@ -100,16 +141,7 @@ public class StandardTypeCalculator : IStandardTypeCalculator
                 continue;
             }
 
-            var interestRate = _interestRateOperation.Execute(new InterestRateOperationFact
-            {
-                LoanType = loan.Type,
-                PeriodDate = request.PeriodDate,
-                CourseStartDate = loan.CourseStartDate,
-                CourseEndDate = loan.CourseEndDate,
-                StudyingPartTime = loan.StudyingPartTime,
-                Salary = request.Salary
-            });
-
+            var interestRate = loanInterestRates[loan.Type];
             var interestToApply = balanceRemaining * interestRate / 12;
             balanceRemaining += interestToApply;
 

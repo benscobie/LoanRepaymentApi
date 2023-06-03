@@ -23,6 +23,8 @@ public class UkStudentLoanCalculationDto
     public DateTime? BirthDate { get; set; }
 
     public List<UkStudentLoanDto> Loans { get; set; } = new();
+
+    public List<VoluntaryRepayment> VoluntaryRepayments { get; set; } = new();
 }
 
 public class UkStudentLoanCalculationDtoValidator : AbstractValidator<UkStudentLoanCalculationDto>
@@ -39,6 +41,8 @@ public class UkStudentLoanCalculationDtoValidator : AbstractValidator<UkStudentL
         RuleFor(x => x.SalaryAdjustments).Must(HaveMaximumAdjustmentOfOnePerMonth)
             .WithMessage("Only one salary adjustment allowed per month.");
         RuleFor(x => x.Loans).NotEmpty().WithMessage("At least one loan must be supplied.");
+        RuleFor(x => x.VoluntaryRepayments).Must(HaveMaximumVoluntaryRepaymentOfOnePerMonth)
+            .WithMessage("Only one voluntary repayment allowed per date, voluntary repayment type and loan type.");
 
         RuleForEach(x => x.Loans)
             .ChildRules(loan =>
@@ -53,6 +57,13 @@ public class UkStudentLoanCalculationDtoValidator : AbstractValidator<UkStudentL
                 loan.RuleFor(x => x.AcademicYearLoanTakenOut).NotNull().When(x =>
                     x.LoanType == UkStudentLoanType.Type1 || x.LoanType == UkStudentLoanType.Type4);
             });
+    }
+
+    private bool HaveMaximumVoluntaryRepaymentOfOnePerMonth(UkStudentLoanCalculationDto loan, List<VoluntaryRepayment> voluntaryRepayments)
+    {
+        var groupedVoluntaryRepayments = voluntaryRepayments.GroupBy(x => new { x.Date.Year, x.Date.Month, x.VoluntaryRepaymentType, x.LoanType });
+
+        return groupedVoluntaryRepayments.Count() == voluntaryRepayments.Count;
     }
 
     private bool HaveMaximumAdjustmentOfOnePerMonth(UkStudentLoanCalculationDto loan, List<Adjustment> adjustments)

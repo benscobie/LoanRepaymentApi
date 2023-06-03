@@ -6,6 +6,14 @@
       "value": 71500
     }
   ],
+  "voluntaryRepayments": [
+    {
+      "loanType": "Type1",
+      "voluntaryRepaymentType": "OneOff",
+      "date": "2022-05-01T00:00:00Z",
+      "value": 100
+    }
+  ],
   "loans": [
     {
       "loanType": "Type1",

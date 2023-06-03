@@ -17,4 +17,6 @@ public class UkStudentLoanCalculatorRequest
     public decimal AnnualEarningsGrowth { get; set; }
 
     public List<UkStudentLoan> Loans { get; }
+
+    public List<VoluntaryRepayment> VoluntaryRepayments { get; set; } = new();
 }
