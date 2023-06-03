@@ -181,6 +181,62 @@ public class UkStudentLoanCalculationDtoValidatorTests
                     },
                     AnnualSalaryBeforeTax = 1
                 }
+            },
+            new object[]
+            {
+                new UkStudentLoanCalculationDto
+                {
+                    Loans = new List<UkStudentLoanDto>
+                    {
+                        new()
+                        {
+                            LoanType = UkStudentLoanType.Postgraduate,
+                            BalanceRemaining = 1,
+                            StudyingPartTime = false,
+                            CourseEndDate = DateTime.Now,
+                        }
+                    },
+                    AnnualSalaryBeforeTax = 1,
+                    VoluntaryRepayments = new List<VoluntaryRepayment>
+                    {
+                        new()
+                        {
+                            LoanType = null,
+                            VoluntaryRepaymentType = VoluntaryRepaymentType.Repeating,
+                            Date = DateTime.Today
+                        },
+                        new()
+                        {
+                            LoanType = null,
+                            VoluntaryRepaymentType = VoluntaryRepaymentType.OneOff,
+                            Date = DateTime.Today
+                        },
+                        new()
+                        {
+                            LoanType = UkStudentLoanType.Postgraduate,
+                            VoluntaryRepaymentType = VoluntaryRepaymentType.Repeating,
+                            Date = DateTime.Today
+                        },
+                        new()
+                        {
+                            LoanType = UkStudentLoanType.Postgraduate,
+                            VoluntaryRepaymentType = VoluntaryRepaymentType.OneOff,
+                            Date = DateTime.Today
+                        },
+                        new()
+                        {
+                            LoanType = UkStudentLoanType.Postgraduate,
+                            VoluntaryRepaymentType = VoluntaryRepaymentType.OneOff,
+                            Date = DateTime.Today.AddMonths(1)
+                        },
+                        new()
+                        {
+                            LoanType = UkStudentLoanType.Postgraduate,
+                            VoluntaryRepaymentType = VoluntaryRepaymentType.Repeating,
+                            Date = DateTime.Today.AddMonths(1)
+                        }
+                    }
+                }
             }
         };
     }
@@ -230,6 +286,21 @@ public class UkStudentLoanCalculationDtoValidatorTests
                     Date = new DateTime(2050, 01, 25, 0, 0, 0),
                     Value = 0.01m
                 }
+            },
+            VoluntaryRepayments = new List<VoluntaryRepayment>
+            {
+                new()
+                {
+                    LoanType = UkStudentLoanType.Type1,
+                    VoluntaryRepaymentType = VoluntaryRepaymentType.Repeating,
+                    Date = DateTime.Today
+                },
+                new()
+                {
+                    LoanType = UkStudentLoanType.Type1,
+                    VoluntaryRepaymentType = VoluntaryRepaymentType.Repeating,
+                    Date = DateTime.Today
+                }
             }
         };
 
@@ -242,10 +313,12 @@ public class UkStudentLoanCalculationDtoValidatorTests
         result.ShouldHaveValidationErrorFor(x => x.BirthDate);
         result.ShouldHaveValidationErrorFor(x => x.AnnualSalaryBeforeTax);
         result.ShouldHaveValidationErrorFor(x => x.SalaryAdjustments);
+        result.ShouldHaveValidationErrorFor(x => x.VoluntaryRepayments);
         result.ShouldHaveValidationErrorFor("Loans[0].BalanceRemaining");
         result.ShouldHaveValidationErrorFor("Loans[2].LoanType");
         result.ShouldHaveValidationErrorFor("Loans[3].CourseStartDate");
         result.ShouldHaveValidationErrorFor("Loans[3].CourseEndDate");
+
     }
 
     [Theory]
