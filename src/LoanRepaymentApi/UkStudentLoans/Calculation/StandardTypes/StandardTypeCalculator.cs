@@ -65,11 +65,6 @@ public class StandardTypeCalculator : IStandardTypeCalculator
             LoanInterestRates = loanInterestRates
         });
 
-        foreach (var voluntaryRepayment in voluntaryRepayments)
-        {
-            balancesRemaining[voluntaryRepayment.Key] -= voluntaryRepayment.Value;
-        }
-
         var loansToRepayInThresholdOrder = request.Loans
             .OrderByDescending(x => _thresholdOperation.Execute(new ThresholdOperationFact
             {
@@ -124,6 +119,11 @@ public class StandardTypeCalculator : IStandardTypeCalculator
                     StudyingPartTime = loan.StudyingPartTime
                 });
 
+            voluntaryRepayments.TryGetValue(loan.Type, out var voluntaryRepayment);
+            result.Paid = voluntaryRepayment;
+            result.TotalPaid = voluntaryRepayment + (previousPeriodResult?.TotalPaid ?? 0);
+            balanceRemaining -= voluntaryRepayment;
+
             if (_canLoanBeWrittenOffOperation.Execute(
                     new CanLoanBeWrittenOffOperationFact
                     {
@@ -135,7 +135,6 @@ public class StandardTypeCalculator : IStandardTypeCalculator
                     }))
             {
                 result.RepaymentStatus = UkStudentLoanRepaymentStatus.WrittenOff;
-                result.TotalPaid = previousPeriodResult?.TotalPaid ?? 0;
                 result.TotalInterestApplied = previousPeriodResult?.TotalInterestApplied ?? 0;
                 results.Add(result);
                 continue;
@@ -154,7 +153,6 @@ public class StandardTypeCalculator : IStandardTypeCalculator
                 result.DebtRemaining = balanceRemaining;
                 result.InterestRate = interestRate;
                 result.InterestApplied = interestToApply;
-                result.TotalPaid = previousPeriodResult?.TotalPaid ?? 0;
                 result.TotalInterestApplied = interestToApply + (previousPeriodResult?.TotalInterestApplied ?? 0);
                 results.Add(result);
                 continue;
@@ -183,10 +181,10 @@ public class StandardTypeCalculator : IStandardTypeCalculator
                 ? UkStudentLoanRepaymentStatus.PaidOff
                 : UkStudentLoanRepaymentStatus.Paying;
             result.DebtRemaining = debtRemaining;
-            result.Paid = amountToPay;
+            result.Paid += amountToPay;
             result.InterestRate = interestRate;
             result.InterestApplied = interestToApply;
-            result.TotalPaid = amountToPay + (previousPeriodResult?.TotalPaid ?? 0);
+            result.TotalPaid += amountToPay;
             result.TotalInterestApplied = interestToApply + (previousPeriodResult?.TotalInterestApplied ?? 0);
 
             results.Add(result);
