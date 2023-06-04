@@ -10,17 +10,17 @@
           "loanType": "Type1",
           "debtRemaining": 565.0875,
           "interestRate": 0.015,
-          "paid": 336.0375,
+          "paid": 436.0375,
           "interestApplied": 1.125,
-          "totalPaid": 336.0375,
+          "totalPaid": 436.0375,
           "totalInterestApplied": 1.125
         }
       ],
       "aggregatedDebtRemaining": 565.0875,
-      "aggregatedPaidInPeriod": 336.0375,
+      "aggregatedPaidInPeriod": 436.0375,
       "aggregatedInterestAppliedInPeriod": 1.125,
       "aggregatedTotalInterestApplied": 1.125,
-      "aggregatedTotalPaid": 336.0375
+      "aggregatedTotalPaid": 436.0375
     },
     {
       "period": 2,
@@ -34,7 +34,7 @@
           "interestRate": 0.015,
           "paid": 384.7875,
           "interestApplied": 0.706359375,
-          "totalPaid": 720.825,
+          "totalPaid": 820.825,
           "totalInterestApplied": 1.831359375
         }
       ],
@@ -42,7 +42,7 @@
       "aggregatedPaidInPeriod": 384.7875,
       "aggregatedInterestAppliedInPeriod": 0.706359375,
       "aggregatedTotalInterestApplied": 1.831359375,
-      "aggregatedTotalPaid": 720.825
+      "aggregatedTotalPaid": 820.825
     },
     {
       "period": 3,
@@ -56,7 +56,7 @@
           "interestRate": 0.015,
           "paid": 181.23261732421875,
           "interestApplied": 0.22625794921875,
-          "totalPaid": 902.0576173242188,
+          "totalPaid": 1002.0576173242188,
           "totalInterestApplied": 2.05761732421875
         }
       ],
@@ -64,11 +64,11 @@
       "aggregatedPaidInPeriod": 181.23261732421875,
       "aggregatedInterestAppliedInPeriod": 0.22625794921875,
       "aggregatedTotalInterestApplied": 2.05761732421875,
-      "aggregatedTotalPaid": 902.0576173242188
+      "aggregatedTotalPaid": 1002.0576173242188
     }
   ],
   "debtClearedDate": "2022-07-01T00:00:00Z",
   "debtClearedNumberOfPeriods": 3,
-  "totalPaid": 902.0576173242188,
+  "totalPaid": 1002.0576173242188,
   "totalInterestApplied": 2.05761732421875
 }
