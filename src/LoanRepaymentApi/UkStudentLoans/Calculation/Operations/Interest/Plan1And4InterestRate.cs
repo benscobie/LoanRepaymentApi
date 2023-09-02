@@ -4,7 +4,7 @@
     {
         public decimal Get()
         {
-            return 0.06m;
+            return 0.0625m;
         }
     }
 }
