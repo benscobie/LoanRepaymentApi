@@ -28,7 +28,7 @@ public class StrictAutoMoqCustomization : ICustomization
 
     public void Customize(IFixture fixture)
     {
-        fixture.Customizations.Add(new MockPostprocessor(new MethodInvoker(new StrictMockConstructorQuery())));
+        fixture.Customizations.Add(new MockPostprocessor(new AutoFixture.Kernel.MethodInvoker(new StrictMockConstructorQuery())));
         fixture.ResidueCollectors.Add(Relay);
     }
 }
