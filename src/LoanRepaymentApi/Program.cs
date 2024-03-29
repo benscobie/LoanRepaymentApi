@@ -17,6 +17,7 @@ using NodaTime;
 using ProblemDetailsOptions = Hellang.Middleware.ProblemDetails.ProblemDetailsOptions;
 
 var builder = WebApplication.CreateBuilder(args);
+builder.WebHost.UseSentry();
 
 // Add services to the container.
 
