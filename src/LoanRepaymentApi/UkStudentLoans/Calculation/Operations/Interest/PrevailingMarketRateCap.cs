@@ -4,6 +4,6 @@ public class PrevailingMarketRateCap : IPrevailingMarketRateCap
 {
     public decimal Get()
     {
-        return 0.079m;
+        return 0.08m;
     }
 }
