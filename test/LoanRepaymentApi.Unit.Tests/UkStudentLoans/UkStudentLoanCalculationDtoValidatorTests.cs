@@ -43,7 +43,7 @@ public class UkStudentLoanCalculationDtoValidatorTests
                             AcademicYearLoanTakenOut = 2005,
                         }
                     },
-                    AnnualSalaryBeforeTax = 1
+
                 }
             },
             new object[]
@@ -61,7 +61,6 @@ public class UkStudentLoanCalculationDtoValidatorTests
                             CourseEndDate = DateTime.Now
                         }
                     },
-                    AnnualSalaryBeforeTax = 1
                 }
             },
             new object[]
@@ -80,7 +79,6 @@ public class UkStudentLoanCalculationDtoValidatorTests
                             CourseEndDate = DateTime.Now
                         }
                     },
-                    AnnualSalaryBeforeTax = 1
                 }
             },
             new object[]
@@ -98,7 +96,6 @@ public class UkStudentLoanCalculationDtoValidatorTests
                             CourseEndDate = DateTime.Now
                         }
                     },
-                    AnnualSalaryBeforeTax = 1
                 }
             },
             new object[]
@@ -116,7 +113,6 @@ public class UkStudentLoanCalculationDtoValidatorTests
                             StudyingPartTime = false
                         }
                     },
-                    AnnualSalaryBeforeTax = 1
                 }
             },
             new object[]
@@ -133,7 +129,6 @@ public class UkStudentLoanCalculationDtoValidatorTests
                             CourseEndDate = DateTime.Now,
                         }
                     },
-                    AnnualSalaryBeforeTax = 1
                 }
             },
             new object[]
@@ -149,7 +144,6 @@ public class UkStudentLoanCalculationDtoValidatorTests
                             StudyingPartTime = false,
                         }
                     },
-                    AnnualSalaryBeforeTax = 1
                 }
             },
             new object[]
@@ -179,7 +173,6 @@ public class UkStudentLoanCalculationDtoValidatorTests
                             CourseEndDate = DateTime.Now,
                         }
                     },
-                    AnnualSalaryBeforeTax = 1
                 }
             },
             new object[]
@@ -196,7 +189,6 @@ public class UkStudentLoanCalculationDtoValidatorTests
                             CourseEndDate = DateTime.Now,
                         }
                     },
-                    AnnualSalaryBeforeTax = 1,
                     VoluntaryRepayments = new List<VoluntaryRepayment>
                     {
                         new()
@@ -272,7 +264,7 @@ public class UkStudentLoanCalculationDtoValidatorTests
                     CourseEndDate = null, // Must be set for type 2
                 }
             },
-            AnnualSalaryBeforeTax = 0,
+            AnnualSalaryBeforeTax = -1,
             BirthDate = DateTime.Now.AddYears(-14),
             SalaryAdjustments = new List<Adjustment>
             {
@@ -343,7 +335,6 @@ public class UkStudentLoanCalculationDtoValidatorTests
                     AcademicYearLoanTakenOut = data.AcademicYearLoanTakenOut
                 },
             },
-            AnnualSalaryBeforeTax = 1,
             BirthDate = data.BirthDate
         };
 
