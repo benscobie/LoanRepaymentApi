@@ -1,5 +1,5 @@
 ﻿{
-  "annualSalaryBeforeTax": 0,
+  "annualSalaryBeforeTax": -1,
   "loans": [
     {
       "loanType": "Type1",
