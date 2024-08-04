@@ -12,6 +12,7 @@
           "interestRate": 0.015,
           "paid": 436.0375,
           "interestApplied": 1.125,
+          "threshold": 20195,
           "totalPaid": 436.0375,
           "totalInterestApplied": 1.125
         }
@@ -34,6 +35,7 @@
           "interestRate": 0.015,
           "paid": 384.7875,
           "interestApplied": 0.706359375,
+          "threshold": 20195,
           "totalPaid": 820.825,
           "totalInterestApplied": 1.831359375
         }
@@ -56,6 +58,7 @@
           "interestRate": 0.015,
           "paid": 181.23261732421875,
           "interestApplied": 0.22625794921875,
+          "threshold": 20195,
           "totalPaid": 1002.0576173242188,
           "totalInterestApplied": 2.05761732421875
         }
