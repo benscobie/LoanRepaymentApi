@@ -2,6 +2,6 @@
 {
     public interface IRetailPriceIndex
     {
-        decimal GetForPreviousMarch();
+        decimal Get(DateTime periodDate);
     }
 }

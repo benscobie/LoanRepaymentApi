@@ -5,56 +5,66 @@ namespace LoanRepaymentApi.UkStudentLoans.Calculation.Operations.Interest;
 public class InterestRateOperation : IInterestRateOperation
 {
     private readonly decimal _prevailingMarketRateCap;
-    private readonly decimal _retailPriceIndex;
-    private readonly decimal _plan1And4InterestRate;
+    private readonly IRetailPriceIndex _retailPriceIndex;
+    private readonly IPlan2LowerAndUpperThresholds _plan2LowerAndUpperThresholds;
+    private readonly IPlan1And4InterestRate _plan1And4InterestRate;
 
-    public InterestRateOperation(IPrevailingMarketRateCap prevailingMarketRateCap, IPlan1And4InterestRate plan1And4InterestRate, IRetailPriceIndex retailPriceIndex)
+    public InterestRateOperation(
+        IPrevailingMarketRateCap prevailingMarketRateCap,
+        IPlan1And4InterestRate plan1And4InterestRate,
+        IRetailPriceIndex retailPriceIndex,
+        IPlan2LowerAndUpperThresholds plan2LowerAndUpperThresholds)
     {
         _prevailingMarketRateCap = prevailingMarketRateCap.Get();
-        _retailPriceIndex = retailPriceIndex.GetForPreviousMarch();
-        _plan1And4InterestRate = plan1And4InterestRate.Get();
+        _retailPriceIndex = retailPriceIndex;
+        _plan1And4InterestRate = plan1And4InterestRate;
+        _plan2LowerAndUpperThresholds = plan2LowerAndUpperThresholds;
     }
 
     public decimal Execute(InterestRateOperationFact fact)
     {
+        var rpi = _retailPriceIndex.Get(fact.PeriodDate);
+
         if (fact.LoanType == UkStudentLoanType.Type1 || fact.LoanType == UkStudentLoanType.Type4)
         {
-            return _plan1And4InterestRate;
+            return _plan1And4InterestRate.Get(fact.PeriodDate);
         }
 
         if (fact.LoanType == UkStudentLoanType.Type5)
         {
-            return decimal.Min(_retailPriceIndex, _prevailingMarketRateCap);
+            return decimal.Min(rpi, _prevailingMarketRateCap);
         }
 
         if (fact.LoanType == UkStudentLoanType.Postgraduate)
         {
-            return decimal.Min(_retailPriceIndex + 0.03m, _prevailingMarketRateCap);
+            return decimal.Min(rpi + 0.03m, _prevailingMarketRateCap);
         }
 
         if (fact.LoanType == UkStudentLoanType.Type2)
         {
-            if (fact.Salary < 27295)
+            var thresholds = _plan2LowerAndUpperThresholds.Get(fact.PeriodDate);
+
+            if (fact.Salary <= thresholds.LowerThreshold)
             {
-                return decimal.Min(_retailPriceIndex, _prevailingMarketRateCap);
+                return decimal.Min(rpi, _prevailingMarketRateCap);
             }
-            else if (fact.Salary < 49130)
+            else if (fact.Salary < thresholds.UpperThreshold)
             {
                 if ((fact.StudyingPartTime && fact.PeriodDate < fact.CourseStartDate!.Value.AddYears(4)) ||
                     !fact.StudyingPartTime && fact.PeriodDate < new DateTime(
                         fact.CourseEndDate!.Value.Year + (fact.CourseEndDate!.Value.Month < 4 ? 0 : 1), 04, 01, 0, 0, 0))
                 {
-                    return decimal.Min(_retailPriceIndex + 0.03m, _prevailingMarketRateCap);
+                    return decimal.Min(rpi + 0.03m, _prevailingMarketRateCap);
                 }
 
-                decimal percentagePortionOfIncome = (fact.Salary - 27295m) / (49129m - 27295m);
+                decimal percentagePortionOfIncome = (fact.Salary - thresholds.LowerThreshold) / ((thresholds.UpperThreshold - 1) - thresholds.LowerThreshold);
                 var rate = Math.Round(percentagePortionOfIncome * 0.03m, 3);
 
-                return decimal.Min(_retailPriceIndex + rate, _prevailingMarketRateCap);
+                return decimal.Min(rpi + rate, _prevailingMarketRateCap);
             }
             else
             {
-                return decimal.Min(_retailPriceIndex + 0.03m, _prevailingMarketRateCap);
+                return decimal.Min(rpi + 0.03m, _prevailingMarketRateCap);
             }
         }
 

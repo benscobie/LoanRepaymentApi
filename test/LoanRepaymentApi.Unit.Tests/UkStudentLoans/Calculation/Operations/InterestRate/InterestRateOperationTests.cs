@@ -36,11 +36,17 @@ public class InterestRateOperationTests
         var prevailingMarketRateCapMock = new Mock<IPrevailingMarketRateCap>();
         prevailingMarketRateCapMock.Setup(x => x.Get()).Returns(plan2And4InterestRateCap);
         var plan1And4InterestRateMock = new Mock<IPlan1And4InterestRate>();
-        plan1And4InterestRateMock.Setup(x => x.Get()).Returns(0.015m);
+        plan1And4InterestRateMock.Setup(x => x.Get(fact.PeriodDate)).Returns(0.015m);
         var retailPriceIndexMock = new Mock<IRetailPriceIndex>();
-        retailPriceIndexMock.Setup(x => x.GetForPreviousMarch()).Returns(0.015m);
+        retailPriceIndexMock.Setup(x => x.Get(fact.PeriodDate)).Returns(0.015m);
+        var plan2LowerAndUpperThresholdsMock = new Mock<IPlan2LowerAndUpperThresholds>();
+        plan2LowerAndUpperThresholdsMock.Setup(x => x.Get(fact.PeriodDate)).Returns(new Plan2LowerAndUpperThreshold
+        {
+            LowerThreshold = 27295,
+            UpperThreshold = 49130
+        });
 
-        var result = new InterestRateOperation(prevailingMarketRateCapMock.Object, plan1And4InterestRateMock.Object, retailPriceIndexMock.Object).Execute(fact);
+        var result = new InterestRateOperation(prevailingMarketRateCapMock.Object, plan1And4InterestRateMock.Object, retailPriceIndexMock.Object, plan2LowerAndUpperThresholdsMock.Object).Execute(fact);
 
         // Assert
         result.Should().Be(expectedResult);

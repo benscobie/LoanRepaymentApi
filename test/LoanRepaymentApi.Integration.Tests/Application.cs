@@ -29,6 +29,7 @@ public class Application : WebApplicationFactory<Program>
             services.AddScoped<IRetailPriceIndex, TestRetailPriceIndex>();
             services.AddScoped<IPrevailingMarketRateCap, TestPrevailingMarketRateCap>();
             services.AddScoped<IPlan1And4InterestRate, TestPlan1And4InterestRate>();
+            services.AddScoped<IPlan2LowerAndUpperThresholds, TestPlan2LowerAndUpperThresholds>();
             services.AddScoped<IThresholdsProvider, TestThresholdsProvider>();
         });
 
