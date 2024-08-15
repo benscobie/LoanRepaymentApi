@@ -20,12 +20,9 @@ public class ThresholdOperation : IThresholdOperation
             return thresholdBandWithinPeriod.Threshold;
         }
 
-        var mostRecentThresholdBand = _thresholds.Single(x =>
-            x.LoanType == fact.LoanType && fact.PeriodDate >= x.DateFrom &&
-            x.DateTo == null);
-
         if (fact.Period == 1)
         {
+            var mostRecentThresholdBand = _thresholds.Where(x => x.LoanType == fact.LoanType).OrderByDescending(x => x.DateFrom).First();
             return mostRecentThresholdBand.Threshold;
         }
 
