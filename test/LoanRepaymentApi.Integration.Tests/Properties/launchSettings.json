@@ -1,0 +1,12 @@
+{
+  "profiles": {
+    "LoanRepaymentApi.Integration.Tests": {
+      "commandName": "Project",
+      "launchBrowser": true,
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      },
+      "applicationUrl": "https://localhost:59785;http://localhost:59786"
+    }
+  }
+}
