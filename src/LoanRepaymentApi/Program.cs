@@ -57,6 +57,7 @@ builder.Services.AddScoped<IRetailPriceIndex, RetailPriceIndex>();
 builder.Services.AddScoped<IPrevailingMarketRateCap, PrevailingMarketRateCap>();
 builder.Services.AddScoped<IPlan1And4InterestRate, Plan1And4InterestRate>();
 builder.Services.AddScoped<IThresholdsProvider, ThresholdsProvider>();
+builder.Services.AddScoped<IPlan2LowerAndUpperThresholds, Plan2LowerAndUpperThresholds>();
 
 // TODO Bulk register IOperations
 builder.Services.AddScoped<ICanLoanBeWrittenOffOperation, CanLoanBeWrittenOffOperation>();

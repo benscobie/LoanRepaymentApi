@@ -2,6 +2,6 @@
 {
     public interface IPlan1And4InterestRate
     {
-        decimal Get();
+        decimal Get(DateTime periodDate);
     }
 }
