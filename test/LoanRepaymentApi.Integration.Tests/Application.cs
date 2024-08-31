@@ -28,7 +28,8 @@ public class Application : WebApplicationFactory<Program>
             services.AddSingleton<IClock>(new FakeClock(Instant.FromUtc(2022, 04, 1, 0, 0, 0)));
             services.AddScoped<IRetailPriceIndex, TestRetailPriceIndex>();
             services.AddScoped<IPrevailingMarketRateCap, TestPrevailingMarketRateCap>();
-            services.AddScoped<IPlan1And4InterestRate, TestPlan1And4InterestRate>();
+            services.AddScoped<IPlan1InterestRate, TestPlan1InterestRate>();
+            services.AddScoped<IPlan4InterestRate, TestPlan4InterestRate>();
             services.AddScoped<IPlan2LowerAndUpperThresholds, TestPlan2LowerAndUpperThresholds>();
             services.AddScoped<IThresholdsProvider, TestThresholdsProvider>();
         });

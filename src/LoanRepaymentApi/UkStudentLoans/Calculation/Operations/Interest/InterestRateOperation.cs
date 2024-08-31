@@ -7,17 +7,20 @@ public class InterestRateOperation : IInterestRateOperation
     private readonly decimal _prevailingMarketRateCap;
     private readonly IRetailPriceIndex _retailPriceIndex;
     private readonly IPlan2LowerAndUpperThresholds _plan2LowerAndUpperThresholds;
-    private readonly IPlan1And4InterestRate _plan1And4InterestRate;
+    private readonly IPlan1InterestRate _plan1InterestRate;
+    private readonly IPlan4InterestRate _plan4InterestRate;
 
     public InterestRateOperation(
         IPrevailingMarketRateCap prevailingMarketRateCap,
-        IPlan1And4InterestRate plan1And4InterestRate,
+        IPlan1InterestRate plan1InterestRate,
+        IPlan4InterestRate plan4InterestRate,
         IRetailPriceIndex retailPriceIndex,
         IPlan2LowerAndUpperThresholds plan2LowerAndUpperThresholds)
     {
         _prevailingMarketRateCap = prevailingMarketRateCap.Get();
         _retailPriceIndex = retailPriceIndex;
-        _plan1And4InterestRate = plan1And4InterestRate;
+        _plan1InterestRate = plan1InterestRate;
+        _plan4InterestRate = plan4InterestRate;
         _plan2LowerAndUpperThresholds = plan2LowerAndUpperThresholds;
     }
 
@@ -25,22 +28,23 @@ public class InterestRateOperation : IInterestRateOperation
     {
         var rpi = _retailPriceIndex.Get(fact.PeriodDate);
 
-        if (fact.LoanType == UkStudentLoanType.Type1 || fact.LoanType == UkStudentLoanType.Type4)
+        if (fact.LoanType == UkStudentLoanType.Type1)
         {
-            return _plan1And4InterestRate.Get(fact.PeriodDate);
+            return _plan1InterestRate.Get(fact.PeriodDate);
         }
-
-        if (fact.LoanType == UkStudentLoanType.Type5)
+        else if (fact.LoanType == UkStudentLoanType.Type4)
+        {
+            return _plan4InterestRate.Get(fact.PeriodDate);
+        }
+        else if (fact.LoanType == UkStudentLoanType.Type5)
         {
             return decimal.Min(rpi, _prevailingMarketRateCap);
         }
-
-        if (fact.LoanType == UkStudentLoanType.Postgraduate)
+        else if (fact.LoanType == UkStudentLoanType.Postgraduate)
         {
             return decimal.Min(rpi + 0.03m, _prevailingMarketRateCap);
         }
-
-        if (fact.LoanType == UkStudentLoanType.Type2)
+        else if (fact.LoanType == UkStudentLoanType.Type2)
         {
             var thresholds = _plan2LowerAndUpperThresholds.Get(fact.PeriodDate);
 
