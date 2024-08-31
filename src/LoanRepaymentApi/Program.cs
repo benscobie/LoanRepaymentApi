@@ -55,7 +55,8 @@ builder.Services.AddScoped<IUkStudentLoanCalculator, UkStudentLoanCalculator>();
 builder.Services.AddScoped<IStandardTypeCalculator, StandardTypeCalculator>();
 builder.Services.AddScoped<IRetailPriceIndex, RetailPriceIndex>();
 builder.Services.AddScoped<IPrevailingMarketRateCap, PrevailingMarketRateCap>();
-builder.Services.AddScoped<IPlan1And4InterestRate, Plan1And4InterestRate>();
+builder.Services.AddScoped<IPlan1InterestRate, Plan1InterestRate>();
+builder.Services.AddScoped<IPlan4InterestRate, Plan4InterestRate>();
 builder.Services.AddScoped<IThresholdsProvider, ThresholdsProvider>();
 builder.Services.AddScoped<IPlan2LowerAndUpperThresholds, Plan2LowerAndUpperThresholds>();
 
