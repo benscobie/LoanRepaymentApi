@@ -4,7 +4,7 @@
     {
         public decimal Get(DateTime periodDate)
         {
-            return 0.0625m;
+            return 0.043m;
         }
     }
 }
