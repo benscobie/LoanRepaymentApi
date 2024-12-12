@@ -4,7 +4,7 @@ namespace LoanRepaymentApi.UkStudentLoans.Calculation.Operations.Interest
     {
         public Plan2LowerAndUpperThreshold Get(DateTime periodDate)
         {
-            if (periodDate >= new DateTime(2024, 09, 01, 0, 0, 0))
+            if (periodDate >= new DateTime(2025, 04, 06, 0, 0, 0))
             {
                 return new Plan2LowerAndUpperThreshold { LowerThreshold = 28470, UpperThreshold = 51245 };
             }
