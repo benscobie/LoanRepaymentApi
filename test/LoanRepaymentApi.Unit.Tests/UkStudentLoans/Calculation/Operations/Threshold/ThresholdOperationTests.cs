@@ -2,8 +2,7 @@
 
 using System;
 using System.Collections.Generic;
-using AutoFixture.Xunit2;
-using FluentAssertions;
+using AwesomeAssertions;
 using LoanRepaymentApi.UkStudentLoans;
 using LoanRepaymentApi.UkStudentLoans.Calculation;
 using LoanRepaymentApi.UkStudentLoans.Calculation.Operations.Threshold;
