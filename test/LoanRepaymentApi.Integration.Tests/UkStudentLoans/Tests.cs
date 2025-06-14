@@ -6,8 +6,8 @@ using System.Net;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
-using FluentAssertions;
-using FluentAssertions.Json;
+using AwesomeAssertions;
+using AwesomeAssertions.Json;
 using Newtonsoft.Json.Linq;
 using Xunit;
 
