@@ -76,14 +76,28 @@ public class UkStudentLoansController : ControllerBase
             });
         }
 
-        var calculationResults = _ukStudentLoanCalculator.Run(calculatorRequest);
-
-        var result = new UkStudentLoanResultsDto
+        try
         {
-            Results = _mapper.Map<List<UkStudentLoanResultDto>>(calculationResults)
-        };
+            var calculationResults = _ukStudentLoanCalculator.Run(calculatorRequest);
 
-        return result;
+            var result = new UkStudentLoanResultsDto
+            {
+                Results = _mapper.Map<List<UkStudentLoanResultDto>>(calculationResults)
+            };
+
+            return result;
+        }
+        catch (OverflowException)
+        {
+            var validation = new ValidationProblemDetails()
+            {
+                Status = StatusCodes.Status400BadRequest,
+                Title = "Number Too Large",
+                Detail = "One or more of the numbers you entered, or values calculated from them, is too large for the system to handle. Please review your entries and try again."
+            };
+
+            throw new ProblemDetailsException(validation);
+        }
     }
 
     [HttpGet("assumptions")]

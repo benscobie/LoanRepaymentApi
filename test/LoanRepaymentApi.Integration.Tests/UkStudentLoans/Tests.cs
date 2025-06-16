@@ -38,18 +38,19 @@ public class Tests
         response.EnsureSuccessStatusCode();
     }
 
-    [Fact]
-    public async Task Calculate_WithSadPath_ShouldReturnBadRequestAndErrors()
+    [Theory]
+    [InlineData("calculate-invalid", "Invalid request")]
+    [InlineData("calculate-integer-overflow", "Calculation result too large")]
+    public async Task Calculate_WithSadPath_ShouldReturnBadRequestAndErrors(string filenamePrefix, string because)
     {
         await using var application = new Application();
 
         // Arrange
         var client = application.CreateClient();
 
-        var jsonRequest = await File.ReadAllTextAsync("UkStudentLoans/calculate-invalid-request.json");
-        var expectedJsonResponse =
-            JToken.Parse(await File.ReadAllTextAsync("UkStudentLoans/calculate-invalid-response.json"));
-        expectedJsonResponse.Children<JProperty>().Single(x => x.Name == "traceId").Remove();
+        var jsonRequest = await File.ReadAllTextAsync($"UkStudentLoans/{filenamePrefix}-request.json");
+        var expectedJsonResponse = JToken.Parse(await File.ReadAllTextAsync($"UkStudentLoans/{filenamePrefix}-response.json"));
+        expectedJsonResponse.Children<JProperty>().SingleOrDefault(x => x.Name == "traceId")?.Remove();
 
         // Act
         var response = await client.PostAsync("/ukstudentloans/calculate",
@@ -58,8 +59,8 @@ public class Tests
         // Assert
         response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
         var responseBody = JToken.Parse(await response.Content.ReadAsStringAsync());
-        responseBody.Children<JProperty>().Single(x => x.Name == "traceId").Remove();
+        responseBody.Children<JProperty>().SingleOrDefault(x => x.Name == "traceId")?.Remove();
 
-        responseBody.Should().BeEquivalentTo(expectedJsonResponse);
+        responseBody.Should().BeEquivalentTo(expectedJsonResponse, because);
     }
 }
