@@ -24,3 +24,7 @@ jobs:
           push: true
           tags: benscobie/loan-repayment-api:latest
           context: "{{defaultContext}}:src/LoanRepaymentApi"
+          build-args: |
+            GITHUB_SHA=${{ github.sha }}
+          secrets: |
+            SENTRY_AUTH_TOKEN=${{ secrets.SENTRY_AUTH_TOKEN || '' }}
