@@ -1,19 +1,20 @@
-﻿FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS base
-WORKDIR /app
-
-FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
+﻿FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 WORKDIR /src
-COPY ["LoanRepaymentApi.csproj", "."]
-RUN dotnet restore "LoanRepaymentApi.csproj"
+
 COPY . .
-WORKDIR "/src"
-RUN dotnet build "LoanRepaymentApi.csproj" -c Release -o /app/build
 
-FROM build AS publish
-RUN dotnet publish "LoanRepaymentApi.csproj" -c Release -o /app/publish
+ARG SENTRY_AUTH_TOKEN
+ARG GITHUB_SHA
+ENV GITHUB_SHA=$GITHUB_SHA
 
-FROM base AS final
+RUN --mount=type=secret,id=SENTRY_AUTH_TOKEN \
+    SENTRY_AUTH_TOKEN=$(cat /run/secrets/SENTRY_AUTH_TOKEN) \
+    dotnet publish "LoanRepaymentApi.csproj" -c Release -o /app
+
+FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS final
 WORKDIR /app
-COPY --from=publish /app/publish .
+COPY --from=build /app .
+
+USER $APP_UID
 
 ENTRYPOINT ["dotnet", "LoanRepaymentApi.dll"]
