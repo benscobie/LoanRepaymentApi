@@ -1,0 +1,6 @@
+{
+  "title": "Number Too Large",
+  "status": 400,
+  "detail": "One or more of the numbers you entered, or values calculated from them, is too large for the system to handle. Please review your entries and try again.",
+  "errors": {}
+}

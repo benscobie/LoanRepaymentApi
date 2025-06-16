@@ -1,0 +1,12 @@
+{
+  "annualSalaryBeforeTax": 20000,
+  "salaryGrowth": 1,
+  "annualEarningsGrowth": 1,
+  "loans": [
+    {
+      "loanType": "Type5",
+      "balanceRemaining": 50000,
+      "studyingPartTime": false
+    }
+  ]
+}

@@ -9,37 +9,33 @@ namespace LoanRepaymentApi.Integration.Tests
     {
         public List<ThresholdBand> Get()
         {
-            return new List<ThresholdBand>
-            {
-                new ThresholdBand
-                {
+            return
+            [
+                new() {
                     LoanType = UkStudentLoanType.Type1,
                     DateFrom = new DateTime(2022, 04, 06, 0, 0, 0),
                     DateTo = null,
                     Threshold = 20195
                 },
-                new ThresholdBand
-                {
+                new() {
                     LoanType = UkStudentLoanType.Type2,
                     DateFrom = new DateTime(2022, 04, 06, 0, 0, 0),
                     DateTo = null,
                     Threshold = 27295
                 },
-                new ThresholdBand
-                {
+                new() {
                     LoanType = UkStudentLoanType.Type4,
                     DateFrom = new DateTime(2022, 04, 06, 0, 0, 0),
                     DateTo = null,
                     Threshold = 25375
                 },
-                new ThresholdBand
-                {
-                    LoanType = UkStudentLoanType.Postgraduate,
-                    DateFrom = new DateTime(2022, 04, 06, 0, 0, 0),
+                new() {
+                    LoanType = UkStudentLoanType.Type5,
+                    DateFrom = new DateTime(2023, 04, 06, 0, 0, 0),
                     DateTo = null,
-                    Threshold = 21000
+                    Threshold = 25000
                 }
-            };
+            ];
         }
     }
 }
