@@ -3,13 +3,12 @@ WORKDIR /src
 
 COPY . .
 
-ARG SENTRY_AUTH_TOKEN
 ARG GITHUB_SHA
 ENV GITHUB_SHA=$GITHUB_SHA
 
 RUN --mount=type=secret,id=SENTRY_AUTH_TOKEN \
     SENTRY_AUTH_TOKEN=$(cat /run/secrets/SENTRY_AUTH_TOKEN) \
-    dotnet publish "LoanRepaymentApi.csproj" -c Release -o /app
+    dotnet publish "src/LoanRepaymentApi/LoanRepaymentApi.csproj" -c Release -o /app
 
 FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS final
 WORKDIR /app
