@@ -71,7 +71,7 @@ builder.Services.AddScoped<IVoluntaryRepaymentOperation, VoluntaryRepaymentOpera
 builder.Services.AddSingleton<IClock>(SystemClock.Instance);
 builder.Services.AddValidatorsFromAssemblyContaining<UkStudentLoanCalculationDtoValidator>();
 
-builder.Services.AddAutoMapper(typeof(Program));
+builder.Services.AddAutoMapper(cfg => { }, typeof(Program));
 
 var app = builder.Build();
 
