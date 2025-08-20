@@ -41,11 +41,14 @@ jobs:
         with:
           fetch-depth: 2
       - name: Download coverage reports
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v5
+        with:
+          path: coverage
+          merge-multiple: true
       - name: Install ReportGenerator tool
         run: dotnet tool install -g dotnet-reportgenerator-globaltool
       - name: Prepare coverage reports
-        run: reportgenerator -reports:*/coverage/*/coverage.cobertura.xml -targetdir:./ -reporttypes:Cobertura
+        run: reportgenerator -reports:coverage/*/coverage.cobertura.xml -targetdir:./ -reporttypes:Cobertura
       - name: Upload coverage report
         uses: codecov/codecov-action@v5
         with:
