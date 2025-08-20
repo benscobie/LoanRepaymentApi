@@ -29,6 +29,13 @@ public class ThresholdsProvider : IThresholdsProvider
             },
             new()
             {
+                LoanType = UkStudentLoanType.Type1,
+                DateFrom = new DateTime(2026, 04, 06, 0, 0, 0),
+                DateTo = null,
+                Threshold = 26900
+            },
+            new()
+            {
                 LoanType = UkStudentLoanType.Type2,
                 DateFrom = new DateTime(2023, 04, 06, 0, 0, 0),
                 DateTo = new DateTime(2025, 04, 06, 0, 0, 0),
