@@ -41,7 +41,7 @@ jobs:
         with:
           fetch-depth: 2
       - name: Download coverage reports
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v6
       - name: Install ReportGenerator tool
         run: dotnet tool install -g dotnet-reportgenerator-globaltool
       - name: Prepare coverage reports
