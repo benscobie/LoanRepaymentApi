@@ -9,7 +9,7 @@
     <ItemGroup>
         <PackageReference Include="AwesomeAssertions" Version="9.3.0" />
         <PackageReference Include="AwesomeAssertions.Json" Version="9.0.0" />
-        <PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" Version="8.0.21" />
+        <PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" Version="8.0.22" />
         <PackageReference Include="Microsoft.NET.Test.Sdk" Version="18.0.0" />
         <PackageReference Include="NodaTime" Version="3.2.2" />
         <PackageReference Include="NodaTime.Testing" Version="3.2.2" />
